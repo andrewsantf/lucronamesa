@@ -86,9 +86,9 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Apenas inicializa o swiper se o elemento existir na página
-            if (document.querySelector('.swiper')) {
-                const swiper = new Swiper('.swiper', {
+            // Inicializa APENAS o carrossel da página de autenticação (login/registro)
+            if (document.querySelector('.auth-carousel')) {
+                const authSwiper = new Swiper('.auth-carousel', {
                   loop: true,
                   autoplay: { delay: 5000, disableOnInteraction: false },
                   effect: 'fade',

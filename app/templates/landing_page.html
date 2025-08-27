@@ -5,10 +5,8 @@
     <section class="hero-section text-center">
         <div class="container">
             <h1 class="hero-title">Sua lucratividade, finalmente <span class="highlighted-word">visível.</span></h1>
-            
             <p class="hero-subtitle">A sua planilha de custos inteligente. Saiba o preço exato de cada produto, sem cálculos complexos.</p>
             <a href="{{ url_for('main.register') }}" class="btn btn-primary btn-lg shadow">Começar meu teste gratuito de 7 dias</a>
-
             <div class="social-proof-avatars">
                 <div class="avatar-group">
                     <img src="{{ url_for('static', filename='img/avatars/avatar1.jpg') }}" alt="Avatar de usuário" class="avatar-image">
@@ -19,153 +17,61 @@
                 </div>
                 <p>Mais de <strong>150 empresas</strong> já estão otimizando seus custos conosco.</p>
             </div>
-
             <img src="{{ url_for('static', filename='img/dashboard_hero.png') }}" class="img-fluid hero-image shadow-lg mt-5" alt="Dashboard do LucroNaMesa">
         </div>
     </section>
 
-<section class="product-carousel-section text-center">
-    <div class="container-fluid">
-        <h2 class="section-title">Veja o que nossos clientes estão precificando.</h2>
-    </div>
-    
-    <div class="swiper product-swiper">
-        <div class="swiper-wrapper">
-            
-            <div class="swiper-slide">
-                <div class="product-card">
-                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/bolo_cenoura_chocolate.jpg') }}" alt="Bolo de Cenoura"></div>
-                    <div class="product-card-body">
-                        <h4 class="product-card-title">Bolo de Cenoura com Chocolate</h4>
-                        <p class="product-card-business">Confeitaria Delícias da Vó</p>
-                        <div class="product-card-details">
-                            <span class="product-card-cost">Custo: R$ 18,50</span>
-                            <span class="product-card-price">Venda: R$ 45,00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="product-card">
-                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/hamburger_artesanal.jpg') }}" alt="Hambúrguer Artesanal"></div>
-                    <div class="product-card-body">
-                        <h4 class="product-card-title">Hambúrguer Artesanal</h4>
-                        <p class="product-card-business">Burger do Chef</p>
-                        <div class="product-card-details">
-                            <span class="product-card-cost">Custo: R$ 12,80</span>
-                            <span class="product-card-price">Venda: R$ 32,50</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="product-card">
-                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/brigadeiro_pistache.jpg') }}" alt="Brigadeiro de Pistache"></div>
-                    <div class="product-card-body">
-                        <h4 class="product-card-title">Brigadeiro Gourmet de Pistache</h4>
-                        <p class="product-card-business">Doces Encantados</p>
-                        <div class="product-card-details">
-                            <span class="product-card-cost">Custo: R$ 1,80</span>
-                            <span class="product-card-price">Venda: R$ 4,50</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="product-card">
-                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/pao_de_queijo_recheado.jpg') }}" alt="Pão de Queijo Recheado"></div>
-                    <div class="product-card-body">
-                        <h4 class="product-card-title">Pão de Queijo Recheado</h4>
-                        <p class="product-card-business">Padaria Pão Quente</p>
-                        <div class="product-card-details">
-                            <span class="product-card-cost">Custo: R$ 2,10</span>
-                            <span class="product-card-price">Venda: R$ 6,00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="product-card">
-                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/torta_morango.jpg') }}" alt="Torta de Morango"></div>
-                    <div class="product-card-body">
-                        <h4 class="product-card-title">Torta de Morango</h4>
-                        <p class="product-card-business">Sabor e Arte Confeitaria</p>
-                        <div class="product-card-details">
-                            <span class="product-card-cost">Custo: R$ 35,00</span>
-                            <span class="product-card-price">Venda: R$ 95,00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="product-card">
-                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/coxinha_frango_requeijao.jpg') }}" alt="Coxinha de Frango"></div>
-                    <div class="product-card-body">
-                        <h4 class="product-card-title">Coxinha de Frango com Requeijão</h4>
-                        <p class="product-card-business">Salgados da Chef</p>
-                        <div class="product-card-details">
-                            <span class="product-card-cost">Custo: R$ 1,10</span>
-                            <span class="product-card-price">Venda: R$ 3,50</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="product-card">
-                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/muffin_blueberry.jpg') }}" alt="Muffin de Blueberry"></div>
-                    <div class="product-card-body">
-                        <h4 class="product-card-title">Muffin de Blueberry</h4>
-                        <p class="product-card-business">Café com Prosa</p>
-                        <div class="product-card-details">
-                            <span class="product-card-cost">Custo: R$ 4,20</span>
-                            <span class="product-card-price">Venda: R$ 12,00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="product-card">
-                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/pizza_calabresa.jpg') }}" alt="Pizza Calabresa"></div>
-                    <div class="product-card-body">
-                        <h4 class="product-card-title">Pizza Calabresa Borda Recheada</h4>
-                        <p class="product-card-business">Pizzaria Forno Mágico</p>
-                        <div class="product-card-details">
-                            <span class="product-card-cost">Custo: R$ 28,00</span>
-                            <span class="product-card-price">Venda: R$ 75,00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="product-card">
-                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/cookie_chocolate.jpg') }}" alt="Cookie de Chocolate"></div>
-                    <div class="product-card-body">
-                        <h4 class="product-card-title">Cookie com Gotas de Chocolate</h4>
-                        <p class="product-card-business">Adoce sua Vida</p>
-                        <div class="product-card-details">
-                            <span class="product-card-cost">Custo: R$ 2,50</span>
-                            <span class="product-card-price">Venda: R$ 8,00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="product-card">
-                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/suco_laranja.jpg') }}" alt="Suco de Laranja"></div>
-                    <div class="product-card-body">
-                        <h4 class="product-card-title">Suco Natural de Laranja</h4>
-                        <p class="product-card-business">Naturalmente Fresco</p>
-                        <div class="product-card-details">
-                            <span class="product-card-cost">Custo: R$ 3,10</span>
-                            <span class="product-card-price">Venda: R$ 9,00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+    <section class="product-carousel-section text-center">
+        <div class="container-fluid">
+            <h2 class="section-title">Veja o que nossos clientes estão precificando.</h2>
         </div>
-    </div>
-</section>
+        <div class="carousel-wrapper">
+            <div class="carousel-container">
+                {% for i in range(2) %} {# Duplica todo o conteúdo para o loop infinito #}
+                    <div class="product-card">
+                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/bolo_cenoura_chocolate.jpg') }}" alt="Bolo de Cenoura"></div>
+                        <div class="product-card-body"><div><h4 class="product-card-title">Bolo de Cenoura com Chocolate</h4><p class="product-card-business">Confeitaria Delícias da Vó</p></div><div class="product-card-details"><span class="product-card-cost">Custo: R$ 18,50</span><span class="product-card-price">Venda: R$ 45,00</span></div></div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/hamburger_artesanal.jpg') }}" alt="Hambúrguer Artesanal"></div>
+                        <div class="product-card-body"><div><h4 class="product-card-title">Hambúrguer Artesanal</h4><p class="product-card-business">Burger do Chef</p></div><div class="product-card-details"><span class="product-card-cost">Custo: R$ 12,80</span><span class="product-card-price">Venda: R$ 32,50</span></div></div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/brigadeiro_pistache.jpg') }}" alt="Brigadeiro de Pistache"></div>
+                        <div class="product-card-body"><div><h4 class="product-card-title">Brigadeiro Gourmet de Pistache</h4><p class="product-card-business">Doces Encantados</p></div><div class="product-card-details"><span class="product-card-cost">Custo: R$ 1,80</span><span class="product-card-price">Venda: R$ 4,50</span></div></div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/pao_de_queijo_recheado.jpg') }}" alt="Pão de Queijo Recheado"></div>
+                        <div class="product-card-body"><div><h4 class="product-card-title">Pão de Queijo Recheado</h4><p class="product-card-business">Padaria Pão Quente</p></div><div class="product-card-details"><span class="product-card-cost">Custo: R$ 2,10</span><span class="product-card-price">Venda: R$ 6,00</span></div></div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/torta_morango.jpg') }}" alt="Torta de Morango"></div>
+                        <div class="product-card-body"><div><h4 class="product-card-title">Torta de Morango</h4><p class="product-card-business">Sabor e Arte Confeitaria</p></div><div class="product-card-details"><span class="product-card-cost">Custo: R$ 35,00</span><span class="product-card-price">Venda: R$ 95,00</span></div></div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/coxinha_frango_requeijao.jpg') }}" alt="Coxinha de Frango"></div>
+                        <div class="product-card-body"><div><h4 class="product-card-title">Coxinha de Frango com Requeijão</h4><p class="product-card-business">Salgados da Chef</p></div><div class="product-card-details"><span class="product-card-cost">Custo: R$ 1,10</span><span class="product-card-price">Venda: R$ 3,50</span></div></div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/muffin_blueberry.jpg') }}" alt="Muffin de Blueberry"></div>
+                        <div class="product-card-body"><div><h4 class="product-card-title">Muffin de Blueberry</h4><p class="product-card-business">Café com Prosa</p></div><div class="product-card-details"><span class="product-card-cost">Custo: R$ 4,20</span><span class="product-card-price">Venda: R$ 12,00</span></div></div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/pizza_calabresa.jpg') }}" alt="Pizza Calabresa"></div>
+                        <div class="product-card-body"><div><h4 class="product-card-title">Pizza Calabresa Borda Recheada</h4><p class="product-card-business">Pizzaria Forno Mágico</p></div><div class="product-card-details"><span class="product-card-cost">Custo: R$ 28,00</span><span class="product-card-price">Venda: R$ 75,00</span></div></div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/cookie_chocolate.jpg') }}" alt="Cookie de Chocolate"></div>
+                        <div class="product-card-body"><div><h4 class="product-card-title">Cookie com Gotas de Chocolate</h4><p class="product-card-business">Adoce sua Vida</p></div><div class="product-card-details"><span class="product-card-cost">Custo: R$ 2,50</span><span class="product-card-price">Venda: R$ 8,00</span></div></div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/suco_laranja.jpg') }}" alt="Suco de Laranja"></div>
+                        <div class="product-card-body"><div><h4 class="product-card-title">Suco Natural de Laranja</h4><p class="product-card-business">Naturalmente Fresco</p></div><div class="product-card-details"><span class="product-card-cost">Custo: R$ 3,10</span><span class="product-card-price">Venda: R$ 9,00</span></div></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
 
     <section class="before-after-section">
         <div class="container">
@@ -233,72 +139,35 @@
                 <div class="row g-4">
                     <div class="col-lg-7">
                         <div class="demo-step">
-                            <h4 class="mb-3"><span class="badge bg-primary me-2"></span>Cadastre seus ingredientes (simulação)</h4>
+                            <h4 class="mb-3"><span class="badge bg-primary me-2">1</span>Cadastre seus ingredientes (simulação)</h4>
                             <form id="ingredient-form" class="p-3 bg-light rounded">
-                                <div class="mb-3">
-                                    <label for="ingName" class="form-label small">Nome do Ingrediente</label>
-                                    <input type="text" class="form-control" id="ingName" placeholder="Ex: Farinha de Trigo">
-                                </div>
+                                <div class="mb-3"><label for="ingName" class="form-label small">Nome do Ingrediente</label><input type="text" class="form-control" id="ingName" placeholder="Ex: Farinha de Trigo"></div>
                                 <div class="row">
-                                    <div class="col-md-4 mb-3">
-                                        <label for="ingPrice" class="form-label small">Preço do Pacote</label>
-                                        <input type="text" class="form-control" id="ingPrice" placeholder="Ex: 5,50" inputmode="decimal">
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="ingQty" class="form-label small">Quantidade</label>
-                                        <input type="text" class="form-control" id="ingQty" placeholder="Ex: 1000" inputmode="decimal">
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="ingUnit" class="form-label small">Unidade</label>
-                                        <select id="ingUnit" class="form-select">
-                                            <option value="g">Grama (g)</option>
-                                            <option value="kg">Quilo (kg)</option>
-                                            <option value="ml">Mililitro (ml)</option>
-                                            <option value="l">Litro (l)</option>
-                                            <option value="un">Unidade (un)</option>
-                                        </select>
-                                    </div>
+                                    <div class="col-md-4 mb-3"><label for="ingPrice" class="form-label small">Preço do Pacote</label><input type="text" class="form-control" id="ingPrice" placeholder="Ex: 5,50" inputmode="decimal"></div>
+                                    <div class="col-md-4 mb-3"><label for="ingQty" class="form-label small">Quantidade</label><input type="text" class="form-control" id="ingQty" placeholder="Ex: 1000" inputmode="decimal"></div>
+                                    <div class="col-md-4 mb-3"><label for="ingUnit" class="form-label small">Unidade</label><select id="ingUnit" class="form-select"><option value="g">Grama (g)</option><option value="kg">Quilo (kg)</option><option value="ml">Mililitro (ml)</option><option value="l">Litro (l)</option><option value="un">Unidade (un)</option></select></div>
                                 </div>
                                <button type="submit" class="btn btn-sm btn-add-ingredient w-100">Adicionar Ingrediente à Lista</button>
                             </form>
                         </div>
                         <div class="demo-step mt-4">
-                             <h4 class="mb-3"><span class="badge bg-primary me-2"></span>Monte sua receita</h4>
-                             <div id="recipe-ingredients-list" class="recipe-list">
-                                <p class="text-muted text-center p-3" id="recipe-placeholder">Adicione ingredientes para começar a montar sua receita.</p>
-                             </div>
+                             <h4 class="mb-3"><span class="badge bg-primary me-2">2</span>Monte sua receita</h4>
+                             <div id="recipe-ingredients-list" class="recipe-list"><p class="text-muted text-center p-3" id="recipe-placeholder">Adicione ingredientes para começar a montar sua receita.</p></div>
                         </div>
                     </div>
                     <div class="col-lg-5">
                         <div class="result-box-v2" id="demo-result-box">
-                            <div class="mb-4">
-                                <h5 class="mb-3">Sua Lista de Ingredientes</h5>
-                                <div id="available-ingredients-list" class="available-list">
-                                    <p class="text-muted text-center small p-2" id="ingredients-placeholder">Nenhum ingrediente cadastrado.</p>
-                                </div>
-                            </div>
+                            <div class="mb-4"><h5 class="mb-3">Sua Lista de Ingredientes</h5><div id="available-ingredients-list" class="available-list"><p class="text-muted text-center small p-2" id="ingredients-placeholder">Nenhum ingrediente cadastrado.</p></div></div>
                             <hr>
                             <div class="mt-4">
                                 <h5 class="mb-3">Resultado da Receita</h5>
-                                <div id="final-cost-placeholder" class="text-center">
-                                     <i class="bi bi-card-list display-4 text-muted"></i>
-                                     <p class="fw-bold mt-2">O custo aparecerá aqui.</p>
-                                </div>
+                                <div id="final-cost-placeholder" class="text-center"><i class="bi bi-card-list display-4 text-muted"></i><p class="fw-bold mt-2">O custo aparecerá aqui.</p></div>
                                 <div id="final-cost-result" class="d-none">
-                                    <div class="mb-3">
-                                        <label for="profit-margin" class="form-label fw-bold">Margem de Lucro (%)</label>
-                                        <input type="number" id="profit-margin" class="form-control form-control-lg text-center" value="150" inputmode="numeric">
-                                    </div>
+                                    <div class="mb-3"><label for="profit-margin" class="form-label fw-bold">Margem de Lucro (%)</label><input type="number" id="profit-margin" class="form-control form-control-lg text-center" value="150" inputmode="numeric"></div>
                                     <div class="cost-breakdown mt-4">
-                                        <div class="d-flex justify-content-between">
-                                            <span>Custo Total:</span>
-                                            <span id="total-cost" class="fw-bold">R$ 0,00</span>
-                                        </div>
+                                        <div class="d-flex justify-content-between"><span>Custo Total:</span><span id="total-cost" class="fw-bold">R$ 0,00</span></div>
                                         <hr class="my-2">
-                                        <div class="d-flex justify-content-between align-items-center price-suggestion">
-                                            <span class="fw-bold">Preço de Venda Sugerido:</span>
-                                            <span id="suggested-price" class="fw-bolder h3">R$ 0,00</span>
-                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center price-suggestion"><span class="fw-bold">Preço de Venda Sugerido:</span><span id="suggested-price" class="fw-bolder h3">R$ 0,00</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -315,42 +184,8 @@
                 <h2 class="section-title">Um preço simples e justo para o seu crescimento.</h2>
             </div>
             <div class="row justify-content-center">
-                <div class="col-lg-5 col-md-6">
-                    <div class="pricing-card">
-                        <h3 class="plan-title">Mensal</h3>
-                        <p class="plan-subtitle">Ideal para começar e validar.</p>
-                        <div class="price-tag">
-                            R$ 59<span class="price-cents">,90</span><span class="price-period">/mês</span>
-                        </div>
-                        <ul class="feature-list list-unstyled">
-                            <li><i class="bi bi-check-circle-fill"></i> Ingredientes Ilimitados</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Receitas Ilimitadas</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Análise de Custo e Lucro</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Relatórios Inteligentes</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Suporte via E-mail</li>
-                        </ul>
-                        <a href="{{ url_for('main.register') }}" class="btn btn-outline-primary w-100">Começar Agora</a>
-                    </div>
-                </div>
-                <div class="col-lg-5 col-md-6">
-                    <div class="pricing-card highlighted">
-                        <div class="plan-badge">ECONOMIZE 2 MESES</div>
-                        <h3 class="plan-title">Anual</h3>
-                        <p class="plan-subtitle">O melhor custo-benefício para o seu negócio.</p>
-                        <div class="price-tag">
-                            R$ 599<span class="price-cents">,90</span><span class="price-period">/ano</span>
-                        </div>
-                        <p class="text-muted text-center fw-bold">Equivale a R$ 49,99/mês</p>
-                        <ul class="feature-list list-unstyled">
-                            <li><i class="bi bi-check-circle-fill"></i> Ingredientes Ilimitados</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Receitas Ilimitadas</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Análise de Custo e Lucro</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Relatórios Inteligentes</li>
-                            <li><i class="bi bi-check-circle-fill"></i> Suporte via E-mail</li>
-                        </ul>
-                        <a href="{{ url_for('main.register') }}" class="btn btn-primary w-100">Quero Economizar</a>
-                    </div>
-                </div>
+                <div class="col-lg-5 col-md-6"><div class="pricing-card"><h3 class="plan-title">Mensal</h3><p class="plan-subtitle">Ideal para começar e validar.</p><div class="price-tag">R$ 59<span class="price-cents">,90</span><span class="price-period">/mês</span></div><ul class="feature-list list-unstyled"><li><i class="bi bi-check-circle-fill"></i> Ingredientes Ilimitados</li><li><i class="bi bi-check-circle-fill"></i> Receitas Ilimitadas</li><li><i class="bi bi-check-circle-fill"></i> Análise de Custo e Lucro</li><li><i class="bi bi-check-circle-fill"></i> Relatórios Inteligentes</li><li><i class="bi bi-check-circle-fill"></i> Suporte via E-mail</li></ul><a href="{{ url_for('main.register') }}" class="btn btn-outline-primary w-100">Começar Agora</a></div></div>
+                <div class="col-lg-5 col-md-6"><div class="pricing-card highlighted"><div class="plan-badge">ECONOMIZE 2 MESES</div><h3 class="plan-title">Anual</h3><p class="plan-subtitle">O melhor custo-benefício para o seu negócio.</p><div class="price-tag">R$ 599<span class="price-cents">,90</span><span class="price-period">/ano</span></div><p class="text-muted text-center fw-bold">Equivale a R$ 49,99/mês</p><ul class="feature-list list-unstyled"><li><i class="bi bi-check-circle-fill"></i> Ingredientes Ilimitados</li><li><i class="bi bi-check-circle-fill"></i> Receitas Ilimitadas</li><li><i class="bi bi-check-circle-fill"></i> Análise de Custo e Lucro</li><li><i class="bi bi-check-circle-fill"></i> Relatórios Inteligentes</li><li><i class="bi bi-check-circle-fill"></i> Suporte via E-mail</li></ul><a href="{{ url_for('main.register') }}" class="btn btn-primary w-100">Quero Economizar</a></div></div>
             </div>
         </div>
     </section>
@@ -378,140 +213,123 @@
         </div>
     </footer>
 
-    <a href="https://wa.me/5561991081071?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20o%20LucroNaMesa." class="whatsapp-float-button" target="_blank" rel="noopener noreferrer">
-        <i class="bi bi-whatsapp"></i>
-    </a>
+    <a href="https://wa.me/556191081071?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20o%20LucroNaMesa." class="whatsapp-float-button" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i></a>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const ingredientForm = document.getElementById('ingredient-form');
-    const ingNameInput = document.getElementById('ingName');
-    const ingPriceInput = document.getElementById('ingPrice');
-    const ingQtyInput = document.getElementById('ingQty');
-    const ingUnitInput = document.getElementById('ingUnit');
-    const availableList = document.getElementById('available-ingredients-list');
-    const recipeList = document.getElementById('recipe-ingredients-list');
-    const profitMarginInput = document.getElementById('profit-margin');
-    const totalCostEl = document.getElementById('total-cost');
-    const suggestedPriceEl = document.getElementById('suggested-price');
-    const ingPlaceholder = document.getElementById('ingredients-placeholder');
-    const recipePlaceholder = document.getElementById('recipe-placeholder');
-    const finalCostPlaceholder = document.getElementById('final-cost-placeholder');
-    const finalCostResult = document.getElementById('final-cost-result');
-    let ingredients = [];
-    let recipeItems = [];
-    let nextId = 0;
-    const formatCurrency = (value) => { return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); };
-    const calculateBaseCost = (price, quantity, unit) => {
-        if (unit === 'kg') return price / (quantity * 1000);
-        if (unit === 'l') return price / (quantity * 1000);
-        return price / quantity;
-    };
-    const updateFinalCost = () => {
-        let totalCost = 0;
-        recipeItems.forEach(item => {
-            const ing = ingredients.find(i => i.id === item.id);
-            const quantityInput = document.querySelector(`#recipe-qty-${item.id}`);
-            const quantity = parseFloat(quantityInput.value) || 0;
-            totalCost += ing.baseCost * quantity;
-        });
-        const profitMargin = parseFloat(profitMarginInput.value) || 0;
-        const suggestedPrice = totalCost * (1 + profitMargin / 100);
-        totalCostEl.textContent = formatCurrency(totalCost);
-        suggestedPriceEl.textContent = formatCurrency(suggestedPrice);
-        if(recipeItems.length > 0) {
-            finalCostPlaceholder.classList.add('d-none');
-            finalCostResult.classList.remove('d-none');
-        } else {
-            finalCostPlaceholder.classList.remove('d-none');
-            finalCostResult.classList.add('d-none');
-        }
-    };
-    const renderAvailableIngredients = () => {
-        if (ingredients.length === 0) {
-            ingPlaceholder.style.display = 'block';
-            availableList.innerHTML = '';
-        } else {
-            ingPlaceholder.style.display = 'none';
-            availableList.innerHTML = '';
-            ingredients.forEach(ing => {
-                const item = document.createElement('div');
-                item.className = 'd-flex justify-content-between align-items-center p-2 border-bottom';
-                item.innerHTML = `<span><strong class="me-2">${ing.name}</strong><small class="text-muted">(${formatCurrency(ing.baseCost)}/${ing.baseUnit})</small></span><button class="btn btn-outline-primary btn-sm add-to-recipe" data-id="${ing.id}">Usar</button>`;
-                availableList.appendChild(item);
-            });
-        }
-    };
-    const renderRecipeIngredients = () => {
-        if (recipeItems.length === 0) {
-            recipePlaceholder.style.display = 'block';
-            recipeList.innerHTML = '';
-        } else {
-            recipePlaceholder.style.display = 'none';
-            recipeList.innerHTML = '';
+    if(ingredientForm) {
+        const ingNameInput = document.getElementById('ingName');
+        const ingPriceInput = document.getElementById('ingPrice');
+        const ingQtyInput = document.getElementById('ingQty');
+        const ingUnitInput = document.getElementById('ingUnit');
+        const availableList = document.getElementById('available-ingredients-list');
+        const recipeList = document.getElementById('recipe-ingredients-list');
+        const profitMarginInput = document.getElementById('profit-margin');
+        const totalCostEl = document.getElementById('total-cost');
+        const suggestedPriceEl = document.getElementById('suggested-price');
+        const ingPlaceholder = document.getElementById('ingredients-placeholder');
+        const recipePlaceholder = document.getElementById('recipe-placeholder');
+        const finalCostPlaceholder = document.getElementById('final-cost-placeholder');
+        const finalCostResult = document.getElementById('final-cost-result');
+        let ingredients = [];
+        let recipeItems = [];
+        let nextId = 0;
+        const formatCurrency = (value) => { return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); };
+        const calculateBaseCost = (price, quantity, unit) => {
+            if (unit === 'kg') return price / (quantity * 1000);
+            if (unit === 'l') return price / (quantity * 1000);
+            return price / quantity;
+        };
+        const updateFinalCost = () => {
+            let totalCost = 0;
             recipeItems.forEach(item => {
                 const ing = ingredients.find(i => i.id === item.id);
-                const itemEl = document.createElement('div');
-                itemEl.className = 'input-group mb-2';
-                itemEl.innerHTML = `<span class="input-group-text" style="width: 40%;">${ing.name}</span><input type="number" step="any" id="recipe-qty-${ing.id}" class="form-control recipe-quantity-input" placeholder="Qtd. em ${ing.baseUnit}"><button class="btn btn-outline-danger remove-from-recipe" data-id="${ing.id}">&times;</button>`;
-                recipeList.appendChild(itemEl);
+                const quantityInput = document.querySelector(`#recipe-qty-${item.id}`);
+                const quantity = parseFloat(quantityInput.value) || 0;
+                totalCost += ing.baseCost * quantity;
             });
-        }
-        updateFinalCost();
-    };
-    ingredientForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = ingNameInput.value.trim();
-        const price = parseFloat(ingPriceInput.value.replace(',', '.')) || 0;
-        const quantity = parseFloat(ingQtyInput.value.replace(',', '.')) || 0;
-        const unit = ingUnitInput.value;
-        if (!name || price <= 0 || quantity <= 0) {
-            alert('Por favor, preencha todos os campos do ingrediente com valores válidos.');
-            return;
-        }
-        const baseCost = calculateBaseCost(price, quantity, unit);
-        const baseUnit = (unit === 'kg') ? 'g' : (unit === 'l') ? 'ml' : unit;
-        ingredients.push({ id: nextId++, name, baseCost, baseUnit });
-        renderAvailableIngredients();
-        ingredientForm.reset();
-    });
-    document.body.addEventListener('click', (e) => {
-        if (e.target.classList.contains('add-to-recipe')) {
-            const id = parseInt(e.target.dataset.id);
-            if (!recipeItems.some(item => item.id === id)) {
-                recipeItems.push({ id });
+            const profitMargin = parseFloat(profitMarginInput.value) || 0;
+            const suggestedPrice = totalCost * (1 + profitMargin / 100);
+            totalCostEl.textContent = formatCurrency(totalCost);
+            suggestedPriceEl.textContent = formatCurrency(suggestedPrice);
+            if(recipeItems.length > 0) {
+                finalCostPlaceholder.classList.add('d-none');
+                finalCostResult.classList.remove('d-none');
+            } else {
+                finalCostPlaceholder.classList.remove('d-none');
+                finalCostResult.classList.add('d-none');
+            }
+        };
+        const renderAvailableIngredients = () => {
+            if (ingredients.length === 0) {
+                ingPlaceholder.style.display = 'block';
+                availableList.innerHTML = '';
+            } else {
+                ingPlaceholder.style.display = 'none';
+                availableList.innerHTML = '';
+                ingredients.forEach(ing => {
+                    const item = document.createElement('div');
+                    item.className = 'd-flex justify-content-between align-items-center p-2 border-bottom';
+                    item.innerHTML = `<span><strong class="me-2">${ing.name}</strong><small class="text-muted">(${formatCurrency(ing.baseCost)}/${ing.baseUnit})</small></span><button class="btn btn-outline-primary btn-sm add-to-recipe" data-id="${ing.id}">Usar</button>`;
+                    availableList.appendChild(item);
+                });
+            }
+        };
+        const renderRecipeIngredients = () => {
+            if (recipeItems.length === 0) {
+                recipePlaceholder.style.display = 'block';
+                recipeList.innerHTML = '';
+            } else {
+                recipePlaceholder.style.display = 'none';
+                recipeList.innerHTML = '';
+                recipeItems.forEach(item => {
+                    const ing = ingredients.find(i => i.id === item.id);
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'input-group mb-2';
+                    itemEl.innerHTML = `<span class="input-group-text" style="width: 40%;">${ing.name}</span><input type="number" step="any" id="recipe-qty-${ing.id}" class="form-control recipe-quantity-input" placeholder="Qtd. em ${ing.baseUnit}"><button class="btn btn-outline-danger remove-from-recipe" data-id="${ing.id}">&times;</button>`;
+                    recipeList.appendChild(itemEl);
+                });
+            }
+            updateFinalCost();
+        };
+        ingredientForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = ingNameInput.value.trim();
+            const price = parseFloat(ingPriceInput.value.replace(',', '.')) || 0;
+            const quantity = parseFloat(ingQtyInput.value.replace(',', '.')) || 0;
+            const unit = ingUnitInput.value;
+            if (!name || price <= 0 || quantity <= 0) {
+                alert('Por favor, preencha todos os campos do ingrediente com valores válidos.');
+                return;
+            }
+            const baseCost = calculateBaseCost(price, quantity, unit);
+            const baseUnit = (unit === 'kg') ? 'g' : (unit === 'l') ? 'ml' : unit;
+            ingredients.push({ id: nextId++, name, baseCost, baseUnit });
+            renderAvailableIngredients();
+            ingredientForm.reset();
+        });
+        document.body.addEventListener('click', (e) => {
+            if (e.target.classList.contains('add-to-recipe')) {
+                const id = parseInt(e.target.dataset.id);
+                if (!recipeItems.some(item => item.id === id)) {
+                    recipeItems.push({ id });
+                    renderRecipeIngredients();
+                }
+            }
+            if (e.target.classList.contains('remove-from-recipe')) {
+                const id = parseInt(e.target.dataset.id);
+                recipeItems = recipeItems.filter(item => item.id !== id);
                 renderRecipeIngredients();
             }
-        }
-        if (e.target.classList.contains('remove-from-recipe')) {
-            const id = parseInt(e.target.dataset.id);
-            recipeItems = recipeItems.filter(item => item.id !== id);
-            renderRecipeIngredients();
-        }
-    });
-    document.body.addEventListener('input', (e) => {
-        if (e.target.classList.contains('recipe-quantity-input') || e.target.id === 'profit-margin') {
-            updateFinalCost();
-        }
-    });
-});
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Inicializa o Swiper.js para o carrossel de produtos
-    const productSwiper = new Swiper('.product-swiper', {
-        slidesPerView: 'auto', // Mostra quantos slides couberem na tela
-        spaceBetween: 0,       // O espaçamento já está no CSS
-        loop: true,            // Cria o loop infinito
-        freeMode: true,        // Permite que o slide deslize livremente
-        speed: 5000,           // Velocidade da transição contínua em milissegundos
-        autoplay: {
-            delay: 1,                      // Delay mínimo entre as transições
-            disableOnInteraction: false,   // Continua o autoplay mesmo depois de interação manual
-        },
-    });
+        });
+        document.body.addEventListener('input', (e) => {
+            if (e.target.classList.contains('recipe-quantity-input') || e.target.id === 'profit-margin') {
+                updateFinalCost();
+            }
+        });
+    }
 });
 </script>
 

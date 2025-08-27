@@ -608,8 +608,7 @@ body:has(.auth-container) nav {
     font-weight: 500;
     color: var(--secondary-color);
 }
-
-/* --- C. Estilos do Carrossel (Mural de Produtos Lucrativos) com Swiper.js --- */
+/* --- C. Estilos do Carrossel (Versão CSS Simples e Definitiva) --- */
 .product-carousel-section {
     padding: 80px 0;
     background-color: var(--light-gray);
@@ -620,14 +619,19 @@ body:has(.auth-container) nav {
     margin-bottom: 3rem;
 }
 
-/* Ajusta a largura dos slides para que fiquem alinhados corretamente */
-.product-swiper .swiper-slide {
-    width: 280px; /* Largura do card */
-    margin: 0 15px; /* Espaçamento entre os cards */
+.carousel-container {
+    display: flex;
+    width: max-content; 
+    animation: scroll-left 100s linear infinite; 
+    will-change: transform;
+    transform: translateZ(0); 
 }
 
 .product-card {
-    width: 100%; /* O card agora ocupa 100% do slide */
+    display: flex;
+    flex-direction: column;
+    width: 280px; 
+    margin: 0 15px; 
     background-color: #fff;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
@@ -635,26 +639,27 @@ body:has(.auth-container) nav {
     flex-shrink: 0; 
 }
 
-/* O resto do estilo do card continua o mesmo */
 .product-card-image-wrapper {
-    width: 100%;
-    height: 180px; 
-    overflow: hidden;
+    height: 160px;
+    flex-shrink: 0;
 }
 .product-card img {
     width: 100%;
     height: 100%;
     object-fit: cover; 
-    transition: transform 0.3s ease;
 }
-.product-card:hover img {
-    transform: scale(1.05); 
-}
+
 .product-card-body {
     padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: left;
 }
+
 .product-card-title {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--secondary-color);
     margin-bottom: 0.25rem;
@@ -662,53 +667,40 @@ body:has(.auth-container) nav {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 .product-card-business {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: #6c757d;
     margin-bottom: 0.75rem;
 }
+
 .product-card-details {
     display: flex;
     justify-content: space-between;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 500;
     padding-top: 0.5rem;
     border-top: 1px solid #eee;
 }
+
 .product-card-cost { color: #e74c3c; }
 .product-card-price { color: var(--primary-color); }
 
-@media (max-width: 768px) {
-    .product-swiper .swiper-slide {
-        width: 220px; 
-        margin: 0 10px;
-    }
-    .product-card-image-wrapper {
-        height: 140px;
-    }
-    .product-carousel-section {
-        padding: 50px 0;
-    }
-    .product-carousel-section .section-title {
-        font-size: 2rem;
-    }
+@keyframes scroll-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
 }
 
-/* Responsividade básica para o carrossel */
-@media (max-width: 768px) {
-    .product-card {
-        width: 220px; 
-        margin: 0 10px;
-    }
-    .product-card-image-wrapper {
-        height: 140px;
-    }
-    .product-carousel-section {
-        padding: 50px 0;
-    }
-    .product-carousel-section .section-title {
-        font-size: 2rem;
-    }
+/* ESTILOS APLICADOS APENAS AO CARROSSEL DA PÁGINA DE LOGIN */
+.auth-carousel .swiper-slide {
+    background-size: cover;
+    background-position: center;
+}
+.auth-carousel .swiper-slide::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .kpi-icon.icon-ingredients { background-color: #fcf4db; color: #f39c12; }

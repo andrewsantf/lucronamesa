@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="mb-4 pb-2 border-bottom">
+        <h1 class="h2">Relatórios e Análises</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="h5 mb-0">Análise de Receitas</h3>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                Exibindo {% if recipe_limit == 'all' %}Todas{% else %}Top {{ recipe_limit }}{% endif %}
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit='5', ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit) }}">Top 5</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit='10', ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit) }}">Top 10</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit='all', ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit) }}">Ver Todas</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <ul class="nav report-filters mt-3">
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.reports', recipe_sort='profit_desc', recipe_limit=recipe_limit, ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit) }}" 
+                               class="nav-link {% if recipe_sort == 'profit_desc' %}active{% endif %}">Mais Lucrativas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.reports', recipe_sort='margin_desc', recipe_limit=recipe_limit, ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit) }}" 
+                               class="nav-link {% if recipe_sort == 'margin_desc' %}active{% endif %}">Maior Margem</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.reports', recipe_sort='cost_desc', recipe_limit=recipe_limit, ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit) }}" 
+                               class="nav-link {% if recipe_sort == 'cost_desc' %}active{% endif %}">Mais Caras</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.reports', recipe_sort='cost_asc', recipe_limit=recipe_limit, ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit) }}" 
+                               class="nav-link {% if recipe_sort == 'cost_asc' %}active{% endif %}">Mais Baratas</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    {% if recipe_chart_labels %}
+                        <canvas id="topRecipesChart"></canvas>
+                    {% else %}
+                        <div class="empty-state"><i class="bi bi-journal-text fs-1 text-muted"></i><h5 class="mt-3">Nenhuma receita cadastrada</h5><p>Crie receitas para ver a análise de custos.</p></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="h5 mb-0">Análise de Ingredientes</h3>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                Exibindo {% if ingredient_limit == 'all' %}Todos{% else %}Top {{ ingredient_limit }}{% endif %}
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit=recipe_limit, ingredient_sort=ingredient_sort, ingredient_limit='5') }}">Top 5</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit=recipe_limit, ingredient_sort=ingredient_sort, ingredient_limit='10') }}">Top 10</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit=recipe_limit, ingredient_sort=ingredient_sort, ingredient_limit='all') }}">Ver Todos</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <ul class="nav report-filters mt-3">
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit=recipe_limit, ingredient_sort='desc', ingredient_limit=ingredient_limit) }}" 
+                               class="nav-link {% if ingredient_sort == 'desc' %}active{% endif %}">Mais Caros</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit=recipe_limit, ingredient_sort='asc', ingredient_limit=ingredient_limit) }}" 
+                               class="nav-link {% if ingredient_sort == 'asc' %}active{% endif %}">Mais Baratos</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    {% if ingredient_chart_labels %}
+                        <canvas id="topIngredientsChart"></canvas>
+                    {% else %}
+                        <div class="empty-state"><i class="bi bi-egg-fried fs-1 text-muted"></i><h5 class="mt-3">Nenhum ingrediente cadastrado</h5><p>Cadastre ingredientes para analisar seus custos.</p></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // --- GRÁFICO 1: RECEITAS (ATUALIZADO COM BARRAS DUPLAS) ---
+        const recipesCtx = document.getElementById('topRecipesChart');
+        if (recipesCtx) {
+            new Chart(recipesCtx, {
+                type: 'bar',
+                data: {
+                    labels: {{ recipe_chart_labels|tojson }},
+                    datasets: [
+                        {
+                            label: 'Custo (R$)',
+                            data: {{ recipe_chart_cost_data|tojson }},
+                            backgroundColor: 'rgba(243, 156, 18, 0.6)', // Laranja
+                            borderColor: 'rgba(243, 156, 18, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Preço de Venda (R$)',
+                            data: {{ recipe_chart_sale_data|tojson }},
+                            backgroundColor: 'rgba(24, 188, 156, 0.6)', // Verde
+                            borderColor: 'rgba(24, 188, 156, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: { 
+                    scales: { y: { beginAtZero: true, ticks: { callback: function(value) { return 'R$ ' + value.toFixed(2); } } } },
+                    plugins: { legend: { display: true, position: 'top' } } // Agora exibimos a legenda
+                }
+            });
+        }
+        
+        // --- GRÁFICO 2: INGREDIENTES ---
+        const ingredientsCtx = document.getElementById('topIngredientsChart');
+        if (ingredientsCtx) {
+            new Chart(ingredientsCtx, {
+                type: 'bar',
+                data: { labels: {{ ingredient_chart_labels|tojson }}, datasets: [{ label: 'Preço (R$/kg ou R$/L)', data: {{ ingredient_chart_data|tojson }}, backgroundColor: 'rgba(243, 156, 18, 0.6)', borderColor: 'rgba(243, 156, 18, 1)', borderWidth: 1 }] },
+                options: { scales: { y: { beginAtZero: true, ticks: { callback: function(value) { return 'R$ ' + value.toFixed(2); } } } }, plugins: { legend: { display: false } } }
+            });
+        }
+    });
+</script>
+{% endblock %}

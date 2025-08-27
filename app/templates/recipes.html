@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Adicionar Nova Receita</h2>
+                    <form method="POST" action="{{ url_for('main.recipes') }}">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nome da Receita</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Ex: Bolo de Chocolate" required>
+                        </div>
+                        
+                        <h4 class="h5 mt-4">Ingredientes da Receita</h4>
+                        
+                        <div class="mb-3">
+                            <input type="text" id="ingredientSearch" class="form-control" placeholder="🔍 Buscar ingrediente...">
+                        </div>
+                        
+                        <p class="text-muted">Selecione os ingredientes e informe a quantidade usada.</p>
+                        
+                        <div id="ingredientsList">
+                            {% for ingredient in ingredients %}
+                            <div class="input-group mb-3 ingredient-item">
+                                <div class="input-group-text"><input class="form-check-input mt-0 ingredient-checkbox" type="checkbox" name="ingredient_ids" value="{{ ingredient.id }}"></div>
+                                <span class="input-group-text ingredient-name" style="width: 40%;">{{ ingredient.name }} (comprado por {{ ingredient.unit }})</span>
+                                
+                                <input type="number" step="any" class="form-control quantity-input" name="quantity_{{ ingredient.id }}" placeholder="Quantidade">
+                                
+                                <select class="form-select" name="unit_{{ ingredient.id }}">
+                                    <option value="g">Grama (g)</option><option value="kg">Quilograma (kg)</option><option value="ml">Mililitro (ml)</option><option value="l">Litro (l)</option><option value="un">Unidade (un)</option>
+                                </select>
+                            </div>
+                            {% else %}
+                                <div class="alert alert-warning">Você precisa <a href="{{ url_for('main.ingredients') }}">cadastrar ingredientes</a> antes.</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mt-4 mb-3">
+                            <label for="profit_margin" class="form-label">Margem de Lucro Desejada (%)</label>
+                            <input type="number" step="any" class="form-control" id="profit_margin" name="profit_margin" placeholder="Ex: 150 (para 150%)" required>
+                        </div>
+                        
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Salvar Receita</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Lógica da Busca de Ingredientes
+    const searchInput = document.getElementById('ingredientSearch');
+    const ingredientsList = document.getElementById('ingredientsList');
+    const ingredientItems = ingredientsList.getElementsByClassName('ingredient-item');
+
+    searchInput.addEventListener('keyup', function() {
+        const filter = searchInput.value.toLowerCase();
+        for (let i = 0; i < ingredientItems.length; i++) {
+            let span = ingredientItems[i].getElementsByClassName('ingredient-name')[0];
+            if (span) {
+                let txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    ingredientItems[i].style.display = "";
+                } else {
+                    ingredientItems[i].style.display = "none";
+                }
+            }
+        }
+    });
+
+    // Lógica da Validação Condicional do Campo 'required'
+    const checkboxes = document.querySelectorAll('.ingredient-checkbox');
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            const parentGroup = this.closest('.input-group');
+            const quantityInput = parentGroup.querySelector('.quantity-input');
+            if (this.checked) {
+                quantityInput.required = true;
+            } else {
+                quantityInput.required = false;
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

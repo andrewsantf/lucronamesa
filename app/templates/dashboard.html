@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <h1 class="h2">Dashboard</h1>
+        <span class="fs-5 text-muted">Olá, <strong>{{ current_user.full_name.split()[0] }}</strong>!</span>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3"><div class="kpi-card"><div class="kpi-icon icon-ingredients"><i class="bi bi-egg-fried"></i></div><div class="kpi-content"><h5 class="kpi-title">Total de Ingredientes</h5><p class="kpi-value">{{ kpi_total_ingredients }}</p></div></div></div>
+        <div class="col-md-4 mb-3"><div class="kpi-card"><div class="kpi-icon icon-recipes"><i class="bi bi-journal-text"></i></div><div class="kpi-content"><h5 class="kpi-title">Total de Receitas</h5><p class="kpi-value">{{ kpi_total_recipes }}</p></div></div></div>
+        <div class="col-md-4 mb-3"><div class="kpi-card"><div class="kpi-icon icon-avg-cost"><i class="bi bi-cash-coin"></i></div><div class="kpi-content"><h5 class="kpi-title">Custo Médio / Receita</h5><p class="kpi-value">R$ {{ "%.2f"|format(kpi_avg_cost) }}</p></div></div></div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-white pb-0 border-0 pt-3"><h3 class="h5">Seus Ingredientes</h3></div>
+                <div class="card-body">
+                    {% if ingredients %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead><tr><th>Nome</th><th>Preço do Pacote</th><th>Preço Base Calculado</th><th>Ações</th></tr></thead>
+                                <tbody>
+                                    {% for ingredient in ingredients %}
+                                    <tr>
+                                        <td>{{ ingredient.name }}</td>
+                                        <td>R$ {{ "%.2f"|format(ingredient.package_price) }} / {{ ingredient.package_quantity }}{{ ingredient.package_unit }}</td>
+                                        <td><span class="badge bg-info text-dark">R$ {{ "%.4f"|format(ingredient.base_price) }} / {{ ingredient.base_unit }}</span></td>
+                                        <td>
+                                            <a href="{{ url_for('main.edit_ingredient', ingredient_id=ingredient.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                                            <form action="{{ url_for('main.delete_ingredient', ingredient_id=ingredient.id) }}" method="POST" class="d-inline">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Tem certeza?');"><i class="bi bi-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="empty-state"><i class="bi bi-egg-fried fs-1 text-muted"></i><h5 class="mt-3">Nenhum ingrediente por aqui</h5><p>Comece a cadastrar os ingredientes.</p></div>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-white border-0 text-end pb-3"><a href="{{ url_for('main.ingredients') }}" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i> Adicionar Ingrediente</a></div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-white pb-0 border-0 pt-3"><h3 class="h5">Suas Receitas</h3></div>
+                <div class="card-body">
+                    {% if recipes %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                 <thead><tr><th>Nome</th><th>Custo</th><th>Preço Venda</th><th>Ações</th></tr></thead>
+                                <tbody>
+                                    {% for recipe in recipes %}
+                                    <tr>
+                                        <td>{{ recipe.name }}</td>
+                                        <td><span class="badge bg-warning text-dark">R$ {{ "%.2f"|format(recipe.total_cost) }}</span></td>
+                                        <td><span class="badge bg-success">R$ {{ "%.2f"|format(recipe.sale_price) }}</span></td>
+                                        <td>
+                                            <a href="{{ url_for('main.edit_recipe', recipe_id=recipe.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                                            <form action="{{ url_for('main.delete_recipe', recipe_id=recipe.id) }}" method="POST" class="d-inline">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Tem certeza que deseja excluir esta receita?');"><i class="bi bi-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="empty-state"><i class="bi bi-journal-text fs-1 text-muted"></i><h5 class="mt-3">Nenhuma receita por aqui</h5><p>Após cadastrar ingredientes, crie sua primeira receita.</p></div>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-white border-0 text-end pb-3"><a href="{{ url_for('main.recipes') }}" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i> Adicionar Receita</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h3 class="h5 mb-0">Análise de Custo por Receita</h3>
+                    <a href="{{ url_for('main.reports') }}" class="view-report-link">
+                        Ver Relatório Completo <i class="bi bi-arrow-right-short"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="dashboard-chart-container">
+                        {% if recipes %}
+                            <canvas id="dashboardChart"></canvas>
+                        {% else %}
+                            <div class="empty-state">
+                                <i class="bi bi-bar-chart-line fs-1 text-muted"></i>
+                                <h5 class="mt-3">Seus insights aparecerão aqui</h5>
+                                <p>Crie sua primeira receita para visualizar a análise de custos.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chartElement = document.getElementById('dashboardChart');
+        if (chartElement) {
+            const ctx = chartElement.getContext('2d');
+            const chartLabels = {{ chart_labels|tojson }};
+            const chartData = {{ chart_data|tojson }};
+            new Chart(ctx, {type: 'bar', data: {labels: chartLabels, datasets: [{label: 'Custo da Receita (R$)', data: chartData, backgroundColor: 'rgba(24, 188, 156, 0.6)', borderColor: 'rgba(24, 188, 156, 1)', borderWidth: 1}]}, options: {responsive: true, maintainAspectRatio: false, scales: {y: {beginAtZero: true}}, plugins: {legend: {display: false}}}});
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-left">
+        <div class="swiper auth-carousel">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" style="background-image: url({{ url_for('static', filename='img/login-bg.jpg') }});"><div class="auth-left-content"><h1 class="display-4 fw-bold">LucroNaMesa</h1><p class="lead">Onde sua paixão encontra o lucro.</p></div></div>
+                <div class="swiper-slide" style="background-image: url({{ url_for('static', filename='img/login-bg-2.jpg') }});"><div class="auth-left-content"><h2 class="fw-bold">Precificação sem Estresse</h2><p class="lead">Calcule o custo exato de cada item do seu menu.</p></div></div>
+                <div class="swiper-slide" style="background-image: url({{ url_for('static', filename='img/login-bg-3.jpg') }});"><div class="auth-left-content"><h2 class="fw-bold">Controle Total</h2><p class="lead">Saiba sua margem de lucro e venda com confiança.</p></div></div>
+                <div class="swiper-slide" style="background-image: url({{ url_for('static', filename='img/login-bg-4.jpg') }});"><div class="auth-left-content"><h2 class="fw-bold">Decisões Inteligentes</h2><p class="lead">Relatórios simples para otimizar suas vendas.</p></div></div>
+                <div class="swiper-slide" style="background-image: url({{ url_for('static', filename='img/login-bg-5.jpg') }});"><div class="auth-left-content"><h2 class="fw-bold">Foque no Sabor</h2><p class="lead">Nós cuidamos dos números para você.</p></div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="auth-right">
+        <div class="auth-form-container">
+            <div class="text-center mb-4">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="LucroNaMesa Logo" width="60">
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }} small text-center">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <h2 class="mb-4 text-center">Acesse sua conta</h2>
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control", placeholder="seu@email.com") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control") }}
+                </div>
+                <div class="d-grid mt-4">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+            <p class="text-center mt-4">
+                Não tem uma conta? <a href="{{ url_for('main.register') }}">Crie agora mesmo</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

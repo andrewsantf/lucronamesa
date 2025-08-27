@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="mb-4 pb-2 border-bottom">
+        <h1 class="h2">Meu Perfil</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header"><h3 class="h5 mb-0">Minha Assinatura</h3></div>
+                <div class="card-body">
+                    <p><strong>Plano Atual:</strong> <span class="badge bg-primary">{{ current_user.plan }}</span></p>
+                    <p><strong>Status:</strong> <span class="badge bg-success">{{ current_user.subscription_status }}</span></p>
+                    <hr>
+                    <p class="text-muted small">A integração com o sistema de pagamentos será adicionada em breve.</p>
+                    <button class="btn btn-primary w-100" disabled>Gerenciar Assinatura</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header"><h3 class="h5 mb-0">Informações do Perfil</h3></div>
+                <div class="card-body">
+                    <form method="POST" action="">
+                        {{ profile_form.hidden_tag() }}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ profile_form.full_name.label(class="form-label") }}
+                                {{ profile_form.full_name(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ profile_form.email.label(class="form-label") }}
+                                {{ profile_form.email(class="form-control") }}
+                                {% for error in profile_form.email.errors %}
+                                    <span class="text-danger small">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ profile_form.business_name.label(class="form-label") }}
+                                {{ profile_form.business_name(class="form-control") }}
+                            </div>
+                             <div class="col-md-6 mb-3">
+                                {{ profile_form.business_type.label(class="form-label") }}
+                                {{ profile_form.business_type(class="form-select") }}
+                            </div>
+                        </div>
+                         <div class="mb-3">
+                            {{ profile_form.phone.label(class="form-label") }}
+                            {{ profile_form.phone(class="form-control") }}
+                        </div>
+                        <div class="text-end">
+                            {{ profile_form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><h3 class="h5 mb-0">Alterar Senha</h3></div>
+                <div class="card-body">
+                     <form method="POST" action="">
+                        {{ password_form.hidden_tag() }}
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                {{ password_form.current_password.label(class="form-label") }}
+                                {{ password_form.current_password(class="form-control") }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ password_form.new_password.label(class="form-label") }}
+                                {{ password_form.new_password(class="form-control") }}
+                            </div>
+                             <div class="col-md-4 mb-3">
+                                {{ password_form.confirm_new_password.label(class="form-label") }}
+                                {{ password_form.confirm_new_password(class="form-control") }}
+                            </div>
+                        </div>
+                        {% for error in password_form.confirm_new_password.errors %}
+                            <span class="text-danger small d-block text-end">{{ error }}</span>
+                        {% endfor %}
+                        <div class="text-end">
+                             {{ password_form.submit_password(class="btn btn-secondary") }}
+                        </div>
+                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

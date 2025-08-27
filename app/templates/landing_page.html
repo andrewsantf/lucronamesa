@@ -27,125 +27,142 @@
 <section class="product-carousel-section text-center">
     <div class="container-fluid">
         <h2 class="section-title">Veja o que nossos clientes estão precificando.</h2>
-        
-        <div class="carousel-wrapper">
-            <div class="carousel-container">
-                
-                {% for i in range(2) %}
-                    
-                    <div class="product-card">
-                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/bolo_cenoura_chocolate.jpg') }}" alt="Bolo de Cenoura"></div>
-                        <div class="product-card-body">
-                            <h4 class="product-card-title">Bolo de Cenoura com Chocolate</h4>
-                            <p class="product-card-business">Confeitaria Delícias da Vó</p>
-                            <div class="product-card-details">
-                                <span class="product-card-cost">Custo: R$ 18,50</span>
-                                <span class="product-card-price">Venda: R$ 45,00</span>
-                            </div>
+    </div>
+    
+    <div class="swiper product-swiper">
+        <div class="swiper-wrapper">
+            
+            <div class="swiper-slide">
+                <div class="product-card">
+                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/bolo_cenoura_chocolate.jpg') }}" alt="Bolo de Cenoura"></div>
+                    <div class="product-card-body">
+                        <h4 class="product-card-title">Bolo de Cenoura com Chocolate</h4>
+                        <p class="product-card-business">Confeitaria Delícias da Vó</p>
+                        <div class="product-card-details">
+                            <span class="product-card-cost">Custo: R$ 18,50</span>
+                            <span class="product-card-price">Venda: R$ 45,00</span>
                         </div>
                     </div>
-                    <div class="product-card">
-                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/hamburger_artesanal.jpg') }}" alt="Hambúrguer Artesanal"></div>
-                        <div class="product-card-body">
-                            <h4 class="product-card-title">Hambúrguer Artesanal</h4>
-                            <p class="product-card-business">Burger do Chef</p>
-                            <div class="product-card-details">
-                                <span class="product-card-cost">Custo: R$ 12,80</span>
-                                <span class="product-card-price">Venda: R$ 32,50</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/brigadeiro_pistache.jpg') }}" alt="Brigadeiro de Pistache"></div>
-                        <div class="product-card-body">
-                            <h4 class="product-card-title">Brigadeiro Gourmet de Pistache</h4>
-                            <p class="product-card-business">Doces Encantados</p>
-                            <div class="product-card-details">
-                                <span class="product-card-cost">Custo: R$ 1,80</span>
-                                <span class="product-card-price">Venda: R$ 4,50</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/pao_de_queijo_recheado.jpg') }}" alt="Pão de Queijo Recheado"></div>
-                        <div class="product-card-body">
-                            <h4 class="product-card-title">Pão de Queijo Recheado</h4>
-                            <p class="product-card-business">Padaria Pão Quente</p>
-                            <div class="product-card-details">
-                                <span class="product-card-cost">Custo: R$ 2,10</span>
-                                <span class="product-card-price">Venda: R$ 6,00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/torta_morango.jpg') }}" alt="Torta de Morango"></div>
-                        <div class="product-card-body">
-                            <h4 class="product-card-title">Torta de Morango</h4>
-                            <p class="product-card-business">Sabor e Arte Confeitaria</p>
-                            <div class="product-card-details">
-                                <span class="product-card-cost">Custo: R$ 35,00</span>
-                                <span class="product-card-price">Venda: R$ 95,00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/coxinha_frango_requeijao.jpg') }}" alt="Coxinha de Frango"></div>
-                        <div class="product-card-body">
-                            <h4 class="product-card-title">Coxinha de Frango com Requeijão</h4>
-                            <p class="product-card-business">Salgados da Chef</p>
-                            <div class="product-card-details">
-                                <span class="product-card-cost">Custo: R$ 1,10</span>
-                                <span class="product-card-price">Venda: R$ 3,50</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/muffin_blueberry.jpg') }}" alt="Muffin de Blueberry"></div>
-                        <div class="product-card-body">
-                            <h4 class="product-card-title">Muffin de Blueberry</h4>
-                            <p class="product-card-business">Café com Prosa</p>
-                            <div class="product-card-details">
-                                <span class="product-card-cost">Custo: R$ 4,20</span>
-                                <span class="product-card-price">Venda: R$ 12,00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/pizza_calabresa.jpg') }}" alt="Pizza Calabresa"></div>
-                        <div class="product-card-body">
-                            <h4 class="product-card-title">Pizza Calabresa Borda Recheada</h4>
-                            <p class="product-card-business">Pizzaria Forno Mágico</p>
-                            <div class="product-card-details">
-                                <span class="product-card-cost">Custo: R$ 28,00</span>
-                                <span class="product-card-price">Venda: R$ 75,00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/cookie_chocolate.jpg') }}" alt="Cookie de Chocolate"></div>
-                        <div class="product-card-body">
-                            <h4 class="product-card-title">Cookie com Gotas de Chocolate</h4>
-                            <p class="product-card-business">Adoce sua Vida</p>
-                            <div class="product-card-details">
-                                <span class="product-card-cost">Custo: R$ 2,50</span>
-                                <span class="product-card-price">Venda: R$ 8,00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/suco_laranja.jpg') }}" alt="Suco de Laranja"></div>
-                        <div class="product-card-body">
-                            <h4 class="product-card-title">Suco Natural de Laranja</h4>
-                            <p class="product-card-business">Naturalmente Fresco</p>
-                            <div class="product-card-details">
-                                <span class="product-card-cost">Custo: R$ 3,10</span>
-                                <span class="product-card-price">Venda: R$ 9,00</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                {% endfor %}
+                </div>
             </div>
+            <div class="swiper-slide">
+                <div class="product-card">
+                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/hamburger_artesanal.jpg') }}" alt="Hambúrguer Artesanal"></div>
+                    <div class="product-card-body">
+                        <h4 class="product-card-title">Hambúrguer Artesanal</h4>
+                        <p class="product-card-business">Burger do Chef</p>
+                        <div class="product-card-details">
+                            <span class="product-card-cost">Custo: R$ 12,80</span>
+                            <span class="product-card-price">Venda: R$ 32,50</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="product-card">
+                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/brigadeiro_pistache.jpg') }}" alt="Brigadeiro de Pistache"></div>
+                    <div class="product-card-body">
+                        <h4 class="product-card-title">Brigadeiro Gourmet de Pistache</h4>
+                        <p class="product-card-business">Doces Encantados</p>
+                        <div class="product-card-details">
+                            <span class="product-card-cost">Custo: R$ 1,80</span>
+                            <span class="product-card-price">Venda: R$ 4,50</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="product-card">
+                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/pao_de_queijo_recheado.jpg') }}" alt="Pão de Queijo Recheado"></div>
+                    <div class="product-card-body">
+                        <h4 class="product-card-title">Pão de Queijo Recheado</h4>
+                        <p class="product-card-business">Padaria Pão Quente</p>
+                        <div class="product-card-details">
+                            <span class="product-card-cost">Custo: R$ 2,10</span>
+                            <span class="product-card-price">Venda: R$ 6,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="product-card">
+                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/torta_morango.jpg') }}" alt="Torta de Morango"></div>
+                    <div class="product-card-body">
+                        <h4 class="product-card-title">Torta de Morango</h4>
+                        <p class="product-card-business">Sabor e Arte Confeitaria</p>
+                        <div class="product-card-details">
+                            <span class="product-card-cost">Custo: R$ 35,00</span>
+                            <span class="product-card-price">Venda: R$ 95,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="product-card">
+                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/coxinha_frango_requeijao.jpg') }}" alt="Coxinha de Frango"></div>
+                    <div class="product-card-body">
+                        <h4 class="product-card-title">Coxinha de Frango com Requeijão</h4>
+                        <p class="product-card-business">Salgados da Chef</p>
+                        <div class="product-card-details">
+                            <span class="product-card-cost">Custo: R$ 1,10</span>
+                            <span class="product-card-price">Venda: R$ 3,50</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="product-card">
+                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/muffin_blueberry.jpg') }}" alt="Muffin de Blueberry"></div>
+                    <div class="product-card-body">
+                        <h4 class="product-card-title">Muffin de Blueberry</h4>
+                        <p class="product-card-business">Café com Prosa</p>
+                        <div class="product-card-details">
+                            <span class="product-card-cost">Custo: R$ 4,20</span>
+                            <span class="product-card-price">Venda: R$ 12,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="product-card">
+                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/pizza_calabresa.jpg') }}" alt="Pizza Calabresa"></div>
+                    <div class="product-card-body">
+                        <h4 class="product-card-title">Pizza Calabresa Borda Recheada</h4>
+                        <p class="product-card-business">Pizzaria Forno Mágico</p>
+                        <div class="product-card-details">
+                            <span class="product-card-cost">Custo: R$ 28,00</span>
+                            <span class="product-card-price">Venda: R$ 75,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="product-card">
+                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/cookie_chocolate.jpg') }}" alt="Cookie de Chocolate"></div>
+                    <div class="product-card-body">
+                        <h4 class="product-card-title">Cookie com Gotas de Chocolate</h4>
+                        <p class="product-card-business">Adoce sua Vida</p>
+                        <div class="product-card-details">
+                            <span class="product-card-cost">Custo: R$ 2,50</span>
+                            <span class="product-card-price">Venda: R$ 8,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="product-card">
+                    <div class="product-card-image-wrapper"><img src="{{ url_for('static', filename='img/products/suco_laranja.jpg') }}" alt="Suco de Laranja"></div>
+                    <div class="product-card-body">
+                        <h4 class="product-card-title">Suco Natural de Laranja</h4>
+                        <p class="product-card-business">Naturalmente Fresco</p>
+                        <div class="product-card-details">
+                            <span class="product-card-cost">Custo: R$ 3,10</span>
+                            <span class="product-card-price">Venda: R$ 9,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -477,6 +494,23 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.target.classList.contains('recipe-quantity-input') || e.target.id === 'profit-margin') {
             updateFinalCost();
         }
+    });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Inicializa o Swiper.js para o carrossel de produtos
+    const productSwiper = new Swiper('.product-swiper', {
+        slidesPerView: 'auto', // Mostra quantos slides couberem na tela
+        spaceBetween: 0,       // O espaçamento já está no CSS
+        loop: true,            // Cria o loop infinito
+        freeMode: true,        // Permite que o slide deslize livremente
+        speed: 5000,           // Velocidade da transição contínua em milissegundos
+        autoplay: {
+            delay: 1,                      // Delay mínimo entre as transições
+            disableOnInteraction: false,   // Continua o autoplay mesmo depois de interação manual
+        },
     });
 });
 </script>

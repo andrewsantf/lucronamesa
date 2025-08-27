@@ -609,58 +609,50 @@ body:has(.auth-container) nav {
     color: var(--secondary-color);
 }
 
-/* --- C. Estilos do Carrossel Infinito (Mural de Produtos Lucrativos) --- */
+/* --- C. Estilos do Carrossel (Mural de Produtos Lucrativos) com Swiper.js --- */
 .product-carousel-section {
     padding: 80px 0;
     background-color: var(--light-gray);
-    overflow: hidden;
+    overflow: hidden; 
 }
 
 .product-carousel-section .section-title {
     margin-bottom: 3rem;
 }
-.carousel-container {
-    display: flex;
-    white-space: nowrap; 
-    width: max-content; 
-    animation: scroll-left 100s linear infinite; 
-    will-change: transform;
-    transform: translateZ(0); 
+
+/* Ajusta a largura dos slides para que fiquem alinhados corretamente */
+.product-swiper .swiper-slide {
+    width: 280px; /* Largura do card */
+    margin: 0 15px; /* Espaçamento entre os cards */
 }
 
 .product-card {
-    display: inline-block; 
-    width: 280px; 
-    margin: 0 15px; 
+    width: 100%; /* O card agora ocupa 100% do slide */
     background-color: #fff;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     overflow: hidden; 
     flex-shrink: 0; 
-    vertical-align: top; 
 }
 
+/* O resto do estilo do card continua o mesmo */
 .product-card-image-wrapper {
     width: 100%;
     height: 180px; 
     overflow: hidden;
 }
-
 .product-card img {
     width: 100%;
     height: 100%;
     object-fit: cover; 
     transition: transform 0.3s ease;
 }
-
 .product-card:hover img {
     transform: scale(1.05); 
 }
-
 .product-card-body {
     padding: 1rem;
 }
-
 .product-card-title {
     font-size: 1.1rem;
     font-weight: 600;
@@ -670,13 +662,11 @@ body:has(.auth-container) nav {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 .product-card-business {
     font-size: 0.85rem;
     color: #6c757d;
     margin-bottom: 0.75rem;
 }
-
 .product-card-details {
     display: flex;
     justify-content: space-between;
@@ -685,23 +675,22 @@ body:has(.auth-container) nav {
     padding-top: 0.5rem;
     border-top: 1px solid #eee;
 }
+.product-card-cost { color: #e74c3c; }
+.product-card-price { color: var(--primary-color); }
 
-.product-card-cost {
-    color: #e74c3c; 
-}
-
-.product-card-price {
-    color: var(--primary-color); 
-}
-
-/* Animações de Scroll */
-@keyframes scroll-left {
-    from { 
-        transform: translateX(0); 
+@media (max-width: 768px) {
+    .product-swiper .swiper-slide {
+        width: 220px; 
+        margin: 0 10px;
     }
-    to { 
-        /* AJUSTE CRÍTICO: Move 50% da largura total, que corresponde exatamente ao comprimento do conjunto original de 10 cards. */
-        transform: translateX(-50%); 
+    .product-card-image-wrapper {
+        height: 140px;
+    }
+    .product-carousel-section {
+        padding: 50px 0;
+    }
+    .product-carousel-section .section-title {
+        font-size: 2rem;
     }
 }
 

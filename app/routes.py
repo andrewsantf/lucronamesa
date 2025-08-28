@@ -9,6 +9,49 @@ import re
 from datetime import datetime, timedelta
 from functools import wraps
 
+# Cria o Blueprint
+main = Blueprint('main', __name__)
+
+# Exemplo de rota de cadastro
+@main.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash('Conta criada com sucesso!', 'success')
+        return redirect(url_for('main.login'))
+    return render_template('register.html', form=form)
+
+# Exemplo de rota de login
+@main.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
+            flash('Login realizado com sucesso!', 'success')
+            return redirect(url_for('main.dashboard'))
+        else:
+            flash('Falha no login. Verifique email e senha.', 'danger')
+    return render_template('login.html', form=form)
+
+# Exemplo de rota protegida
+@main.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
+
+# Exemplo de rota usando current_app
+@main.route('/config')
+def show_config():
+    secret_key = current_app.config.get('SECRET_KEY')
+    return f'Secret Key do app: {secret_key}'
+
+
 main = Blueprint('main', __name__)
 
 # --- DECORADOR PERSONALIZADO (GUARDIÃO DA ASSINATURA) ---
@@ -474,12 +517,12 @@ def calculate_ingredient_cost_in_recipe(ingredient, quantity_used, unit_used):
     cost = ingredient.base_price * quantity_used
     return cost
 #------------------------------#####-----------------
-from flask import Flask
-from app import app  # ou seu objeto Flask
+from flask import current_app
 from sqlalchemy import text
-from app import db  # ou sua instância do SQLAlchemy
+from app import db
+from . import main  # seu Blueprint principal
 
-@app.route("/fix_columns")
+@main.route("/fix_columns")
 def fix_columns():
     try:
         db.session.execute(text('ALTER TABLE "user" ADD COLUMN IF NOT EXISTS plan_type VARCHAR(50);'))
@@ -490,3 +533,4 @@ def fix_columns():
         return "Colunas criadas com sucesso!"
     except Exception as e:
         return f"Erro: {e}"
+

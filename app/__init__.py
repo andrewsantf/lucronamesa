@@ -1,7 +1,21 @@
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+from flask_bcrypt import Bcrypt
+from flask_migrate import Migrate
+from config import Config
+
+db = SQLAlchemy()
+bcrypt = Bcrypt()
+login_manager = LoginManager()
+login_manager.login_view = 'main.login'
+login_manager.login_message_category = 'info'
+migrate = Migrate()
+
 def create_app():
     app = Flask(__name__)
     
-    # Carrega todas as configurações
+    # Carrega as configurações
     app.config.from_object(Config)
 
     # Inicializa as extensões
@@ -14,13 +28,14 @@ def create_app():
     from .routes import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
+    # Importa o modelo User
     from .models import User
 
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    # === ROTA TEMPORÁRIA PARA CRIAR COLUNAS NO RENDER ===
+    # Rota temporária para criar colunas no Render
     @app.route("/fix_columns")
     def fix_columns():
         try:

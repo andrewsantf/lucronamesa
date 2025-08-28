@@ -1,8 +1,8 @@
-"""tabelas iniciais com campos de assinatura
+"""tabelas iniciais
 
-Revision ID: 47d6e1c1516e
+Revision ID: 223f1ced9f16
 Revises: 
-Create Date: 2025-08-28 14:10:14.612282
+Create Date: 2025-08-28 14:29:52.174243
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '47d6e1c1516e'
+revision = '223f1ced9f16'
 down_revision = None
 branch_labels = None
 depends_on = None

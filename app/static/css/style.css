@@ -150,28 +150,28 @@ body:has(.landing-container-v2) main {
     width: 100%;
 }
 .section-title {
-    font-size: 2.5rem;
+    font-size: 2.2rem; /* Reduzido para melhor encaixe em mobile */
     font-weight: 700;
     color: var(--secondary-color);
 }
 .section-subtitle {
-    font-size: 1.15rem;
+    font-size: 1.1rem; /* Reduzido */
     color: #6c757d;
     max-width: 600px;
     margin: 1rem auto 0;
 }
 .hero-section {
-    padding: 100px 0;
+    padding: 60px 0; /* Padding reduzido para mobile */
     background-color: #fff;
 }
 .hero-title {
-    font-size: 3.2rem;
+    font-size: 2.5rem; /* Reduzido */
     font-weight: 700;
     line-height: 1.2;
     color: var(--secondary-color);
 }
 .hero-subtitle {
-    font-size: 1.25rem;
+    font-size: 1.15rem; /* Reduzido */
     color: #6c757d;
     margin: 1.5rem 0 2rem;
     max-width: 550px;
@@ -202,21 +202,23 @@ body:has(.landing-container-v2) main {
     font-weight: 500;
     color: #6c757d;
 }
-.before-after-section { padding: 100px 0; }
+.before-after-section, .features-section-v2, .interactive-demo-section, .pricing-section { 
+    padding: 60px 0; /* Padding padronizado e reduzido para mobile */
+}
 .before-list { list-style: none; padding-left: 0; }
-before-list li { font-size: 1.1rem; margin-bottom: 1rem; }
+.before-list li { font-size: 1.1rem; margin-bottom: 1rem; }
 .after-card {
     background: #fff;
-    padding: 2.5rem;
+    padding: 2rem; /* Padding reduzido */
     border-radius: 12px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.08);
 }
-.features-section-v2 { padding: 100px 0; background-color: var(--light-gray); }
-.feature-row { margin-bottom: 80px; }
+.features-section-v2 { background-color: var(--light-gray); }
+.feature-row { margin-bottom: 60px; } /* Margem reduzida */
 .feature-row:last-child { margin-bottom: 0; }
-.feature-text { padding: 0 2rem; }
+.feature-text { padding: 0 1rem; text-align: center; } /* Centralizado para mobile */
 .feature-text h3 {
-    font-size: 1.8rem;
+    font-size: 1.6rem; /* Reduzido */
     font-weight: 600;
     color: var(--secondary-color);
     margin-bottom: 1rem;
@@ -249,7 +251,6 @@ before-list li { font-size: 1.1rem; margin-bottom: 1rem; }
     color: #FFF;
 }
 .pricing-section {
-    padding: 100px 0;
     background-color: #fff;
 }
 .pricing-section .row {
@@ -269,6 +270,10 @@ before-list li { font-size: 1.1rem; margin-bottom: 1rem; }
     margin: 0 auto;            /* Centraliza */
     font-size: 0.95rem;        /* Texto levemente menor */
 }
+/* No mobile, remove o efeito de escala para não quebrar o layout */
+.pricing-card.highlighted {
+    transform: none; 
+}
 .pricing-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
@@ -277,7 +282,6 @@ before-list li { font-size: 1.1rem; margin-bottom: 1rem; }
     border-color: var(--primary-color);
     border-width: 2px;
     position: relative;
-    transform: scale(1.05);
 }
 .plan-badge {
     position: absolute;
@@ -308,7 +312,7 @@ before-list li { font-size: 1.1rem; margin-bottom: 1rem; }
     border-width: 2px;
 }
 .faq-section {
-    padding: 80px 0;
+    padding: 60px 0; /* Padding reduzido */
     background-color: var(--light-gray);
 }
 .faq-section .section-title {
@@ -364,6 +368,7 @@ body:has(.auth-container) nav {
 .swiper, .swiper-wrapper, .swiper-slide {
     height: 100%;
     width: 100%;
+    background-color: transparent;
 }
 .swiper-slide {
     background-size: cover;
@@ -374,7 +379,7 @@ body:has(.auth-container) nav {
     text-align: center;
     color: white;
 }
-.swiper-slide::before {
+.auth-carousel .swiper-slide::before {
     content: '';
     position: absolute;
     top: 0;
@@ -383,6 +388,7 @@ body:has(.auth-container) nav {
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
 }
+
 .auth-left-content {
     position: relative;
     z-index: 1;
@@ -453,19 +459,26 @@ body:has(.auth-container) nav {
     margin-right: 1rem;
 }
 
+.card-body .table-responsive {
+    max-height: 350px; /* Define uma altura máxima para a área da tabela */
+    overflow-y: auto;  /* Adiciona a barra de rolagem vertical APENAS se necessário */
+}
+
 /* --- B. Filtros de Relatórios (Pílula) --- */
 .report-filters {
     background-color: var(--light-gray);
-    border-radius: 50px;
+    border-radius: 10px;
     padding: 0.3rem;
     display: inline-flex;
     border: 1px solid #dee2e6;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 .report-filters .nav-link {
     color: var(--text-color);
     font-weight: 500;
     padding: 0.5rem 1rem;
-    border-radius: 50px;
+    border-radius: 10px;
     border-bottom: none;
     transition: all 0.2s ease-in-out;
 }
@@ -483,14 +496,13 @@ body:has(.auth-container) nav {
 
 /* --- SEÇÃO DO NOVO DEMO INTERATIVO --- */
 .interactive-demo-section {
-    padding: 100px 0;
     background-color: var(--light-gray);
 }
 
 .demo-container {
     background-color: #fff;
     border-radius: 12px;
-    padding: 2.5rem;
+    padding: 1.5rem; /* Padding reduzido para mobile */
     border: 1px solid #e9ecef;
 }
 
@@ -501,7 +513,7 @@ body:has(.auth-container) nav {
 .result-box-v2 {
     background-color: #f8f9fa; /* Um cinza um pouco mais escuro que o fundo da seção */
     border-radius: 8px;
-    padding: 2rem;
+    padding: 1.5rem; /* Padding reduzido */
     height: 100%;
     border: 1px solid #dee2e6;
 }
@@ -546,6 +558,8 @@ body:has(.auth-container) nav {
     background-color: #149a7e; /* Uma versão ainda mais escura para o clique/ativo */
     border-color: #149a7e;
 }
+
+
 
 /* ==========================================================================
    7. NOVOS ELEMENTOS DA LANDING PAGE (Adicionado e Atualizado)
@@ -608,9 +622,10 @@ body:has(.auth-container) nav {
     font-weight: 500;
     color: var(--secondary-color);
 }
-/* --- C. Estilos do Carrossel (Versão CSS Simples e Definitiva) --- */
+
+/* --- C. Estilos FINAIS e REFINADOS do Carrossel (Nativo Swiper) --- */
 .product-carousel-section {
-    padding: 80px 0;
+    padding: 60px 0;
     background-color: var(--light-gray);
     overflow: hidden; 
 }
@@ -619,89 +634,70 @@ body:has(.auth-container) nav {
     margin-bottom: 3rem;
 }
 
-.carousel-container {
-    display: flex;
-    width: max-content; 
-    animation: scroll-left 100s linear infinite; 
-    will-change: transform;
-    transform: translateZ(0); 
+.continuous-slider {
+    width: 100%;
 }
 
+.continuous-slider .swiper-wrapper {
+    transition-timing-function: linear !important;
+}
+
+/* Garante que o container do slide seja invisível */
+.continuous-slider .swiper-slide {
+    width: 280px !important;
+    margin: 0 15px;
+    flex-shrink: 0;
+    height: auto;
+    background: transparent !important;
+    padding-bottom: 0px;
+}
+
+/* Estiliza o card que fica DENTRO do slide */
 .product-card {
     display: flex;
     flex-direction: column;
-    width: 280px; 
-    margin: 0 15px; 
-    background-color: #fff;
-    border-radius: var(--border-radius);
+    height: 100%;
+    width: 100%;
+    background-color: #fff; /* Fundo branco para o card */
+    border-radius: var(--border-radius); /* Bordas arredondadas */
     box-shadow: var(--box-shadow);
-    overflow: hidden; 
-    flex-shrink: 0; 
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    /* A "dica" para forçar a renderização correta no navegador */
+    transform: translateZ(0); 
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .product-card-image-wrapper {
-    height: 160px;
-    flex-shrink: 0;
+    height: 180px;
+    overflow: hidden;
 }
-.product-card img {
+
+.product-card-image-wrapper img {
     width: 100%;
     height: 100%;
-    object-fit: cover; 
+    object-fit: cover;
+    transition: transform 0.4s ease-in-out;
 }
 
-.product-card-body {
-    padding: 1rem;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    text-align: left;
+/* Efeito de zoom na imagem reduzido */
+.product-card:hover .product-card-image-wrapper img {
+    transform: scale(1.05); /* EFEITO REDUZIDO AQUI */
 }
 
-.product-card-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--secondary-color);
-    margin-bottom: 0.25rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.product-card-business {
-    font-size: 0.8rem;
-    color: #6c757d;
-    margin-bottom: 0.75rem;
-}
-
-.product-card-details {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.85rem;
-    font-weight: 500;
-    padding-top: 0.5rem;
-    border-top: 1px solid #eee;
-}
-
+/* Estilos do corpo do card */
+.product-card-body { padding: 1rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; text-align: left; }
+.product-card-title { font-size: 1rem; font-weight: 600; color: var(--secondary-color); margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.product-card-business { font-size: 0.8rem; color: #6c757d; margin-bottom: 0.75rem; }
+.product-card-details { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 500; padding-top: 0.5rem; border-top: 1px solid #eee; }
 .product-card-cost { color: #e74c3c; }
 .product-card-price { color: var(--primary-color); }
 
-@keyframes scroll-left {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-}
-
-/* ESTILOS APLICADOS APENAS AO CARROSSEL DA PÁGINA DE LOGIN */
-.auth-carousel .swiper-slide {
-    background-size: cover;
-    background-position: center;
-}
-.auth-carousel .swiper-slide::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-}
 
 .kpi-icon.icon-ingredients { background-color: #fcf4db; color: #f39c12; }
 .kpi-icon.icon-recipes { background-color: #eafaf1; color: #2ecc71; }
@@ -715,3 +711,88 @@ body:has(.auth-container) nav {
 .footer { border-top: 1px solid #dee2e6; }
 .footer a { color: var(--text-color); text-decoration: none; font-weight: 500; }
 .footer a:hover { color: var(--primary-color); }
+
+
+/* ==========================================================================
+   8. AJUSTES RESPONSIVOS (Media Queries)
+   ========================================================================== */
+
+/* --- Telas médias (tablets, 768px ou mais) --- */
+@media (min-width: 768px) {
+    .section-title { font-size: 2.5rem; }
+    .section-subtitle { font-size: 1.15rem; }
+    .hero-title { font-size: 3.2rem; }
+    .hero-subtitle { font-size: 1.25rem; }
+    .hero-section { padding: 100px 0; }
+    .before-after-section, .features-section-v2, .interactive-demo-section, .pricing-section, .faq-section, .product-carousel-section {
+        padding: 100px 0;
+    }
+    .feature-text { text-align: left; } /* Alinha o texto à esquerda em telas maiores */
+    .demo-container, .result-box-v2 { padding: 2.5rem; }
+}
+
+/* --- Telas grandes (desktops, 992px ou mais) --- */
+@media (min-width: 992px) {
+    .feature-text { padding: 0 2rem; }
+    .pricing-card.highlighted { transform: scale(1.05); } /* Reativa o efeito de escala */
+}
+
+/* --- Telas pequenas (celulares, abaixo de 768px) --- */
+@media (max-width: 767.98px) {
+    .feature-row {
+        flex-direction: column; /* Empilha a imagem e o texto */
+    }
+    /* Inverte a ordem visual para o segundo feature-item no mobile */
+    .feature-row .order-lg-2 { order: 1 !important; }
+    .feature-row .order-lg-1 { order: 2 !important; margin-top: 2rem;}
+    .feature-row img { margin-bottom: 2rem; } /* Adiciona espaço abaixo da imagem */
+    
+    /* Ajusta o demo interativo para empilhar as colunas */
+    .demo-container .row > div {
+        margin-bottom: 1.5rem;
+    }
+
+    /* Garante que os cards de preço não fiquem espremidos */
+    .pricing-card {
+        margin-bottom: 2rem;
+    }
+    .pricing-section .row {
+        gap: 0; /* Remove o gap para usar margin nos cards */
+    }
+}
+/* --- Telas pequenas (celulares, abaixo de 768px) --- */
+@media (max-width: 767.98px) {
+    /* ... (código que já estava aqui, como o das features) ... */
+
+    /* NOVO CÓDIGO: Estilos para as tabelas empilháveis */
+    .table-responsive-stack thead {
+        display: none; /* 1. Esconde o cabeçalho original */
+    }
+    .table-responsive-stack tr {
+        display: flex;
+        flex-direction: column; /* 2. Faz cada linha virar uma coluna */
+        margin-bottom: 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: var(--border-radius);
+        padding: 1rem;
+    }
+    .table-responsive-stack td {
+        display: flex;
+        justify-content: space-between; /* 4. Alinha o rótulo e o valor */
+        align-items: center;
+        border: none;
+        padding: 0.5rem 0;
+    }
+    .table-responsive-stack td::before {
+        content: attr(data-label); /* 3. Usa o 'data-label' do HTML como um rótulo */
+        font-weight: bold;
+        margin-right: 1rem;
+    }
+    /* Alinha os botões de ação à direita */
+    .table-responsive-stack td[data-label="Ações"] {
+        justify-content: flex-end;
+    }
+    .table-responsive-stack td[data-label="Ações"]::before {
+        display: none; /* Esconde o rótulo "Ações" que não é necessário */
+    }
+}

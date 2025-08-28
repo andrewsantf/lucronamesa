@@ -14,7 +14,7 @@
       {% endif %}
     {% endwith %}
 
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4 pb-2 border-bottom">
         <h1 class="h2">Dashboard</h1>
         <span class="fs-5 text-muted">Olá, <strong>{{ current_user.full_name.split()[0] }}</strong>!</span>
     </div>
@@ -27,20 +27,23 @@
 
     <div class="row">
         <div class="col-lg-6 mb-4">
-            <div class="card h-100">
-                <div class="card-header bg-white pb-0 border-0 pt-3"><h3 class="h5">Seus Ingredientes</h3></div>
-                <div class="card-body">
+            <div class="card h-100 d-flex flex-column">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h3 class="h5">Seus Ingredientes</h3>
+                    <input type="search" id="ingredient-search-input" class="form-control mt-2" placeholder="Buscar ingrediente...">
+                </div>
+                <div class="card-body" style="flex-grow: 1; overflow: hidden;">
                     {% if ingredients %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
+                        <div class="table-responsive h-100">
+                            <table class="table table-hover table-responsive-stack">
                                 <thead><tr><th>Nome</th><th>Preço do Pacote</th><th>Preço Base Calculado</th><th>Ações</th></tr></thead>
-                                <tbody>
+                                <tbody id="ingredient-list">
                                     {% for ingredient in ingredients %}
                                     <tr>
-                                        <td>{{ ingredient.name }}</td>
-                                        <td>R$ {{ "%.2f"|format(ingredient.package_price) }} / {{ ingredient.package_quantity }}{{ ingredient.package_unit }}</td>
-                                        <td><span class="badge bg-info text-dark">R$ {{ "%.4f"|format(ingredient.base_price) }} / {{ ingredient.base_unit }}</span></td>
-                                        <td>
+                                        <td data-label="Nome">{{ ingredient.name }}</td>
+                                        <td data-label="Preço Pacote">R$ {{ "%.2f"|format(ingredient.package_price) }} / {{ ingredient.package_quantity }}{{ ingredient.package_unit }}</td>
+                                        <td data-label="Preço Base"><span class="badge bg-info text-dark">R$ {{ "%.4f"|format(ingredient.base_price) }} / {{ ingredient.base_unit }}</span></td>
+                                        <td data-label="Ações">
                                             <a href="{{ url_for('main.edit_ingredient', ingredient_id=ingredient.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
                                             <form action="{{ url_for('main.delete_ingredient', ingredient_id=ingredient.id) }}" method="POST" class="d-inline">
                                                 <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Tem certeza?');"><i class="bi bi-trash"></i></button>
@@ -48,6 +51,7 @@
                                         </td>
                                     </tr>
                                     {% endfor %}
+                                    <tr id="ingredient-no-results" class="d-none"><td colspan="4" class="text-center text-muted">Nenhum ingrediente encontrado.</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -60,20 +64,23 @@
         </div>
 
         <div class="col-lg-6 mb-4">
-            <div class="card h-100">
-                <div class="card-header bg-white pb-0 border-0 pt-3"><h3 class="h5">Suas Receitas</h3></div>
-                <div class="card-body">
+            <div class="card h-100 d-flex flex-column">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h3 class="h5">Suas Receitas</h3>
+                    <input type="search" id="recipe-search-input" class="form-control mt-2" placeholder="Buscar receita...">
+                </div>
+                <div class="card-body" style="flex-grow: 1; overflow: hidden;">
                     {% if recipes %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
+                        <div class="table-responsive h-100">
+                            <table class="table table-hover table-responsive-stack">
                                  <thead><tr><th>Nome</th><th>Custo</th><th>Preço Venda</th><th>Ações</th></tr></thead>
-                                <tbody>
+                                 <tbody id="recipe-list">
                                     {% for recipe in recipes %}
                                     <tr>
-                                        <td>{{ recipe.name }}</td>
-                                        <td><span class="badge bg-warning text-dark">R$ {{ "%.2f"|format(recipe.total_cost) }}</span></td>
-                                        <td><span class="badge bg-success">R$ {{ "%.2f"|format(recipe.sale_price) }}</span></td>
-                                        <td>
+                                        <td data-label="Nome">{{ recipe.name }}</td>
+                                        <td data-label="Custo"><span class="badge bg-warning text-dark">R$ {{ "%.2f"|format(recipe.total_cost) }}</span></td>
+                                        <td data-label="Preço Venda"><span class="badge bg-success">R$ {{ "%.2f"|format(recipe.sale_price) }}</span></td>
+                                        <td data-label="Ações">
                                             <a href="{{ url_for('main.edit_recipe', recipe_id=recipe.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
                                             <form action="{{ url_for('main.delete_recipe', recipe_id=recipe.id) }}" method="POST" class="d-inline">
                                                 <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Tem certeza que deseja excluir esta receita?');"><i class="bi bi-trash"></i></button>
@@ -81,6 +88,7 @@
                                         </td>
                                     </tr>
                                     {% endfor %}
+                                    <tr id="recipe-no-results" class="d-none"><td colspan="4" class="text-center text-muted">Nenhuma receita encontrada.</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -123,6 +131,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Lógica do Gráfico (já existente)
         const chartElement = document.getElementById('dashboardChart');
         if (chartElement) {
             const ctx = chartElement.getContext('2d');
@@ -130,6 +139,57 @@
             const chartData = {{ chart_data|tojson }};
             new Chart(ctx, {type: 'bar', data: {labels: chartLabels, datasets: [{label: 'Custo da Receita (R$)', data: chartData, backgroundColor: 'rgba(24, 188, 156, 0.6)', borderColor: 'rgba(24, 188, 156, 1)', borderWidth: 1}]}, options: {responsive: true, maintainAspectRatio: false, scales: {y: {beginAtZero: true}}, plugins: {legend: {display: false}}}});
         }
+
+        // --- NOVA LÓGICA DE BUSCA EM TEMPO REAL ---
+
+        /**
+         * Função reutilizável para configurar a busca em uma tabela.
+         * @param {string} inputId - O ID do campo de busca <input>.
+         * @param {string} listId - O ID do <tbody> da tabela a ser filtrada.
+         * @param {string} noResultsId - O ID da linha <tr> a ser exibida quando não houver resultados.
+         */
+        const setupLiveSearch = (inputId, listId, noResultsId) => {
+            const searchInput = document.getElementById(inputId);
+            const list = document.getElementById(listId);
+            const noResultsRow = document.getElementById(noResultsId);
+            
+            // Verifica se os elementos existem antes de adicionar o listener
+            if (!searchInput || !list || !noResultsRow) {
+                return;
+            }
+
+            searchInput.addEventListener('input', function() {
+                const filter = searchInput.value.toLowerCase();
+                const rows = list.getElementsByTagName('tr');
+                let visibleRows = 0;
+
+                for (let i = 0; i < rows.length; i++) {
+                    // Ignora a linha de "nenhum resultado" na filtragem
+                    if (rows[i].id === noResultsId) {
+                        continue;
+                    }
+
+                    const text = rows[i].textContent || rows[i].innerText;
+                    if (text.toLowerCase().indexOf(filter) > -1) {
+                        rows[i].classList.remove('d-none');
+                        visibleRows++;
+                    } else {
+                        rows[i].classList.add('d-none');
+                    }
+                }
+                
+                // Mostra ou esconde a mensagem de "nenhum resultado"
+                if (visibleRows === 0) {
+                    noResultsRow.classList.remove('d-none');
+                } else {
+                    noResultsRow.classList.add('d-none');
+                }
+            });
+        };
+
+        // Configura a busca para ingredientes e receitas
+        setupLiveSearch('ingredient-search-input', 'ingredient-list', 'ingredient-no-results');
+        setupLiveSearch('recipe-search-input', 'recipe-list', 'recipe-no-results');
     });
 </script>
 {% endblock %}

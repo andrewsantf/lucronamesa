@@ -70,12 +70,10 @@
                     </div>
                     <ul class="nav report-filters mt-3">
                         <li class="nav-item">
-                            <a href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit=recipe_limit, ingredient_sort='desc', ingredient_limit=ingredient_limit) }}" 
-                               class="nav-link {% if ingredient_sort == 'desc' %}active{% endif %}">Mais Caros</a>
+                            <a href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit=recipe_limit, ingredient_sort='desc', ingredient_limit=ingredient_limit) }}" class="nav-link {% if ingredient_sort == 'desc' %}active{% endif %}">Mais Caros</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit=recipe_limit, ingredient_sort='asc', ingredient_limit=ingredient_limit) }}" 
-                               class="nav-link {% if ingredient_sort == 'asc' %}active{% endif %}">Mais Baratos</a>
+                            <a href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit=recipe_limit, ingredient_sort='asc', ingredient_limit=ingredient_limit) }}" class="nav-link {% if ingredient_sort == 'asc' %}active{% endif %}">Mais Baratos</a>
                         </li>
                     </ul>
                 </div>
@@ -92,47 +90,61 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // --- GRÁFICO 1: RECEITAS (ATUALIZADO COM BARRAS DUPLAS) ---
-        const recipesCtx = document.getElementById('topRecipesChart');
-        if (recipesCtx) {
-            new Chart(recipesCtx, {
-                type: 'bar',
-                data: {
-                    labels: {{ recipe_chart_labels|tojson }},
-                    datasets: [
-                        {
-                            label: 'Custo (R$)',
-                            data: {{ recipe_chart_cost_data|tojson }},
-                            backgroundColor: 'rgba(243, 156, 18, 0.6)', // Laranja
-                            borderColor: 'rgba(243, 156, 18, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Preço de Venda (R$)',
-                            data: {{ recipe_chart_sale_data|tojson }},
-                            backgroundColor: 'rgba(24, 188, 156, 0.6)', // Verde
-                            borderColor: 'rgba(24, 188, 156, 1)',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: { 
-                    scales: { y: { beginAtZero: true, ticks: { callback: function(value) { return 'R$ ' + value.toFixed(2); } } } },
-                    plugins: { legend: { display: true, position: 'top' } } // Agora exibimos a legenda
-                }
-            });
-        }
-        
-        // --- GRÁFICO 2: INGREDIENTES ---
-        const ingredientsCtx = document.getElementById('topIngredientsChart');
-        if (ingredientsCtx) {
-            new Chart(ingredientsCtx, {
-                type: 'bar',
-                data: { labels: {{ ingredient_chart_labels|tojson }}, datasets: [{ label: 'Preço (R$/kg ou R$/L)', data: {{ ingredient_chart_data|tojson }}, backgroundColor: 'rgba(243, 156, 18, 0.6)', borderColor: 'rgba(243, 156, 18, 1)', borderWidth: 1 }] },
-                options: { scales: { y: { beginAtZero: true, ticks: { callback: function(value) { return 'R$ ' + value.toFixed(2); } } } }, plugins: { legend: { display: false } } }
-            });
-        }
-    });
+document.addEventListener('DOMContentLoaded', function () {
+    // --- GRÁFICO 1: RECEITAS ---
+    const recipesCtx = document.getElementById('topRecipesChart');
+    if (recipesCtx) {
+        new Chart(recipesCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ recipe_chart_labels|default([])|tojson }},
+                datasets: [
+                    {
+                        label: 'Custo (R$)',
+                        data: {{ recipe_chart_cost_data|default([])|tojson }},
+                        backgroundColor: 'rgba(243, 156, 18, 0.6)',
+                        borderColor: 'rgba(243, 156, 18, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Preço de Venda (R$)',
+                        data: {{ recipe_chart_sale_data|default([])|tojson }},
+                        backgroundColor: 'rgba(24, 188, 156, 0.6)',
+                        borderColor: 'rgba(24, 188, 156, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: { 
+                scales: { y: { beginAtZero: true, ticks: { callback: function(value) { return 'R$ ' + value.toFixed(2); } } } },
+                plugins: { legend: { display: true, position: 'top' } }
+            }
+        });
+    }
+
+    // --- GRÁFICO 2: INGREDIENTES ---
+    const ingredientsCtx = document.getElementById('topIngredientsChart');
+    if (ingredientsCtx) {
+        new Chart(ingredientsCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ ingredient_chart_labels|default([])|tojson }},
+                datasets: [
+                    {
+                        label: 'Preço (R$/kg ou R$/L)',
+                        data: {{ ingredient_chart_data|default([])|tojson }},
+                        backgroundColor: 'rgba(243, 156, 18, 0.6)',
+                        borderColor: 'rgba(243, 156, 18, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: { 
+                scales: { y: { beginAtZero: true, ticks: { callback: function(value) { return 'R$ ' + value.toFixed(2); } } } },
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
+});
 </script>
 {% endblock %}

@@ -4,7 +4,7 @@ from app import db, bcrypt
 from app.models import User, Ingredient, Recipe
 from app.forms import RegistrationForm, LoginForm, IngredientForm, UpdateProfileForm, ChangePasswordForm
 from flask_login import login_user, logout_user, login_required, current_user
-from sqlalchemy import func, desc
+from sqlalchemy import func
 import re
 from datetime import datetime, timedelta
 from functools import wraps
@@ -15,12 +15,22 @@ main = Blueprint('main', __name__)
 def subscription_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        # Se o usuário acabou de criar a conta, não mostrar mensagem de trial expirado
+        if session.get('novo_usuario'):
+            session.pop('novo_usuario')  # remove a flag após exibir a primeira vez
+            return f(*args, **kwargs)
+
+        # Se usuário não está ativo
         if not current_user.is_subscription_active:
-            flash('Sua assinatura ou período de teste expirou. Por favor, escolha um plano para continuar.', 'warning')
+            if current_user.subscription_status == 'trialing':
+                flash('Seu período de teste expirou. Escolha um plano para continuar.', 'danger')
+            elif current_user.subscription_status == 'pending':
+                flash('Sua assinatura ainda não foi ativada. Escolha um plano para continuar.', 'info')
+            else:
+                flash('Sua assinatura expirou. Escolha um plano para continuar.', 'danger')
             return redirect(url_for('main.planos'))
         return f(*args, **kwargs)
     return decorated_function
-
 
 # --- MANIPULADORES DE ERRO ---
 @main.app_errorhandler(404)
@@ -61,48 +71,71 @@ def login():
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('main.dashboard'))
+
     plan = request.args.get('plan', 'trial')
     form = RegistrationForm()
+
     if form.validate_on_submit():
         plan_from_form = request.form.get('plan')
+
+        # --- USUÁRIO TRIAL ---
         if plan_from_form == 'trial':
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
             user = User(
-                full_name=form.full_name.data, email=form.email.data,
-                business_name=form.business_name.data, business_type=form.business_type.data,
-                phone=form.phone.data, password=hashed_password,
-                plan_type='Trial', subscription_status='trialing',
+                full_name=form.full_name.data,
+                email=form.email.data,
+                business_name=form.business_name.data,
+                business_type=form.business_type.data,
+                phone=form.phone.data,
+                password=hashed_password,
+                plan_type='Trial',
+                subscription_status='trialing',
                 trial_ends_at=datetime.utcnow() + timedelta(days=7)
             )
             db.session.add(user)
             db.session.commit()
             flash('Sua conta foi criada com sucesso! Aproveite seus 7 dias de teste.', 'success')
             login_user(user, remember=True)
+            session['novo_usuario'] = True
             return redirect(url_for('main.dashboard'))
+
+        # --- USUÁRIO PAGOS ---
         elif plan_from_form in ['mensal', 'anual']:
-            pending_data = form.data
-            pending_data['password'] = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-            session['pending_registration_data'] = pending_data
-            price_id = current_app.config['STRIPE_ANNUAL_PLAN_PRICE_ID'] if plan_from_form == 'anual' else current_app.config['STRIPE_MONTHLY_PLAN_PRICE_ID']
-            stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
-            try:
-                checkout_session = stripe.checkout.Session.create(
-                    line_items=[{'price': price_id, 'quantity': 1}],
-                    mode='subscription',
-                    success_url=url_for('main.dashboard', _external=True),
-                    cancel_url=url_for('main.register', plan=plan_from_form, _external=True),
-                    customer_email=form.email.data
-                )
-                return redirect(checkout_session.url, code=303)
-            except Exception as e:
-                flash(f'Erro ao conectar com o gateway de pagamento: {e}', 'danger')
-                return redirect(url_for('main.register', plan=plan_from_form))
+            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            user = User(
+                full_name=form.full_name.data,
+                email=form.email.data,
+                business_name=form.business_name.data,
+                business_type=form.business_type.data,
+                phone=form.phone.data,
+                password=hashed_password,
+                plan_type=None,
+                subscription_status='pending'
+            )
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, remember=True)
+            flash('Sua conta foi criada! Agora escolha seu plano para ativar a assinatura.', 'info')
+            session['novo_usuario'] = True
+            return redirect(url_for('main.planos'))
+
     return render_template('register.html', form=form, title="Crie sua Conta", plan=plan)
 
 @main.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('main.login'))
+
+# --- ROTAS DE BOAS-VINDAS PARA PLANOS PAGOS ---
+@main.route('/welcome/mensal')
+@login_required
+def welcome_mensal():
+    return redirect(url_for('main.criar_assinatura', plan='mensal'))
+
+@main.route('/welcome/anual')
+@login_required
+def welcome_anual():
+    return redirect(url_for('main.criar_assinatura', plan='anual'))
 
 # --- ROTAS PROTEGIDAS PELA ASSINATURA ---
 @main.route('/dashboard')
@@ -118,8 +151,36 @@ def dashboard():
     top_5_recipes = sorted(recipes, key=lambda x: x.total_cost, reverse=True)[:5]
     chart_labels = [recipe.name for recipe in top_5_recipes]
     chart_data = [round(recipe.total_cost, 2) for recipe in top_5_recipes]
-    return render_template('dashboard.html', title="Dashboard", ingredients=ingredients, recipes=recipes, kpi_total_ingredients=kpi_total_ingredients, kpi_total_recipes=kpi_total_recipes, kpi_avg_cost=kpi_avg_cost, chart_labels=chart_labels, chart_data=chart_data)
+    return render_template('dashboard.html', title="Dashboard", ingredients=ingredients, recipes=recipes,
+                           kpi_total_ingredients=kpi_total_ingredients, kpi_total_recipes=kpi_total_recipes,
+                           kpi_avg_cost=kpi_avg_cost, chart_labels=chart_labels, chart_data=chart_data)
 
+# --- ROTAS DE GERENCIAR ASSINATURA ---
+@main.route('/gerenciar_assinatura')
+@login_required
+def gerenciar_assinatura():
+    return redirect(url_for('main.planos'))
+
+# --- ROTAS DE CRIAR ASSINATURA (CHECKOUT STRIPE) ---
+@main.route('/criar_assinatura/<plan>')
+@login_required
+def criar_assinatura(plan):
+    stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
+    price_id = current_app.config['STRIPE_ANNUAL_PLAN_PRICE_ID'] if plan == 'anual' else current_app.config['STRIPE_MONTHLY_PLAN_PRICE_ID']
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            line_items=[{'price': price_id, 'quantity': 1}],
+            mode='subscription',
+            success_url=url_for('main.dashboard', _external=True),
+            cancel_url=url_for('main.planos', _external=True),
+            customer_email=current_user.email
+        )
+        return redirect(checkout_session.url, code=303)
+    except Exception as e:
+        flash(f'Erro ao conectar com o gateway de pagamento: {e}', 'danger')
+        return redirect(url_for('main.planos'))
+
+# --- ROTAS DE INGREDIENTES ---
 @main.route('/ingredients', methods=['GET', 'POST'])
 @login_required
 @subscription_required
@@ -175,6 +236,7 @@ def delete_ingredient(ingredient_id):
     flash('Ingrediente excluído com sucesso!', 'success')
     return redirect(url_for('main.dashboard'))
 
+# --- ROTAS DE RECEITAS ---
 @main.route('/recipes', methods=['GET', 'POST'])
 @login_required
 @subscription_required
@@ -245,7 +307,7 @@ def edit_recipe(recipe_id):
         db.session.commit()
         flash('Receita atualizada com sucesso!', 'success')
         return redirect(url_for('main.dashboard'))
-    
+
     recipe_ingredients = {}
     if recipe.ingredients_list:
         parts = recipe.ingredients_list.split(';')
@@ -261,7 +323,8 @@ def edit_recipe(recipe_id):
                         recipe_ingredients[ingredient_obj.id] = {'quantity': float(quantity), 'unit': unit}
             except (ValueError, AttributeError):
                 continue
-    return render_template('edit_recipe.html', recipe=recipe, all_ingredients=all_ingredients, recipe_ingredients=recipe_ingredients, title=f"Editar '{recipe.name}'")
+    return render_template('edit_recipe.html', recipe=recipe, all_ingredients=all_ingredients,
+                           recipe_ingredients=recipe_ingredients, title=f"Editar '{recipe.name}'")
 
 @main.route('/recipe/<int:recipe_id>/delete', methods=['POST'])
 @login_required
@@ -274,6 +337,7 @@ def delete_recipe(recipe_id):
     flash('Receita excluída com sucesso!', 'success')
     return redirect(url_for('main.dashboard'))
 
+# --- ROTAS DE PERFIL ---
 @main.route('/profile', methods=['GET', 'POST'])
 @login_required
 @subscription_required
@@ -306,6 +370,7 @@ def profile():
         profile_form.phone.data = current_user.phone
     return render_template('profile.html', profile_form=profile_form, password_form=password_form, title="Meu Perfil")
 
+# --- ROTAS DE RELATÓRIOS ---
 @main.route('/reports')
 @login_required
 @subscription_required
@@ -314,10 +379,14 @@ def reports():
     recipe_limit = request.args.get('recipe_limit', '5')
     ingredient_sort = request.args.get('ingredient_sort', 'desc')
     ingredient_limit = request.args.get('ingredient_limit', '5')
+
+    # --- RECEITAS ---
     all_recipes = Recipe.query.filter_by(user_id=current_user.id).all()
     for r in all_recipes:
         r.profit = r.sale_price - r.total_cost if r.sale_price else 0
         r.margin = (r.profit / r.sale_price * 100) if r.sale_price and r.sale_price > 0 else 0
+
+    # Ordenar receitas
     if recipe_sort == 'cost_asc':
         sorted_recipes = sorted(all_recipes, key=lambda x: x.total_cost)
     elif recipe_sort == 'profit_desc':
@@ -326,42 +395,51 @@ def reports():
         sorted_recipes = sorted(all_recipes, key=lambda x: x.margin, reverse=True)
     else:
         sorted_recipes = sorted(all_recipes, key=lambda x: x.total_cost, reverse=True)
-    if recipe_limit != 'all':
+
+    # Tratar recipe_limit seguro
+    if recipe_limit.isdigit():
         recipes_to_display = sorted_recipes[:int(recipe_limit)]
     else:
-        recipes_to_display = sorted_recipes
+        recipes_to_display = sorted_recipes  # 'all' ou vazio
+
     recipe_chart_labels = [r.name for r in recipes_to_display]
     recipe_chart_cost_data = [round(r.total_cost, 2) for r in recipes_to_display]
     recipe_chart_sale_data = [round(r.sale_price, 2) for r in recipes_to_display]
-    recipe_chart_ids = [r.id for r in recipes_to_display]
-    ingredient_query = Ingredient.query.filter_by(user_id=current_user.id)
+
+    # --- INGREDIENTES ---
+    all_ingredients = Ingredient.query.filter_by(user_id=current_user.id).all()
+
+    # Ordenar ingredientes
     if ingredient_sort == 'asc':
-        ingredient_query = ingredient_query.order_by(Ingredient.base_price.asc())
+        sorted_ingredients = sorted(all_ingredients, key=lambda x: x.base_price)
+    else:  # desc ou qualquer outro valor
+        sorted_ingredients = sorted(all_ingredients, key=lambda x: x.base_price, reverse=True)
+
+    # Tratar ingredient_limit seguro
+    if ingredient_limit.isdigit():
+        ingredients_to_display = sorted_ingredients[:int(ingredient_limit)]
     else:
-        ingredient_query = ingredient_query.order_by(Ingredient.base_price.desc())
-    if ingredient_limit != 'all':
-        ingredients = ingredient_query.limit(int(ingredient_limit)).all()
-    else:
-        ingredients = ingredient_query.all()
-    ingredient_chart_labels = []
-    ingredient_chart_data = []
-    for i in ingredients:
-        if i.base_unit in ['g', 'ml']:
-            ingredient_chart_labels.append(f"{i.name} (R$/{'kg' if i.base_unit == 'g' else 'l'})")
-            ingredient_chart_data.append(round(i.base_price * 1000, 2))
-        else:
-            ingredient_chart_labels.append(f"{i.name} (R$/un)")
-            ingredient_chart_data.append(round(i.base_price, 2))
-    return render_template('reports.html', title="Relatórios",
-        recipe_chart_labels=recipe_chart_labels, 
+        ingredients_to_display = sorted_ingredients  # 'all' ou vazio
+
+    ingredient_chart_labels = [i.name for i in ingredients_to_display]
+    ingredient_chart_data = [round(i.base_price, 2) for i in ingredients_to_display]
+
+    return render_template(
+        'reports.html',
+        title="Relatórios",
+        recipes=recipes_to_display,
+        recipe_chart_labels=recipe_chart_labels,
         recipe_chart_cost_data=recipe_chart_cost_data,
         recipe_chart_sale_data=recipe_chart_sale_data,
-        recipe_chart_ids=recipe_chart_ids,
-        ingredient_chart_labels=ingredient_chart_labels, 
+        ingredient_chart_labels=ingredient_chart_labels,
         ingredient_chart_data=ingredient_chart_data,
-        recipe_sort=recipe_sort, recipe_limit=recipe_limit,
-        ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit)
+        recipe_sort=recipe_sort,
+        recipe_limit=recipe_limit,
+        ingredient_sort=ingredient_sort,
+        ingredient_limit=ingredient_limit
+    )
 
+# --- ROTAS DE TERMOS E PRIVACIDADE ---
 @main.route('/terms')
 def terms():
     return render_template('terms.html', title="Termos de Serviço")
@@ -370,107 +448,27 @@ def terms():
 def privacy():
     return render_template('privacy.html', title="Política de Privacidade")
 
-# --- ROTAS DO GATEWAY DE PAGAMENTO ---
-@main.route('/criar-assinatura/<plan>')
-@login_required
-def criar_assinatura(plan):
-    if current_user.stripe_customer_id and current_user.subscription_status == 'active':
-        flash('Você já possui uma assinatura ativa.', 'warning')
-        return redirect(url_for('main.profile'))
-    price_id = None
-    if plan == 'mensal':
-        price_id = current_app.config['STRIPE_MONTHLY_PLAN_PRICE_ID']
-    elif plan == 'anual':
-        price_id = current_app.config['STRIPE_ANNUAL_PLAN_PRICE_ID']
-    else:
-        flash('Plano inválido.', 'danger')
-        return redirect(url_for('main.planos'))
-    stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
-    try:
-        checkout_session = stripe.checkout.Session.create(
-            line_items=[{'price': price_id, 'quantity': 1}],
-            mode='subscription',
-            success_url=url_for('main.dashboard', _external=True),
-            cancel_url=url_for('main.planos', _external=True),
-            client_reference_id=current_user.id
-        )
-        return redirect(checkout_session.url, code=303)
-    except Exception as e:
-        flash(f'Erro ao conectar com o gateway de pagamento: {e}', 'danger')
-        return redirect(url_for('main.planos'))
-
-@main.route('/pagamento-sucesso')
-def payment_success():
-    flash('Seu pagamento está sendo processado! Sua conta será atualizada em instantes.', 'info')
-    return redirect(url_for('main.login'))
-
-@main.route('/webhook-stripe', methods=['POST'])
-def webhook_stripe():
-    payload = request.get_data(as_text=True)
-    sig_header = request.headers.get('Stripe-Signature')
-    endpoint_secret = current_app.config.get('STRIPE_WEBHOOK_SECRET')
-    try:
-        event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
-    except (ValueError, stripe.error.SignatureVerificationError) as e:
-        return f'Webhook error: {e}', 400
-    if event['type'] == 'checkout.session.completed':
-        checkout_session = event['data']['object']
-        user_id = checkout_session.get('client_reference_id')
-        if user_id:
-            user = User.query.get(user_id)
-            if user:
-                stripe_customer_id = checkout_session.get('customer')
-                stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
-                line_items = stripe.checkout.Session.list_line_items(checkout_session.id, limit=1)
-                price_id = line_items.data[0].price.id
-                plan_type = 'Anual' if price_id == current_app.config['STRIPE_ANNUAL_PLAN_PRICE_ID'] else 'Mensal'
-                user.plan_type = plan_type
-                user.subscription_status = 'active'
-                user.stripe_customer_id = stripe_customer_id
-                user.trial_ends_at = None
-                db.session.commit()
-                print(f"Assinatura do usuário {user.email} atualizada para o plano {plan_type}!")
-        else:
-            form_data = session.get('pending_registration_data')
-            if form_data:
-                stripe_customer_id = checkout_session.get('customer')
-                stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
-                line_items = stripe.checkout.Session.list_line_items(checkout_session.id, limit=1)
-                price_id = line_items.data[0].price.id
-                plan_type = 'Anual' if price_id == current_app.config['STRIPE_ANNUAL_PLAN_PRICE_ID'] else 'Mensal'
-                user = User(
-                    full_name=form_data.get('full_name'), email=form_data.get('email'),
-                    business_name=form_data.get('business_name'), business_type=form_data.get('business_type'),
-                    phone=form_data.get('phone'), password=form_data.get('password'),
-                    plan_type=plan_type, subscription_status='active',
-                    stripe_customer_id=stripe_customer_id
-                )
-                db.session.add(user)
-                db.session.commit()
-                session.pop('pending_registration_data', None)
-                print(f"Usuário {user.email} criado com sucesso com o plano {plan_type}!")
-    if event['type'] == 'customer.subscription.updated':
-        subscription_data = event['data']['object']
-        stripe_customer_id = subscription_data.get('customer')
-        new_status = subscription_data.get('status')
-        user = User.query.filter_by(stripe_customer_id=stripe_customer_id).first()
-        if user:
-            user.subscription_status = new_status
-            db.session.commit()
-            print(f"Status da assinatura do usuário {user.email} atualizado para {new_status}")
-    return 'Success', 200
-
 # --- FUNÇÕES AUXILIARES ---
-def calculate_base_price(price, quantity, unit):
-    if not quantity or quantity == 0: return 0, unit
-    if unit == 'kg': return price / (quantity * 1000), 'g'
-    elif unit == 'l': return price / (quantity * 1000), 'ml'
-    else: return price / quantity, unit
+def calculate_base_price(package_price, package_quantity, package_unit):
+    if package_unit in ['kg', 'l']:
+        base_price = package_price / package_quantity
+        base_unit = package_unit[0]
+    elif package_unit in ['g', 'ml']:
+        base_price = package_price / package_quantity
+        base_unit = package_unit
+    else:
+        base_price = package_price / package_quantity
+        base_unit = 'un'
+    return base_price, base_unit
 
-def calculate_ingredient_cost_in_recipe(ingredient, quantity_used, unit_used):
-    cost = 0
-    if unit_used == 'kg': quantity_used *= 1000
-    elif unit_used == 'l': quantity_used *= 1000
-    cost = ingredient.base_price * quantity_used
-    return cost
-
+def calculate_ingredient_cost_in_recipe(ingredient, quantity, unit_used):
+    if ingredient.base_unit == unit_used:
+        return ingredient.base_price * quantity
+    elif ingredient.base_unit == 'g' and unit_used == 'kg':
+        return ingredient.base_price * (quantity * 1000)
+    elif ingredient.base_unit == 'ml' and unit_used == 'l':
+        return ingredient.base_price * (quantity * 1000)
+    elif ingredient.base_unit in ['kg', 'l'] and unit_used in ['g', 'ml']:
+        return ingredient.base_price * (quantity / 1000)
+    else:
+        return ingredient.base_price * quantity

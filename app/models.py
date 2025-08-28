@@ -1,6 +1,6 @@
 from app import db, login_manager
 from flask_login import UserMixin
-from datetime import datetime
+from datetime import datetime, timedelta
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -15,13 +15,26 @@ class User(db.Model, UserMixin):
     phone = db.Column(db.String(20), nullable=True)
     password = db.Column(db.String(60), nullable=False)
     
-    # --- NOVOS CAMPOS DE ASSINATURA ---
-    plan = db.Column(db.String(50), nullable=False, default='Gratuito')
-    subscription_status = db.Column(db.String(50), nullable=False, default='ativo')
-    # -----------------------------------
+    # --- CAMPOS DE ASSINATURA ---
+    plan_type = db.Column(db.String(50), nullable=False, default='Trial')
+    subscription_status = db.Column(db.String(50), nullable=False, default='trialing')
+    trial_ends_at = db.Column(db.DateTime, nullable=True)
+    stripe_customer_id = db.Column(db.String(120), nullable=True)
 
     ingredients = db.relationship('Ingredient', backref='author', lazy=True)
     recipes = db.relationship('Recipe', backref='author', lazy=True)
+
+    # --- NOVA PROPRIEDADE INTELIGENTE ---
+    @property
+    def is_subscription_active(self):
+        # Um usuário está ativo se seu status for 'active' (pago)
+        if self.subscription_status == 'active':
+            return True
+        # Ou se ele estiver em 'trialing' E a data de fim do teste ainda não passou
+        if self.subscription_status == 'trialing' and self.trial_ends_at and datetime.utcnow() < self.trial_ends_at:
+            return True
+        # Caso contrário, a assinatura não está ativa
+        return False
 
     def __repr__(self):
         return f"User('{self.full_name}', '{self.email}')"

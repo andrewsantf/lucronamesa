@@ -35,6 +35,9 @@
             <p class="text-center text-muted mb-4">Comece a precificar seus produtos da forma certa.</p>
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
+                
+                <input type="hidden" name="plan" value="{{ plan }}">
+
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         {{ form.full_name.label(class="form-label") }}

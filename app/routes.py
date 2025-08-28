@@ -1,12 +1,26 @@
-from flask import render_template, redirect, url_for, flash, request, Blueprint, abort
+import stripe
+from flask import render_template, redirect, url_for, flash, request, Blueprint, abort, session, current_app
 from app import db, bcrypt
 from app.models import User, Ingredient, Recipe
 from app.forms import RegistrationForm, LoginForm, IngredientForm, UpdateProfileForm, ChangePasswordForm
 from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy import func, desc
-import re # Importa a biblioteca de expressões regulares para um parsing mais robusto
+import re
+from datetime import datetime, timedelta
+from functools import wraps
 
 main = Blueprint('main', __name__)
+
+# --- DECORADOR PERSONALIZADO (GUARDIÃO DA ASSINATURA) ---
+def subscription_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_subscription_active:
+            flash('Sua assinatura ou período de teste expirou. Por favor, escolha um plano para continuar.', 'warning')
+            return redirect(url_for('main.planos'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 
 # --- MANIPULADORES DE ERRO ---
 @main.app_errorhandler(404)
@@ -18,12 +32,16 @@ def error_500(error):
     db.session.rollback()
     return render_template('500.html', title="Erro interno"), 500
 
-# --- ROTAS DE AUTENTICAÇÃO E DASHBOARD ---
+# --- ROTAS PÚBLICAS E DE AUTENTICAÇÃO ---
 @main.route('/')
 def index():
     if current_user.is_authenticated:
         return redirect(url_for('main.dashboard'))
     return render_template('landing_page.html', title="LucroNaMesa - A forma inteligente de precifiar")
+
+@main.route('/planos')
+def planos():
+    return render_template('plans.html', title="Escolha seu Plano")
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
@@ -32,52 +50,71 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            if bcrypt.check_password_hash(user.password, form.password.data):
-                login_user(user, remember=True)
-                return redirect(url_for('main.dashboard'))
-            else:
-                flash('Senha incorreta. Por favor, tente novamente.', 'danger')
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=True)
+            return redirect(url_for('main.dashboard'))
         else:
-            flash('Nenhuma conta encontrada com este e-mail.', 'warning')
-        return redirect(url_for('main.login'))
+            flash('Login sem sucesso. Verifique o e-mail e a senha.', 'danger')
     return render_template('login.html', form=form, title="Login")
 
 @main.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('main.dashboard'))
+    plan = request.args.get('plan', 'trial')
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(
-            full_name=form.full_name.data, email=form.email.data,
-            business_name=form.business_name.data, business_type=form.business_type.data,
-            phone=form.phone.data, password=hashed_password
-        )
-        db.session.add(user)
-        db.session.commit()
-        flash('Sua conta foi criada com sucesso! Você já pode fazer o login.', 'success')
-        return redirect(url_for('main.login'))
-    return render_template('register.html', form=form, title="Crie sua Conta")
+        plan_from_form = request.form.get('plan')
+        if plan_from_form == 'trial':
+            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            user = User(
+                full_name=form.full_name.data, email=form.email.data,
+                business_name=form.business_name.data, business_type=form.business_type.data,
+                phone=form.phone.data, password=hashed_password,
+                plan_type='Trial', subscription_status='trialing',
+                trial_ends_at=datetime.utcnow() + timedelta(days=7)
+            )
+            db.session.add(user)
+            db.session.commit()
+            flash('Sua conta foi criada com sucesso! Aproveite seus 7 dias de teste.', 'success')
+            login_user(user, remember=True)
+            return redirect(url_for('main.dashboard'))
+        elif plan_from_form in ['mensal', 'anual']:
+            pending_data = form.data
+            pending_data['password'] = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            session['pending_registration_data'] = pending_data
+            price_id = current_app.config['STRIPE_ANNUAL_PLAN_PRICE_ID'] if plan_from_form == 'anual' else current_app.config['STRIPE_MONTHLY_PLAN_PRICE_ID']
+            stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
+            try:
+                checkout_session = stripe.checkout.Session.create(
+                    line_items=[{'price': price_id, 'quantity': 1}],
+                    mode='subscription',
+                    success_url=url_for('main.dashboard', _external=True),
+                    cancel_url=url_for('main.register', plan=plan_from_form, _external=True),
+                    customer_email=form.email.data
+                )
+                return redirect(checkout_session.url, code=303)
+            except Exception as e:
+                flash(f'Erro ao conectar com o gateway de pagamento: {e}', 'danger')
+                return redirect(url_for('main.register', plan=plan_from_form))
+    return render_template('register.html', form=form, title="Crie sua Conta", plan=plan)
 
 @main.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('main.login'))
 
+# --- ROTAS PROTEGIDAS PELA ASSINATURA ---
 @main.route('/dashboard')
 @login_required
+@subscription_required
 def dashboard():
     ingredients = Ingredient.query.filter_by(user_id=current_user.id).order_by(Ingredient.name).all()
     recipes = Recipe.query.filter_by(user_id=current_user.id).order_by(Recipe.name).all()
     kpi_total_ingredients = len(ingredients)
     kpi_total_recipes = len(recipes)
-    if kpi_total_recipes > 0:
-        total_cost_sum = db.session.query(func.sum(Recipe.total_cost)).filter_by(user_id=current_user.id).scalar()
-        kpi_avg_cost = total_cost_sum / kpi_total_recipes if total_cost_sum else 0
-    else:
-        kpi_avg_cost = 0
+    total_cost_sum = db.session.query(func.sum(Recipe.total_cost)).filter_by(user_id=current_user.id).scalar() or 0
+    kpi_avg_cost = total_cost_sum / kpi_total_recipes if kpi_total_recipes > 0 else 0
     top_5_recipes = sorted(recipes, key=lambda x: x.total_cost, reverse=True)[:5]
     chart_labels = [recipe.name for recipe in top_5_recipes]
     chart_data = [round(recipe.total_cost, 2) for recipe in top_5_recipes]
@@ -85,6 +122,7 @@ def dashboard():
 
 @main.route('/ingredients', methods=['GET', 'POST'])
 @login_required
+@subscription_required
 def ingredients():
     form = IngredientForm()
     if form.validate_on_submit():
@@ -102,6 +140,7 @@ def ingredients():
 
 @main.route('/ingredient/<int:ingredient_id>/edit', methods=['GET', 'POST'])
 @login_required
+@subscription_required
 def edit_ingredient(ingredient_id):
     ingredient = Ingredient.query.get_or_404(ingredient_id)
     if ingredient.author != current_user: abort(403)
@@ -127,6 +166,7 @@ def edit_ingredient(ingredient_id):
 
 @main.route('/ingredient/<int:ingredient_id>/delete', methods=['POST'])
 @login_required
+@subscription_required
 def delete_ingredient(ingredient_id):
     ingredient = Ingredient.query.get_or_404(ingredient_id)
     if ingredient.author != current_user: abort(403)
@@ -137,6 +177,7 @@ def delete_ingredient(ingredient_id):
 
 @main.route('/recipes', methods=['GET', 'POST'])
 @login_required
+@subscription_required
 def recipes():
     ingredients = Ingredient.query.filter_by(user_id=current_user.id).order_by(Ingredient.name).all()
     if request.method == 'POST':
@@ -170,9 +211,9 @@ def recipes():
         return redirect(url_for('main.dashboard'))
     return render_template('recipes.html', ingredients=ingredients, title="Adicionar Receita")
 
-# --- ROTA DE EDITAR RECEITA (COM LÓGICA DE PARSING CORRIGIDA) ---
 @main.route('/recipe/<int:recipe_id>/edit', methods=['GET', 'POST'])
 @login_required
+@subscription_required
 def edit_recipe(recipe_id):
     recipe = Recipe.query.get_or_404(recipe_id)
     if recipe.author != current_user: abort(403)
@@ -205,14 +246,12 @@ def edit_recipe(recipe_id):
         flash('Receita atualizada com sucesso!', 'success')
         return redirect(url_for('main.dashboard'))
     
-    # LÓGICA DE PARSING ROBUSTA PARA PRÉ-PREENCHER O FORMULÁRIO
     recipe_ingredients = {}
     if recipe.ingredients_list:
         parts = recipe.ingredients_list.split(';')
         for part in parts:
             try:
                 name, quant_unit = part.split(':', 1)
-                # Usa regex para extrair o número (incluindo decimais) e a unidade
                 match = re.match(r"(\d*\.?\d+)([a-zA-Z]+)", quant_unit)
                 if match:
                     quantity = match.group(1)
@@ -226,6 +265,7 @@ def edit_recipe(recipe_id):
 
 @main.route('/recipe/<int:recipe_id>/delete', methods=['POST'])
 @login_required
+@subscription_required
 def delete_recipe(recipe_id):
     recipe = Recipe.query.get_or_404(recipe_id)
     if recipe.author != current_user: abort(403)
@@ -236,6 +276,7 @@ def delete_recipe(recipe_id):
 
 @main.route('/profile', methods=['GET', 'POST'])
 @login_required
+@subscription_required
 def profile():
     profile_form = UpdateProfileForm()
     password_form = ChangePasswordForm()
@@ -257,7 +298,6 @@ def profile():
             return redirect(url_for('main.profile'))
         else:
             flash('Senha atual incorreta.', 'danger')
-            return redirect(url_for('main.profile'))
     if request.method == 'GET':
         profile_form.full_name.data = current_user.full_name
         profile_form.email.data = current_user.email
@@ -268,6 +308,7 @@ def profile():
 
 @main.route('/reports')
 @login_required
+@subscription_required
 def reports():
     recipe_sort = request.args.get('recipe_sort', 'profit_desc')
     recipe_limit = request.args.get('recipe_limit', '5')
@@ -329,6 +370,97 @@ def terms():
 def privacy():
     return render_template('privacy.html', title="Política de Privacidade")
 
+# --- ROTAS DO GATEWAY DE PAGAMENTO ---
+@main.route('/criar-assinatura/<plan>')
+@login_required
+def criar_assinatura(plan):
+    if current_user.stripe_customer_id and current_user.subscription_status == 'active':
+        flash('Você já possui uma assinatura ativa.', 'warning')
+        return redirect(url_for('main.profile'))
+    price_id = None
+    if plan == 'mensal':
+        price_id = current_app.config['STRIPE_MONTHLY_PLAN_PRICE_ID']
+    elif plan == 'anual':
+        price_id = current_app.config['STRIPE_ANNUAL_PLAN_PRICE_ID']
+    else:
+        flash('Plano inválido.', 'danger')
+        return redirect(url_for('main.planos'))
+    stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            line_items=[{'price': price_id, 'quantity': 1}],
+            mode='subscription',
+            success_url=url_for('main.dashboard', _external=True),
+            cancel_url=url_for('main.planos', _external=True),
+            client_reference_id=current_user.id
+        )
+        return redirect(checkout_session.url, code=303)
+    except Exception as e:
+        flash(f'Erro ao conectar com o gateway de pagamento: {e}', 'danger')
+        return redirect(url_for('main.planos'))
+
+@main.route('/pagamento-sucesso')
+def payment_success():
+    flash('Seu pagamento está sendo processado! Sua conta será atualizada em instantes.', 'info')
+    return redirect(url_for('main.login'))
+
+@main.route('/webhook-stripe', methods=['POST'])
+def webhook_stripe():
+    payload = request.get_data(as_text=True)
+    sig_header = request.headers.get('Stripe-Signature')
+    endpoint_secret = current_app.config.get('STRIPE_WEBHOOK_SECRET')
+    try:
+        event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
+    except (ValueError, stripe.error.SignatureVerificationError) as e:
+        return f'Webhook error: {e}', 400
+    if event['type'] == 'checkout.session.completed':
+        checkout_session = event['data']['object']
+        user_id = checkout_session.get('client_reference_id')
+        if user_id:
+            user = User.query.get(user_id)
+            if user:
+                stripe_customer_id = checkout_session.get('customer')
+                stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
+                line_items = stripe.checkout.Session.list_line_items(checkout_session.id, limit=1)
+                price_id = line_items.data[0].price.id
+                plan_type = 'Anual' if price_id == current_app.config['STRIPE_ANNUAL_PLAN_PRICE_ID'] else 'Mensal'
+                user.plan_type = plan_type
+                user.subscription_status = 'active'
+                user.stripe_customer_id = stripe_customer_id
+                user.trial_ends_at = None
+                db.session.commit()
+                print(f"Assinatura do usuário {user.email} atualizada para o plano {plan_type}!")
+        else:
+            form_data = session.get('pending_registration_data')
+            if form_data:
+                stripe_customer_id = checkout_session.get('customer')
+                stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
+                line_items = stripe.checkout.Session.list_line_items(checkout_session.id, limit=1)
+                price_id = line_items.data[0].price.id
+                plan_type = 'Anual' if price_id == current_app.config['STRIPE_ANNUAL_PLAN_PRICE_ID'] else 'Mensal'
+                user = User(
+                    full_name=form_data.get('full_name'), email=form_data.get('email'),
+                    business_name=form_data.get('business_name'), business_type=form_data.get('business_type'),
+                    phone=form_data.get('phone'), password=form_data.get('password'),
+                    plan_type=plan_type, subscription_status='active',
+                    stripe_customer_id=stripe_customer_id
+                )
+                db.session.add(user)
+                db.session.commit()
+                session.pop('pending_registration_data', None)
+                print(f"Usuário {user.email} criado com sucesso com o plano {plan_type}!")
+    if event['type'] == 'customer.subscription.updated':
+        subscription_data = event['data']['object']
+        stripe_customer_id = subscription_data.get('customer')
+        new_status = subscription_data.get('status')
+        user = User.query.filter_by(stripe_customer_id=stripe_customer_id).first()
+        if user:
+            user.subscription_status = new_status
+            db.session.commit()
+            print(f"Status da assinatura do usuário {user.email} atualizado para {new_status}")
+    return 'Success', 200
+
+# --- FUNÇÕES AUXILIARES ---
 def calculate_base_price(price, quantity, unit):
     if not quantity or quantity == 0: return 0, unit
     if unit == 'kg': return price / (quantity * 1000), 'g'

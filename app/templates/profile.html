@@ -11,14 +11,28 @@
             <div class="card">
                 <div class="card-header"><h3 class="h5 mb-0">Minha Assinatura</h3></div>
                 <div class="card-body">
-                    <p><strong>Plano Atual:</strong> <span class="badge bg-primary">{{ current_user.plan }}</span></p>
+                    <p><strong>Plano Atual:</strong> <span class="badge bg-primary">{{ current_user.plan_type }}</span></p>
                     <p><strong>Status:</strong> <span class="badge bg-success">{{ current_user.subscription_status }}</span></p>
+                    
+                    {% if current_user.trial_ends_at %}
+                        <p class="small text-muted">Seu teste termina em: {{ current_user.trial_ends_at.strftime('%d/%m/%Y') }}</p>
+                    {% endif %}
                     <hr>
-                    <p class="text-muted small">A integração com o sistema de pagamentos será adicionada em breve.</p>
-                    <button class="btn btn-primary w-100" disabled>Gerenciar Assinatura</button>
+                    
+                    <!-- LÓGICA INTELIGENTE DO BOTÃO -->
+                    {% if current_user.stripe_customer_id %}
+                        <!-- Se o usuário for um cliente pagante, mostra o botão de gerenciar -->
+                        <form action="{{ url_for('main.manage_subscription') }}" method="POST">
+                            <button type="submit" class="btn btn-primary w-100">Gerenciar Assinatura</button>
+                        </form>
+                    {% else %}
+                        <!-- Se for um usuário em teste, mostra um botão para escolher um plano -->
+                        <a href="{{ url_for('main.planos') }}#pricing-section" class="btn btn-success w-100">Escolher um Plano</a>
+                        <p class="text-muted small mt-2 text-center">Assine um plano para gerenciar sua fatura e método de pagamento.</p>
+                    {% endif %}
                 </div>
             </div>
-        </div>
+        </div> <!-- FIM DA COLUNA DA ESQUERDA (ASSINATURA) -->
 
         <div class="col-lg-8">
             <div class="card mb-4">
@@ -87,7 +101,7 @@
                      </form>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        </div> <!-- FIM DA COLUNA DA DIREITA (FORMULÁRIOS) -->
+    </div> <!-- FIM DA ROW PRINCIPAL -->
+</div> <!-- FIM DO CONTAINER -->
 {% endblock %}

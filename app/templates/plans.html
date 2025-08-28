@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <section class="pricing-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Escolha o plano ideal para o seu negócio</h2>
+                <p class="section-subtitle">Faça o upgrade da sua conta para desbloquear todo o potencial do LucroNaMesa.</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                    <div class="pricing-card">
+                        <h3 class="plan-title">Mensal</h3>
+                        <p class="plan-subtitle">Ideal para começar e validar.</p>
+                        <div class="price-tag">R$ 59<span class="price-cents">,90</span><span class="price-period">/mês</span></div>
+                        <ul class="feature-list list-unstyled">
+                            <li><i class="bi bi-check-circle-fill"></i> Ingredientes Ilimitados</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Receitas Ilimitadas</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Análise de Custo e Lucro</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Relatórios Inteligentes</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Suporte via E-mail</li>
+                        </ul>
+                        <a href="{{ url_for('main.criar_assinatura', plan='mensal') }}" class="btn btn-primary w-100">Assinar Plano Mensal</a>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-6">
+                    <div class="pricing-card highlighted">
+                        <div class="plan-badge">ECONOMIZE 2 MESES</div>
+                        <h3 class="plan-title">Anual</h3>
+                        <p class="plan-subtitle">O melhor custo-benefício para o seu negócio.</p>
+                        <div class="price-tag">R$ 599<span class="price-cents">,90</span><span class="price-period">/ano</span></div>
+                        <p class="text-muted text-center fw-bold">Equivale a R$ 49,99/mês</p>
+                        <ul class="feature-list list-unstyled">
+                            <li><i class="bi bi-check-circle-fill"></i> Ingredientes Ilimitados</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Receitas Ilimitadas</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Análise de Custo e Lucro</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Relatórios Inteligentes</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Suporte via E-mail</li>
+                        </ul>
+                        <a href="{{ url_for('main.criar_assinatura', plan='anual') }}" class="btn btn-primary w-100">Assinar Plano Anual</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

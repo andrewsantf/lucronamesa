@@ -473,3 +473,20 @@ def calculate_ingredient_cost_in_recipe(ingredient, quantity_used, unit_used):
     elif unit_used == 'l': quantity_used *= 1000
     cost = ingredient.base_price * quantity_used
     return cost
+#------------------------------#####-----------------
+from flask import Flask
+from app import app  # ou seu objeto Flask
+from sqlalchemy import text
+from app import db  # ou sua instância do SQLAlchemy
+
+@app.route("/fix_columns")
+def fix_columns():
+    try:
+        db.session.execute(text('ALTER TABLE "user" ADD COLUMN IF NOT EXISTS plan_type VARCHAR(50);'))
+        db.session.execute(text('ALTER TABLE "user" ADD COLUMN IF NOT EXISTS subscription_status VARCHAR(50);'))
+        db.session.execute(text('ALTER TABLE "user" ADD COLUMN IF NOT EXISTS trial_ends_at TIMESTAMP;'))
+        db.session.execute(text('ALTER TABLE "user" ADD COLUMN IF NOT EXISTS stripe_customer_id VARCHAR(100);'))
+        db.session.commit()
+        return "Colunas criadas com sucesso!"
+    except Exception as e:
+        return f"Erro: {e}"

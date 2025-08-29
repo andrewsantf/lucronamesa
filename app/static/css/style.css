@@ -351,6 +351,60 @@ body:has(.landing-container-v2) main {
     color: #6c757d;
 }
 
+/* --- Estilos para a Calculadora Interativa da Landing Page --- */
+
+/* Container para os botões de ação na lista de ingredientes */
+.ingredient-actions {
+    display: flex;
+    gap: 6px; /* Espaço entre os botões */
+}
+
+/* Estilo PADRÃO para os botões pequenos de ícone (Adicionar e Excluir da lista principal) */
+.add-ingredient-btn,
+.remove-available-btn {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    font-size: 1.1em;
+    border-radius: 4px;
+}
+
+/* Estilo para o botão de remover na lista de ingredientes da receita */
+.recipe-ingredient-item .remove-recipe-btn {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    font-size: 1.1em;
+    border-radius: 4px;
+}
+
+/* Alinhamento dos itens na lista de ingredientes disponíveis */
+.available-ingredient-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+.available-ingredient-item:last-child {
+    border-bottom: none;
+}
+
+/* Ajustes no input group da receita */
+.recipe-ingredient-item .input-group input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.recipe-ingredient-item .input-group-text {
+    border-radius: 0;
+}
+
 /* --- B. Páginas de Login/Registro --- */
 body:has(.auth-container) nav {
     display: none !important;

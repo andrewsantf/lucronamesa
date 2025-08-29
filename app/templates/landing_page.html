@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
 <div class="landing-container-v2">
     <section class="hero-section text-center">
         <div class="container">
@@ -171,6 +175,12 @@
                         </div>
                         <div class="demo-step mt-4">
                              <h4 class="mb-3"><span class="badge bg-primary me-2"></span>Monte sua receita</h4>
+                             
+                             <div class="mb-3">
+                                 <label for="recipeName" class="form-label small">Nome da Receita</label>
+                                 <input type="text" class="form-control" id="recipeName" placeholder="Ex: Bolo de Cenoura com Chocolate">
+                             </div>
+
                              <div id="recipe-ingredients-list" class="recipe-list"><p class="text-muted text-center p-3" id="recipe-placeholder">Adicione ingredientes para começar a montar sua receita.</p></div>
                         </div>
                     </div>
@@ -232,15 +242,182 @@
         </div>
     </footer>
 
-    <a href="https://wa.me/556191081071?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%2o%20LucroNaMesa." class="whatsapp-float-button" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i></a>
+    <a href="https://wa.me/556191081071?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20o%20LucroNaMesa." class="whatsapp-float-button" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i></a>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // --- LÓGICA DO DEMO INTERATIVO (sem alterações) ---
+    // --- LÓGICA DO DEMO INTERATIVO ---
     const ingredientForm = document.getElementById('ingredient-form');
-    if(ingredientForm) {
-        // ... (código do formulário de demonstração) ...
+    const availableIngredientsList = document.getElementById('available-ingredients-list');
+    const recipeIngredientsList = document.getElementById('recipe-ingredients-list');
+    const ingredientsPlaceholder = document.getElementById('ingredients-placeholder');
+    const recipePlaceholder = document.getElementById('recipe-placeholder');
+    const profitMarginInput = document.getElementById('profit-margin');
+    const totalCostEl = document.getElementById('total-cost');
+    const suggestedPriceEl = document.getElementById('suggested-price');
+    const finalCostPlaceholder = document.getElementById('final-cost-placeholder');
+    const finalCostResult = document.getElementById('final-cost-result');
+    
+    // NOVO: Pega os novos elementos
+    const calculateBtn = document.getElementById('calculate-btn');
+    const resultBox = document.getElementById('demo-result-box');
+
+    let ingredients = {};
+    let recipe = {};
+
+    // 1. ADICIONAR INGREDIENTE À LISTA
+    if (ingredientForm) {
+        ingredientForm.addEventListener('submit', function (e) {
+            e.preventDefault(); 
+            const name = document.getElementById('ingName').value.trim();
+            const price = parseFloat(document.getElementById('ingPrice').value.replace(',', '.'));
+            const qty = parseFloat(document.getElementById('ingQty').value.replace(',', '.'));
+            const unit = document.getElementById('ingUnit').value;
+            if (!name || isNaN(price) || isNaN(qty) || price <= 0 || qty <= 0) {
+                alert('Por favor, preencha todos os campos do ingrediente com valores válidos.');
+                return;
+            }
+            let baseCost = 0;
+            if (unit === 'kg' || unit === 'l') {
+                baseCost = price / (qty * 1000);
+            } else { 
+                baseCost = price / qty;
+            }
+            const ingredientId = 'ing-' + Date.now();
+            ingredients[ingredientId] = { name, baseCost, unit: normalizeUnit(unit) };
+            renderAvailableIngredients();
+            ingredientForm.reset();
+            document.getElementById('ingName').focus();
+        });
+    }
+
+    // 2. RENDERIZAR A LISTA DE INGREDIENTES DISPONÍVEIS
+    function renderAvailableIngredients() {
+        if (Object.keys(ingredients).length === 0) {
+            ingredientsPlaceholder.style.display = 'block';
+            availableIngredientsList.innerHTML = '';
+        } else {
+            ingredientsPlaceholder.style.display = 'none';
+            availableIngredientsList.innerHTML = '';
+            for (const id in ingredients) {
+                const ing = ingredients[id];
+                const item = document.createElement('div');
+                item.className = 'available-ingredient-item';
+                item.innerHTML = `
+                    <span>${ing.name}</span>
+                    <div class="ingredient-actions">
+                        <button class="btn btn-sm btn-outline-danger remove-available-btn" data-id="${id}" title="Excluir ingrediente"><i class="fas fa-trash-alt"></i></button>
+                        <button class="btn btn-sm btn-outline-primary add-ingredient-btn" data-id="${id}" title="Adicionar à receita"><i class="fas fa-plus"></i></button>
+                    </div>
+                `;
+                availableIngredientsList.appendChild(item);
+            }
+        }
+    }
+
+    // 3. ADICIONAR OU EXCLUIR INGREDIENTE DA LISTA DISPONÍVEL
+    availableIngredientsList.addEventListener('click', function(e) {
+        const addButton = e.target.closest('.add-ingredient-btn');
+        const removeButton = e.target.closest('.remove-available-btn');
+        if (addButton) {
+            const id = addButton.dataset.id;
+            if (ingredients[id] && !recipe[id]) {
+                recipe[id] = { quantity: '', unit: ingredients[id].unit };
+                renderRecipeIngredients();
+            }
+        }
+        if (removeButton) {
+            const id = removeButton.dataset.id;
+            delete ingredients[id];
+            if (recipe[id]) {
+                delete recipe[id];
+            }
+            renderAvailableIngredients();
+            renderRecipeIngredients();
+        }
+    });
+
+    // 4. RENDERIZAR A LISTA DE INGREDIENTES NA RECEITA
+    function renderRecipeIngredients() {
+        if (Object.keys(recipe).length === 0) {
+            recipePlaceholder.style.display = 'block';
+            recipeIngredientsList.innerHTML = '';
+        } else {
+            recipePlaceholder.style.display = 'none';
+            recipeIngredientsList.innerHTML = '';
+            for (const id in recipe) {
+                const ing = ingredients[id];
+                const recipeIng = recipe[id];
+                const item = document.createElement('div');
+                item.className = 'recipe-ingredient-item';
+                item.innerHTML = `
+                    <label>${ing.name}</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Qtd." value="${recipeIng.quantity}" data-id="${id}" inputmode="decimal">
+                        <span class="input-group-text">${ing.unit}</span>
+                        <button class="btn btn-outline-danger remove-recipe-btn" data-id="${id}" title="Remover da receita"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                `;
+                recipeIngredientsList.appendChild(item);
+            }
+        }
+        updateCosts();
+    }
+    
+    // 5. ATUALIZAR QUANTIDADE OU REMOVER INGREDIENTE DA RECEITA
+    recipeIngredientsList.addEventListener('input', function(e) {
+        if (e.target && e.target.tagName === 'INPUT') {
+            const id = e.target.dataset.id;
+            recipe[id].quantity = e.target.value;
+            updateCosts();
+        }
+    });
+
+    recipeIngredientsList.addEventListener('click', function(e) {
+        const button = e.target.closest('.remove-recipe-btn');
+        if (button) {
+            const id = button.dataset.id;
+            delete recipe[id];
+            renderRecipeIngredients();
+        }
+    });
+
+    // 6. ATUALIZAR OS CUSTOS QUANDO A MARGEM DE LUCRO MUDAR
+    profitMarginInput.addEventListener('input', updateCosts);
+
+    // 7. CALCULAR E EXIBIR OS CUSTOS FINAIS
+    function updateCosts() {
+        let totalCost = 0;
+        let isRecipeValid = Object.keys(recipe).length > 0;
+        for (const id in recipe) {
+            const ing = ingredients[id];
+            const recipeIng = recipe[id];
+            const quantity = parseFloat(String(recipeIng.quantity).replace(',', '.'));
+            if (isNaN(quantity) || quantity <= 0) {
+                isRecipeValid = false;
+                break;
+            }
+            totalCost += ing.baseCost * quantity;
+        }
+        if (isRecipeValid) {
+            finalCostPlaceholder.classList.add('d-none');
+            finalCostResult.classList.remove('d-none');
+            const profitMargin = parseFloat(profitMarginInput.value) || 0;
+            const suggestedPrice = totalCost * (1 + profitMargin / 100);
+            totalCostEl.textContent = `R$ ${totalCost.toFixed(2).replace('.', ',')}`;
+            suggestedPriceEl.textContent = `R$ ${suggestedPrice.toFixed(2).replace('.', ',')}`;
+        } else {
+            finalCostPlaceholder.classList.remove('d-none');
+            finalCostResult.classList.add('d-none');
+        }
+    }
+
+    // FUNÇÃO AUXILIAR PARA NORMALIZAR UNIDADES
+    function normalizeUnit(unit) {
+        if (unit === 'kg') return 'g';
+        if (unit === 'l') return 'ml';
+        return unit;
     }
 
     // --- INICIALIZAÇÃO DO SWIPER PARA ROLAGEM CONTÍNUA ---

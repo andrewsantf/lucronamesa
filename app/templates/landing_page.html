@@ -152,60 +152,95 @@
         </div>
     </section>
 
-    <section class="interactive-demo-section">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="section-title">Experimente o poder do LucroNaMesa</h2>
-                <p class="section-subtitle">Simule o fluxo real: cadastre ingredientes, monte sua receita e veja a mágica acontecer.</p>
-            </div>
-            <div class="demo-container shadow">
-                <div class="row g-4">
-                    <div class="col-lg-7">
-                        <div class="demo-step">
-                            <h4 class="mb-3"><span class="badge bg-primary me-2"></span>Cadastre seus ingredientes</h4>
-                            <form id="ingredient-form" class="p-3 bg-light rounded">
+   <section class="interactive-demo-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Experimente o poder do LucroNaMesa</h2>
+            <p class="section-subtitle">Simule o fluxo real: cadastre ingredientes, monte sua receita e veja a mágica acontecer.</p>
+        </div>
+        
+        <div class="demo-container-v3 shadow">
+            <ul class="nav nav-tabs nav-fill" id="demoTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="step1-tab" data-bs-toggle="tab" data-bs-target="#step1" type="button" role="tab" aria-controls="step1" aria-selected="true">
+                        <strong>Passo 1:</strong> Cadastrar Ingredientes
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="step2-tab" data-bs-toggle="tab" data-bs-target="#step2" type="button" role="tab" aria-controls="step2" aria-selected="false" disabled>
+                        <strong>Passo 2:</strong> Montar Receita
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="step3-tab" data-bs-toggle="tab" data-bs-target="#step3" type="button" role="tab" aria-controls="step3" aria-selected="false" disabled>
+                        <strong>Passo 3:</strong> Análise de Custos
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content p-4" id="demoTabsContent">
+                <div class="tab-pane fade show active" id="step1" role="tabpanel" aria-labelledby="step1-tab">
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <h4 class="mb-3">Adicionar Ingrediente</h4>
+                            <form id="ingredient-form-demo">
                                 <div class="mb-3"><label for="ingName" class="form-label small">Nome do Ingrediente</label><input type="text" class="form-control" id="ingName" placeholder="Ex: Farinha de Trigo"></div>
                                 <div class="row">
-                                    <div class="col-md-4 mb-3"><label for="ingPrice" class="form-label small">Preço do Pacote</label><input type="text" class="form-control" id="ingPrice" placeholder="Ex: 5,50" inputmode="decimal"></div>
-                                    <div class="col-md-4 mb-3"><label for="ingQty" class="form-label small">Quantidade</label><input type="text" class="form-control" id="ingQty" placeholder="Ex: 1000" inputmode="decimal"></div>
+                                    <div class="col-md-4 mb-3"><label for="ingPrice" class="form-label small">Preço (R$)</label><input type="text" class="form-control" id="ingPrice" placeholder="5,50" inputmode="decimal"></div>
+                                    <div class="col-md-4 mb-3"><label for="ingQty" class="form-label small">Quantidade</label><input type="text" class="form-control" id="ingQty" placeholder="1000" inputmode="decimal"></div>
                                     <div class="col-md-4 mb-3"><label for="ingUnit" class="form-label small">Unidade</label><select id="ingUnit" class="form-select"><option value="g">Grama (g)</option><option value="kg">Quilo (kg)</option><option value="ml">Mililitro (ml)</option><option value="l">Litro (l)</option><option value="un">Unidade (un)</option></select></div>
                                 </div>
-                               <button type="submit" class="btn btn-sm btn-add-ingredient w-100">Adicionar Ingrediente à Lista</button>
+                               <button type="submit" class="btn btn-primary w-100">Adicionar Ingrediente</button>
                             </form>
                         </div>
-                        <div class="demo-step mt-4">
-                             <h4 class="mb-3"><span class="badge bg-primary me-2"></span>Monte sua receita</h4>
-                             
-                             <div class="mb-3">
-                                 <label for="recipeName" class="form-label small">Nome da Receita</label>
-                                 <input type="text" class="form-control" id="recipeName" placeholder="Ex: Bolo de Cenoura com Chocolate">
-                             </div>
-
-                             <div id="recipe-ingredients-list" class="recipe-list"><p class="text-muted text-center p-3" id="recipe-placeholder">Adicione ingredientes para começar a montar sua receita.</p></div>
-                        </div>
-                    </div>
-                    <div class="col-lg-5">
-                        <div class="result-box-v2" id="demo-result-box">
-                            <div class="mb-4"><h5 class="mb-3">Sua Lista de Ingredientes</h5><div id="available-ingredients-list" class="available-list"><p class="text-muted text-center small p-2" id="ingredients-placeholder">Nenhum ingrediente cadastrado.</p></div></div>
-                            <hr>
-                            <div class="mt-4">
-                                <h5 class="mb-3">Resultado da Receita</h5>
-                                <div id="final-cost-placeholder" class="text-center"><i class="bi bi-card-list display-4 text-muted"></i><p class="fw-bold mt-2">O custo aparecerá aqui.</p></div>
-                                <div id="final-cost-result" class="d-none">
-                                    <div class="mb-3"><label for="profit-margin" class="form-label fw-bold">Margem de Lucro (%)</label><input type="number" id="profit-margin" class="form-control form-control-lg text-center" value="150" inputmode="numeric"></div>
-                                    <div class="cost-breakdown mt-4">
-                                        <div class="d-flex justify-content-between"><span>Custo Total:</span><span id="total-cost" class="fw-bold">R$ 0,00</span></div>
-                                        <hr class="my-2">
-                                        <div class="d-flex justify-content-between align-items-center price-suggestion"><span class="fw-bold">Preço de Venda Sugerido:</span><span id="suggested-price" class="fw-bolder h3">R$ 0,00</span></div>
-                                    </div>
-                                </div>
+                        <div class="col-lg-6">
+                            <h4 class="mb-3">Ingredientes Cadastrados</h4>
+                            <div id="available-ingredients-list-demo" class="available-list-demo">
+                                <p class="text-muted text-center small p-2" id="ingredients-placeholder-demo">Nenhum ingrediente cadastrado.</p>
                             </div>
+                            <button class="btn btn-primary w-100 mt-3" id="goto-step2" disabled>Próximo: Montar Receita <i class="bi bi-arrow-right"></i></button>
                         </div>
                     </div>
                 </div>
+
+                <div class="tab-pane fade" id="step2" role="tabpanel" aria-labelledby="step2-tab">
+                    <div class="mb-3">
+                        <label for="recipeNameDemo" class="form-label">Nome da sua Receita</label>
+                        <input type="text" class="form-control" id="recipeNameDemo" placeholder="Ex: Bolo de Cenoura com Chocolate">
+                    </div>
+                    <hr>
+                    <p class="text-muted">Selecione os ingredientes da sua lista e defina a quantidade usada na receita.</p>
+                    <div id="recipe-ingredients-list-demo">
+                        </div>
+                    <button class="btn btn-primary w-100 mt-3" id="goto-step3" disabled>Ver Análise de Custos <i class="bi bi-graph-up"></i></button>
+                </div>
+
+                <div class="tab-pane fade" id="step3" role="tabpanel" aria-labelledby="step3-tab">
+                    <h3 class="text-center mb-1" id="analysis-recipe-name">Análise da Receita</h3>
+                    <p class="text-center text-muted mb-4">Ajuste a margem de lucro e veja o resultado em tempo real.</p>
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                             <div class="mb-4">
+                                <label for="profit-margin-demo" class="form-label fw-bold">Margem de Lucro (%)</label>
+                                <input type="number" id="profit-margin-demo" class="form-control form-control-lg text-center" value="150" inputmode="numeric">
+                            </div>
+                            <div class="kpi-card-demo"><div class="kpi-content"><h5 class="kpi-title">Custo Total da Receita</h5><p class="kpi-value" id="total-cost-demo">R$ 0,00</p></div></div>
+                            <div class="kpi-card-demo sale-price"><div class="kpi-content"><h5 class="kpi-title">Preço de Venda Sugerido</h5><p class="kpi-value" id="suggested-price-demo">R$ 0,00</p></div></div>
+                            <div class="kpi-card-demo profit"><div class="kpi-content"><h5 class="kpi-title">Lucro Bruto</h5><p class="kpi-value" id="gross-profit-demo">R$ 0,00</p></div></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <h5 class="text-center mb-3">Contribuição de Custo por Ingrediente</h5>
+                             <div style="position: relative; height: 300px; width: 100%;">
+                                <canvas id="costBreakdownChartDemo"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                     <button class="btn btn-outline-secondary w-100 mt-4" id="reset-demo"><i class="bi bi-arrow-clockwise"></i> Começar de Novo</button>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <section class="pricing-section">
         <div class="container">
@@ -247,188 +282,247 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // --- LÓGICA DO DEMO INTERATIVO ---
-    const ingredientForm = document.getElementById('ingredient-form');
-    const availableIngredientsList = document.getElementById('available-ingredients-list');
-    const recipeIngredientsList = document.getElementById('recipe-ingredients-list');
-    const ingredientsPlaceholder = document.getElementById('ingredients-placeholder');
-    const recipePlaceholder = document.getElementById('recipe-placeholder');
-    const profitMarginInput = document.getElementById('profit-margin');
-    const totalCostEl = document.getElementById('total-cost');
-    const suggestedPriceEl = document.getElementById('suggested-price');
-    const finalCostPlaceholder = document.getElementById('final-cost-placeholder');
-    const finalCostResult = document.getElementById('final-cost-result');
-    
-    // NOVO: Pega os novos elementos
-    const calculateBtn = document.getElementById('calculate-btn');
-    const resultBox = document.getElementById('demo-result-box');
-
-    let ingredients = {};
+    // --- LÓGICA DO NOVO DEMO INTERATIVO V3 ---
+    const ingredients = {};
     let recipe = {};
+    let costChart = null;
 
-    // 1. ADICIONAR INGREDIENTE À LISTA
-    if (ingredientForm) {
-        ingredientForm.addEventListener('submit', function (e) {
-            e.preventDefault(); 
-            const name = document.getElementById('ingName').value.trim();
-            const price = parseFloat(document.getElementById('ingPrice').value.replace(',', '.'));
-            const qty = parseFloat(document.getElementById('ingQty').value.replace(',', '.'));
-            const unit = document.getElementById('ingUnit').value;
-            if (!name || isNaN(price) || isNaN(qty) || price <= 0 || qty <= 0) {
-                alert('Por favor, preencha todos os campos do ingrediente com valores válidos.');
-                return;
-            }
-            let baseCost = 0;
-            if (unit === 'kg' || unit === 'l') {
-                baseCost = price / (qty * 1000);
-            } else { 
-                baseCost = price / qty;
-            }
-            const ingredientId = 'ing-' + Date.now();
-            ingredients[ingredientId] = { name, baseCost, unit: normalizeUnit(unit) };
-            renderAvailableIngredients();
-            ingredientForm.reset();
-            document.getElementById('ingName').focus();
-        });
-    }
+    // Elementos da UI
+    const ingredientForm = document.getElementById('ingredient-form-demo');
+    const ingNameInput = document.getElementById('ingName');
+    const availableList = document.getElementById('available-ingredients-list-demo');
+    const ingredientsPlaceholder = document.getElementById('ingredients-placeholder-demo');
+    const recipeList = document.getElementById('recipe-ingredients-list-demo');
+    const profitMarginInput = document.getElementById('profit-margin-demo');
+    
+    const recipeNameInput = document.getElementById('recipeNameDemo');
+    const analysisRecipeName = document.getElementById('analysis-recipe-name');
+    const totalCostEl = document.getElementById('total-cost-demo');
+    const suggestedPriceEl = document.getElementById('suggested-price-demo');
+    const grossProfitEl = document.getElementById('gross-profit-demo');
+    
+    // Abas e Botões de Navegação
+    const demoTabs = new bootstrap.Tab(document.getElementById('step1-tab'));
+    const step2TabBtn = document.getElementById('step2-tab');
+    const step3TabBtn = document.getElementById('step3-tab');
+    const gotoStep2Btn = document.getElementById('goto-step2');
+    const gotoStep3Btn = document.getElementById('goto-step3');
+    const resetBtn = document.getElementById('reset-demo');
+    
+    // FUNÇÕES AUXILIARES
+    const normalizeUnit = (unit) => (unit === 'kg' ? 'g' : (unit === 'l' ? 'ml' : unit));
+    const formatCurrency = (value) => `R$ ${value.toFixed(2).replace('.', ',')}`;
 
-    // 2. RENDERIZAR A LISTA DE INGREDIENTES DISPONÍVEIS
+    // LÓGICA DO PASSO 1: Adicionar Ingredientes
+    ingredientForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name = ingNameInput.value.trim();
+        const price = parseFloat(document.getElementById('ingPrice').value.replace(',', '.'));
+        const qty = parseFloat(document.getElementById('ingQty').value.replace(',', '.'));
+        const unit = document.getElementById('ingUnit').value;
+
+        if (!name || isNaN(price) || isNaN(qty) || price <= 0 || qty <= 0) {
+            alert('Por favor, preencha todos os campos com valores válidos.');
+            return;
+        }
+
+        const baseQty = (unit === 'kg' || unit === 'l') ? qty * 1000 : qty;
+        const baseCost = price / baseQty;
+        const ingredientId = 'ing-' + Date.now();
+        
+        ingredients[ingredientId] = { name, baseCost, unit: normalizeUnit(unit) };
+        renderAvailableIngredients();
+        ingredientForm.reset();
+        ingNameInput.focus();
+    });
+
     function renderAvailableIngredients() {
-        if (Object.keys(ingredients).length === 0) {
-            ingredientsPlaceholder.style.display = 'block';
-            availableIngredientsList.innerHTML = '';
-        } else {
-            ingredientsPlaceholder.style.display = 'none';
-            availableIngredientsList.innerHTML = '';
+        const hasIngredients = Object.keys(ingredients).length > 0;
+        ingredientsPlaceholder.style.display = hasIngredients ? 'none' : 'block';
+        gotoStep2Btn.disabled = !hasIngredients;
+        availableList.innerHTML = '';
+
+        if(hasIngredients) {
             for (const id in ingredients) {
                 const ing = ingredients[id];
                 const item = document.createElement('div');
-                item.className = 'available-ingredient-item';
+                item.className = 'available-ingredient-item-demo';
                 item.innerHTML = `
-                    <span>${ing.name}</span>
-                    <div class="ingredient-actions">
-                        <button class="btn btn-sm btn-outline-danger remove-available-btn" data-id="${id}" title="Excluir ingrediente"><i class="fas fa-trash-alt"></i></button>
-                        <button class="btn btn-sm btn-outline-primary add-ingredient-btn" data-id="${id}" title="Adicionar à receita"><i class="fas fa-plus"></i></button>
-                    </div>
+                    <span class="fw-bold">${ing.name}</span>
+                    <small class="text-muted">${formatCurrency(ing.baseCost * (ing.unit === 'g' || ing.unit === 'ml' ? 1000 : 1))}/${ing.unit === 'g' ? 'kg' : ing.unit === 'ml' ? 'l' : 'un'}</small>
                 `;
-                availableIngredientsList.appendChild(item);
+                availableList.appendChild(item);
             }
         }
     }
 
-    // 3. ADICIONAR OU EXCLUIR INGREDIENTE DA LISTA DISPONÍVEL
-    availableIngredientsList.addEventListener('click', function(e) {
-        const addButton = e.target.closest('.add-ingredient-btn');
-        const removeButton = e.target.closest('.remove-available-btn');
-        if (addButton) {
-            const id = addButton.dataset.id;
-            if (ingredients[id] && !recipe[id]) {
-                recipe[id] = { quantity: '', unit: ingredients[id].unit };
-                renderRecipeIngredients();
-            }
-        }
-        if (removeButton) {
-            const id = removeButton.dataset.id;
-            delete ingredients[id];
-            if (recipe[id]) {
-                delete recipe[id];
-            }
-            renderAvailableIngredients();
-            renderRecipeIngredients();
-        }
+    // NAVEGAÇÃO PARA O PASSO 2
+    gotoStep2Btn.addEventListener('click', () => {
+        step2TabBtn.disabled = false;
+        new bootstrap.Tab(step2TabBtn).show();
+        renderRecipeIngredients();
     });
 
-    // 4. RENDERIZAR A LISTA DE INGREDIENTES NA RECEITA
+    // LÓGICA DO PASSO 2: Montar a Receita
     function renderRecipeIngredients() {
-        if (Object.keys(recipe).length === 0) {
-            recipePlaceholder.style.display = 'block';
-            recipeIngredientsList.innerHTML = '';
-        } else {
-            recipePlaceholder.style.display = 'none';
-            recipeIngredientsList.innerHTML = '';
-            for (const id in recipe) {
-                const ing = ingredients[id];
-                const recipeIng = recipe[id];
-                const item = document.createElement('div');
-                item.className = 'recipe-ingredient-item';
-                item.innerHTML = `
-                    <label>${ing.name}</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Qtd." value="${recipeIng.quantity}" data-id="${id}" inputmode="decimal">
-                        <span class="input-group-text">${ing.unit}</span>
-                        <button class="btn btn-outline-danger remove-recipe-btn" data-id="${id}" title="Remover da receita"><i class="fas fa-trash-alt"></i></button>
-                    </div>
-                `;
-                recipeIngredientsList.appendChild(item);
-            }
+        recipeList.innerHTML = '';
+        for (const id in ingredients) {
+            const ing = ingredients[id];
+            const item = document.createElement('div');
+            item.className = 'input-group mb-3';
+            item.innerHTML = `
+                <div class="input-group-text">
+                    <input class="form-check-input mt-0 recipe-checkbox" type="checkbox" data-id="${id}" ${recipe[id] ? 'checked' : ''}>
+                </div>
+                <span class="input-group-text" style="width: 40%;">${ing.name}</span>
+                <input type="text" class="form-control recipe-quantity" placeholder="Quantidade" data-id="${id}" value="${recipe[id] ? recipe[id].quantity : ''}" inputmode="decimal" ${!recipe[id] ? 'disabled' : ''}>
+                <span class="input-group-text">${ing.unit}</span>
+            `;
+            recipeList.appendChild(item);
         }
-        updateCosts();
+        validateRecipe();
     }
     
-    // 5. ATUALIZAR QUANTIDADE OU REMOVER INGREDIENTE DA RECEITA
-    recipeIngredientsList.addEventListener('input', function(e) {
-        if (e.target && e.target.tagName === 'INPUT') {
+    recipeList.addEventListener('change', function(e) {
+        if (e.target.classList.contains('recipe-checkbox')) {
             const id = e.target.dataset.id;
-            recipe[id].quantity = e.target.value;
-            updateCosts();
+            const quantityInput = e.target.closest('.input-group').querySelector('.recipe-quantity');
+            if (e.target.checked) {
+                recipe[id] = { quantity: '' };
+                quantityInput.disabled = false;
+                quantityInput.focus();
+            } else {
+                delete recipe[id];
+                quantityInput.disabled = true;
+                quantityInput.value = '';
+            }
+            validateRecipe();
         }
     });
 
-    recipeIngredientsList.addEventListener('click', function(e) {
-        const button = e.target.closest('.remove-recipe-btn');
-        if (button) {
-            const id = button.dataset.id;
-            delete recipe[id];
-            renderRecipeIngredients();
+    recipeList.addEventListener('input', function(e) {
+        if (e.target.classList.contains('recipe-quantity')) {
+            const id = e.target.dataset.id;
+            if (recipe[id]) {
+                recipe[id].quantity = e.target.value;
+            }
+            validateRecipe();
         }
     });
+    
+    function validateRecipe() {
+        if(Object.keys(recipe).length === 0) {
+            gotoStep3Btn.disabled = true;
+            return;
+        }
+        for (const id in recipe) {
+            const qty = parseFloat(String(recipe[id].quantity).replace(',', '.'));
+            if(isNaN(qty) || qty <= 0) {
+                gotoStep3Btn.disabled = true;
+                return;
+            }
+        }
+        gotoStep3Btn.disabled = false;
+    }
 
-    // 6. ATUALIZAR OS CUSTOS QUANDO A MARGEM DE LUCRO MUDAR
-    profitMarginInput.addEventListener('input', updateCosts);
+    // NAVEGAÇÃO PARA O PASSO 3
+    gotoStep3Btn.addEventListener('click', () => {
+        step3TabBtn.disabled = false;
+        new bootstrap.Tab(step3TabBtn).show();
+        analysisRecipeName.textContent = recipeNameInput.value.trim() || 'Análise da Receita';
+        updateAnalysis();
+    });
 
-    // 7. CALCULAR E EXIBIR OS CUSTOS FINAIS
-    function updateCosts() {
+    // LÓGICA DO PASSO 3: Análise de Custos
+    profitMarginInput.addEventListener('input', updateAnalysis);
+
+    function updateAnalysis() {
+        const labels = [];
+        const data = [];
         let totalCost = 0;
-        let isRecipeValid = Object.keys(recipe).length > 0;
+
         for (const id in recipe) {
             const ing = ingredients[id];
             const recipeIng = recipe[id];
-            const quantity = parseFloat(String(recipeIng.quantity).replace(',', '.'));
-            if (isNaN(quantity) || quantity <= 0) {
-                isRecipeValid = false;
-                break;
+            const quantity = parseFloat(String(recipeIng.quantity).replace(',', '.')) || 0;
+            const cost = ing.baseCost * quantity;
+            if(cost > 0){
+                labels.push(ing.name);
+                data.push(parseFloat(cost.toFixed(2)));
+                totalCost += cost;
             }
-            totalCost += ing.baseCost * quantity;
         }
-        if (isRecipeValid) {
-            finalCostPlaceholder.classList.add('d-none');
-            finalCostResult.classList.remove('d-none');
-            const profitMargin = parseFloat(profitMarginInput.value) || 0;
-            const suggestedPrice = totalCost * (1 + profitMargin / 100);
-            totalCostEl.textContent = `R$ ${totalCost.toFixed(2).replace('.', ',')}`;
-            suggestedPriceEl.textContent = `R$ ${suggestedPrice.toFixed(2).replace('.', ',')}`;
-        } else {
-            finalCostPlaceholder.classList.remove('d-none');
-            finalCostResult.classList.add('d-none');
+        
+        const profitMargin = parseFloat(profitMarginInput.value) || 0;
+        const suggestedPrice = totalCost * (1 + profitMargin / 100);
+        const grossProfit = suggestedPrice - totalCost;
+
+        totalCostEl.textContent = formatCurrency(totalCost);
+        suggestedPriceEl.textContent = formatCurrency(suggestedPrice);
+        grossProfitEl.textContent = formatCurrency(grossProfit);
+
+        renderChart(labels, data);
+    }
+    
+    function renderChart(labels, data) {
+        const ctx = document.getElementById('costBreakdownChartDemo');
+        if (costChart) {
+            costChart.destroy();
         }
+        costChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Custo (R$)',
+                    data: data,
+                    backgroundColor: ['#18bc9c', '#2c3e50', '#f39c12', '#3498db', '#9b59b6', '#e74c3c', '#2ecc71', '#e67e22', '#1abc9c', '#d35400'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                let value = context.raw || 0;
+                                let total = context.chart.getDatasetMeta(0).total;
+                                let percentage = (value / total * 100).toFixed(2) + '%';
+                                return `${label}: ${formatCurrency(value)} (${percentage})`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
-    // FUNÇÃO AUXILIAR PARA NORMALIZAR UNIDADES
-    function normalizeUnit(unit) {
-        if (unit === 'kg') return 'g';
-        if (unit === 'l') return 'ml';
-        return unit;
-    }
+    // LÓGICA DE RESET
+    resetBtn.addEventListener('click', () => {
+        Object.keys(ingredients).forEach(key => delete ingredients[key]);
+        recipe = {};
+        
+        ingredientForm.reset();
+        recipeNameInput.value = '';
+        profitMarginInput.value = '150';
+        
+        renderAvailableIngredients();
+        
+        step2TabBtn.disabled = true;
+        step3TabBtn.disabled = true;
+        
+        new bootstrap.Tab(document.getElementById('step1-tab')).show();
+    });
 
-    // --- INICIALIZAÇÃO DO SWIPER PARA ROLAGEM CONTÍNUA ---
-    const continuousSwiper = new Swiper('.continuous-slider', {
+    // --- INICIALIZAÇÃO DO SWIPER (já existente no seu código) ---
+    new Swiper('.continuous-slider', {
         loop: true,
         slidesPerView: 'auto',
         freeMode: true,
-        autoplay: {
-            delay: 1,
-            disableOnInteraction: false,
-        },
+        autoplay: { delay: 1, disableOnInteraction: false },
         speed: 5000,
     });
 });

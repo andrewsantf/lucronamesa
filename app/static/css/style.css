@@ -59,7 +59,7 @@ a:hover {
     padding: 10px 24px;
     font-weight: 500;
     transition: all 0.3s ease;
-    border-radius: var(--border-radius); 
+    border-radius: var(--border-radius);
 }
 
 .btn-primary:hover {
@@ -150,28 +150,28 @@ body:has(.landing-container-v2) main {
     width: 100%;
 }
 .section-title {
-    font-size: 2.2rem; /* Reduzido para melhor encaixe em mobile */
+    font-size: 2.2rem;
     font-weight: 700;
     color: var(--secondary-color);
 }
 .section-subtitle {
-    font-size: 1.1rem; /* Reduzido */
+    font-size: 1.1rem;
     color: #6c757d;
     max-width: 600px;
     margin: 1rem auto 0;
 }
 .hero-section {
-    padding: 60px 0; /* Padding reduzido para mobile */
+    padding: 60px 0;
     background-color: #fff;
 }
 .hero-title {
-    font-size: 2.5rem; /* Reduzido */
+    font-size: 2.5rem;
     font-weight: 700;
     line-height: 1.2;
     color: var(--secondary-color);
 }
 .hero-subtitle {
-    font-size: 1.15rem; /* Reduzido */
+    font-size: 1.15rem;
     color: #6c757d;
     margin: 1.5rem 0 2rem;
     max-width: 550px;
@@ -182,51 +182,26 @@ body:has(.landing-container-v2) main {
     border-radius: 12px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
-.social-proof-section {
+.before-after-section, .features-section-v2, .interactive-demo-section, .pricing-section {
     padding: 60px 0;
-    background-color: var(--light-gray);
-    border-top: 1px solid #e9ecef;
-    border-bottom: 1px solid #e9ecef;
-}
-.logos-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    filter: grayscale(100%);
-    opacity: 0.7;
-    gap: 20px;
-}
-.logo-item {
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: #6c757d;
-}
-.before-after-section, .features-section-v2, .interactive-demo-section, .pricing-section { 
-    padding: 60px 0; /* Padding padronizado e reduzido para mobile */
 }
 .before-list { list-style: none; padding-left: 0; }
 .before-list li { font-size: 1.1rem; margin-bottom: 1rem; }
 .after-card {
     background: #fff;
-    padding: 2rem; /* Padding reduzido */
+    padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.08);
 }
 .features-section-v2 { background-color: var(--light-gray); }
-.feature-row { margin-bottom: 60px; } /* Margem reduzida */
+.feature-row { margin-bottom: 60px; }
 .feature-row:last-child { margin-bottom: 0; }
-.feature-text { padding: 0 1rem; text-align: center; } /* Centralizado para mobile */
+.feature-text { padding: 0 1rem; text-align: center; }
 .feature-text h3 {
-    font-size: 1.6rem; /* Reduzido */
+    font-size: 1.6rem;
     font-weight: 600;
     color: var(--secondary-color);
     margin-bottom: 1rem;
-}
-.cta-section {
-    padding: 100px 0;
-    background-color: var(--secondary-color);
-    background-image: linear-gradient(45deg, var(--secondary-color), #34495e);
 }
 .whatsapp-float-button {
     position: fixed;
@@ -254,25 +229,24 @@ body:has(.landing-container-v2) main {
     background-color: #fff;
 }
 .pricing-section .row {
-    justify-content: center;   /* Centraliza os cards */
-    gap: 20px;                 /* Espaço entre eles */
+    justify-content: center;
+    gap: 20px;
 }
 .pricing-card {
     border: 1px solid #e9ecef;
     border-radius: 12px;
-    padding: 1.5rem;           /* Reduz padding interno */
+    padding: 1.5rem;
     text-align: center;
     transition: all 0.3s ease;
     height: 100%;
     display: flex;
     flex-direction: column;
-    max-width: 320px;          /* Limita a largura do card */
-    margin: 0 auto;            /* Centraliza */
-    font-size: 0.95rem;        /* Texto levemente menor */
+    max-width: 320px;
+    margin: 0 auto;
+    font-size: 0.95rem;
 }
-/* No mobile, remove o efeito de escala para não quebrar o layout */
 .pricing-card.highlighted {
-    transform: none; 
+    transform: none;
 }
 .pricing-card:hover {
     transform: translateY(-10px);
@@ -305,14 +279,14 @@ body:has(.landing-container-v2) main {
 .pricing-card .btn {
     border-radius: 50px;
     font-weight: 500;
-    padding: 10px 20px;        /* Botão mais compacto */
+    padding: 10px 20px;
     font-size: 0.9rem;
 }
 .pricing-card .btn-outline-primary {
     border-width: 2px;
 }
 .faq-section {
-    padding: 60px 0; /* Padding reduzido */
+    padding: 60px 0;
     background-color: var(--light-gray);
 }
 .faq-section .section-title {
@@ -349,60 +323,6 @@ body:has(.landing-container-v2) main {
 .accordion-body {
     padding: 1rem 1.5rem;
     color: #6c757d;
-}
-
-/* --- Estilos para a Calculadora Interativa da Landing Page --- */
-
-/* Container para os botões de ação na lista de ingredientes */
-.ingredient-actions {
-    display: flex;
-    gap: 6px; /* Espaço entre os botões */
-}
-
-/* Estilo PADRÃO para os botões pequenos de ícone (Adicionar e Excluir da lista principal) */
-.add-ingredient-btn,
-.remove-available-btn {
-    width: 22px;
-    height: 22px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    font-size: 1.1em;
-    border-radius: 4px;
-}
-
-/* Estilo para o botão de remover na lista de ingredientes da receita */
-.recipe-ingredient-item .remove-recipe-btn {
-    width: 46px;
-    height: 46px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    font-size: 1.1em;
-    border-radius: 4px;
-}
-
-/* Alinhamento dos itens na lista de ingredientes disponíveis */
-.available-ingredient-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-}
-.available-ingredient-item:last-child {
-    border-bottom: none;
-}
-
-/* Ajustes no input group da receita */
-.recipe-ingredient-item .input-group input {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-}
-.recipe-ingredient-item .input-group-text {
-    border-radius: 0;
 }
 
 /* --- B. Páginas de Login/Registro --- */
@@ -514,9 +434,21 @@ body:has(.auth-container) nav {
 }
 
 .card-body .table-responsive {
-    max-height: 350px; /* Define uma altura máxima para a área da tabela */
-    overflow-y: auto;  /* Adiciona a barra de rolagem vertical APENAS se necessário */
+    max-height: 350px;
+    overflow-y: auto;
 }
+.kpi-icon.icon-ingredients { background-color: #fcf4db; color: #f39c12; }
+.kpi-icon.icon-recipes { background-color: #eafaf1; color: #2ecc71; }
+.kpi-icon.icon-avg-cost { background-color: #e5f9f6; color: var(--primary-color); }
+.kpi-title { font-size: 0.9rem; color: #7f8c8d; margin-bottom: 0.25rem; }
+.kpi-value { font-size: 1.75rem; font-weight: 700; color: var(--secondary-color); margin-bottom: 0; }
+.dashboard-chart-container { position: relative; height: 300px; }
+.view-report-link { font-size: 0.9rem; font-weight: 500; text-decoration: none; }
+.view-report-link i { transition: transform 0.3s ease; }
+.view-report-link:hover i { transform: translateX(4px); }
+.footer { border-top: 1px solid #dee2e6; }
+.footer a { color: var(--text-color); text-decoration: none; font-weight: 500; }
+.footer a:hover { color: var(--primary-color); }
 
 /* --- B. Filtros de Relatórios (Pílula) --- */
 .report-filters {
@@ -547,127 +479,59 @@ body:has(.auth-container) nav {
     border-bottom: none;
 }
 
-
-/* --- SEÇÃO DO NOVO DEMO INTERATIVO --- */
-.interactive-demo-section {
-    background-color: var(--light-gray);
-}
-
-.demo-container {
-    background-color: #fff;
-    border-radius: 12px;
-    padding: 1.5rem; /* Padding reduzido para mobile */
-    border: 1px solid #e9ecef;
-}
-
-.demo-step h4 {
-    font-weight: 600;
-}
-
-.result-box-v2 {
-    background-color: #f8f9fa; /* Um cinza um pouco mais escuro que o fundo da seção */
-    border-radius: 8px;
-    padding: 1.5rem; /* Padding reduzido */
-    height: 100%;
-    border: 1px solid #dee2e6;
-}
-
-.available-list, .recipe-list {
-    min-height: 100px;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.price-suggestion {
-    background-color: var(--primary-light);
-    color: var(--primary);
-    padding: 0.75rem 1.25rem;
-    border-radius: 6px;
-}
-
-.price-suggestion #suggested-price {
-    color: var(--primary-dark);
-}
-
-/* Estilo para o botão customizado de adicionar ingrediente */
-.btn-add-ingredient {
-    background-color: #18BC9C; /* Cor de fundo */
-    border-color: #18BC9C;     /* Cor da borda */
-    color: #fff;              /* Cor do texto */
-}
-
-.btn-add-ingredient:hover {
-    background-color: #149a7e; /* Uma versão um pouco mais escura para o hover */
-    border-color: #149a7e;
-    color: #fff;
-}
-
-.btn-add-ingredient:focus,
-.btn-add-ingredient.focus {
-    box-shadow: 0 0 0 0.25rem rgba(46, 204, 113, 0.5); /* Sombra para o foco */
-}
-
-.btn-add-ingredient:active,
-.btn-add-ingredient.active {
-    background-color: #149a7e; /* Uma versão ainda mais escura para o clique/ativo */
-    border-color: #149a7e;
-}
-
-
-
 /* ==========================================================================
-   7. NOVOS ELEMENTOS DA LANDING PAGE (Adicionado e Atualizado)
+   7. NOVOS ELEMENTOS DA LANDING PAGE
    ========================================================================== */
 
-/* --- A. Animação de Sublinhado no Título Principal --- */
-.hero-title .highlighted-word {
+/* --- A. Animação de Sublinhado na Palavra Destacada --- */
+.highlighted-word {
     position: relative;
     display: inline-block;
 }
 
-.hero-title .highlighted-word::after {
+.highlighted-word::after {
     content: '';
     position: absolute;
-    bottom: -10px; /* Ajuste a distância da linha em relação ao texto */
-    left: 0;
-    height: 6px; /* Ajuste a espessura da linha */
     width: 100%;
-    background-color: var(--primary-color); /* Usa a cor primária do seu site */
+    height: 4px; /* Espessura da linha */
+    background-color: var(--primary-color); /* Cor da linha */
     border-radius: 5px;
-    transform: scaleX(0);
-    transform-origin: left;
-    animation: draw-line 1s forwards;
-    animation-delay: 0.5s; /* Começa a animação meio segundo depois da página carregar */
+    bottom: -8px; /* Distância do texto */
+    left: 0;
+    transform-origin: left; /* Animação começa da esquerda */
+    transform: scaleX(0); /* Começa com largura 0 */
+    animation: draw-line-underline 0.8s forwards;
+    animation-delay: 0.5s;
 }
 
-@keyframes draw-line {
+@keyframes draw-line-underline {
     to {
-        transform: scaleX(1);
+        transform: scaleX(1); /* Anima para a largura total */
     }
 }
 
+
 /* --- B. Seção de Prova Social com Avatares --- */
-/* Esta seção será substituída pelo carrossel, mas mantemos o estilo dos avatares caso ainda use em outro lugar */
 .social-proof-avatars {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px; /* Espaço entre o texto e os avatares */
-    margin-top: 2rem; /* Espaço acima da nova seção */
+    gap: 16px;
+    margin-top: 2rem;
 }
 
 .avatar-group {
     display: flex;
-    padding-left: 20px; /* Compensa o overlap da primeira imagem */
+    padding-left: 20px;
 }
 
 .avatar-group .avatar-image {
-    width: 52px; /* Tamanho dos avatares */
+    width: 52px;
     height: 52px;
     border-radius: 50%;
-    border: 3px solid #fff; /* Borda branca para dar o efeito de recorte */
-    margin-left: -20px; /* O segredo do empilhamento */
-    object-fit: cover; /* Garante que a imagem não distorça */
+    border: 3px solid #fff;
+    margin-left: -20px;
+    object-fit: cover;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
@@ -677,49 +541,40 @@ body:has(.auth-container) nav {
     color: var(--secondary-color);
 }
 
-/* --- C. Estilos FINAIS e REFINADOS do Carrossel (Nativo Swiper) --- */
+/* --- C. Carrossel de Produtos --- */
 .product-carousel-section {
     padding: 60px 0;
     background-color: var(--light-gray);
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 .product-carousel-section .section-title {
     margin-bottom: 3rem;
 }
 
-.continuous-slider {
-    width: 100%;
-}
-
 .continuous-slider .swiper-wrapper {
     transition-timing-function: linear !important;
 }
 
-/* Garante que o container do slide seja invisível */
 .continuous-slider .swiper-slide {
     width: 280px !important;
     margin: 0 15px;
     flex-shrink: 0;
     height: auto;
     background: transparent !important;
-    padding-bottom: 0px;
 }
 
-/* Estiliza o card que fica DENTRO do slide */
 .product-card {
     display: flex;
     flex-direction: column;
     height: 100%;
     width: 100%;
-    background-color: #fff; /* Fundo branco para o card */
-    border-radius: var(--border-radius); /* Bordas arredondadas */
+    background-color: #fff;
+    border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    
-    /* A "dica" para forçar a renderização correta no navegador */
-    transform: translateZ(0); 
+    transform: translateZ(0);
 }
 
 .product-card:hover {
@@ -739,12 +594,10 @@ body:has(.auth-container) nav {
     transition: transform 0.4s ease-in-out;
 }
 
-/* Efeito de zoom na imagem reduzido */
 .product-card:hover .product-card-image-wrapper img {
-    transform: scale(1.05); /* EFEITO REDUZIDO AQUI */
+    transform: scale(1.05);
 }
 
-/* Estilos do corpo do card */
 .product-card-body { padding: 1rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; text-align: left; }
 .product-card-title { font-size: 1rem; font-weight: 600; color: var(--secondary-color); margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .product-card-business { font-size: 0.8rem; color: #6c757d; margin-bottom: 0.75rem; }
@@ -752,20 +605,58 @@ body:has(.auth-container) nav {
 .product-card-cost { color: #e74c3c; }
 .product-card-price { color: var(--primary-color); }
 
-
-.kpi-icon.icon-ingredients { background-color: #fcf4db; color: #f39c12; }
-.kpi-icon.icon-recipes { background-color: #eafaf1; color: #2ecc71; }
-.kpi-icon.icon-avg-cost { background-color: #e5f9f6; color: var(--primary-color); }
-.kpi-title { font-size: 0.9rem; color: #7f8c8d; margin-bottom: 0.25rem; }
-.kpi-value { font-size: 1.75rem; font-weight: 700; color: var(--secondary-color); margin-bottom: 0; }
-.dashboard-chart-container { position: relative; height: 300px; }
-.view-report-link { font-size: 0.9rem; font-weight: 500; text-decoration: none; }
-.view-report-link i { transition: transform 0.3s ease; }
-.view-report-link:hover i { transform: translateX(4px); }
-.footer { border-top: 1px solid #dee2e6; }
-.footer a { color: var(--text-color); text-decoration: none; font-weight: 500; }
-.footer a:hover { color: var(--primary-color); }
-
+/* --- D. Nova Demonstração Interativa (Calculadora) --- */
+.demo-container-v3 {
+    background-color: #fff;
+    border-radius: 0.5rem;
+    border: 1px solid #dee2e6;
+}
+.demo-container-v3 .nav-tabs .nav-link {
+    color: #6c757d;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+.demo-container-v3 .nav-tabs .nav-link.active {
+    color: #0d6efd;
+    background-color: #fff;
+    border-color: #0d6efd;
+}
+.demo-container-v3 .nav-tabs .nav-link:disabled {
+    color: #adb5bd;
+    background-color: #f8f9fa;
+}
+.available-list-demo {
+    min-height: 150px;
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+}
+.available-ingredient-item-demo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #dee2e6;
+}
+.kpi-card-demo {
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    border: 1px solid #e9ecef;
+}
+.kpi-card-demo .kpi-title { font-size: 0.9rem; color: #6c757d; }
+.kpi-card-demo .kpi-value { font-size: 1.75rem; font-weight: bold; color: #212529; margin:0; }
+.kpi-card-demo.sale-price .kpi-value { color: #198754; }
+.kpi-card-demo.profit .kpi-value { color: #0d6efd; }
 
 /* ==========================================================================
    8. AJUSTES RESPONSIVOS (Media Queries)
@@ -781,50 +672,41 @@ body:has(.auth-container) nav {
     .before-after-section, .features-section-v2, .interactive-demo-section, .pricing-section, .faq-section, .product-carousel-section {
         padding: 100px 0;
     }
-    .feature-text { text-align: left; } /* Alinha o texto à esquerda em telas maiores */
-    .demo-container, .result-box-v2 { padding: 2.5rem; }
+    .feature-text { text-align: left; }
 }
 
 /* --- Telas grandes (desktops, 992px ou mais) --- */
 @media (min-width: 992px) {
     .feature-text { padding: 0 2rem; }
-    .pricing-card.highlighted { transform: scale(1.05); } /* Reativa o efeito de escala */
+    .pricing-card.highlighted { transform: scale(1.05); }
 }
 
 /* --- Telas pequenas (celulares, abaixo de 768px) --- */
 @media (max-width: 767.98px) {
     .feature-row {
-        flex-direction: column; /* Empilha a imagem e o texto */
+        flex-direction: column;
     }
-    /* Inverte a ordem visual para o segundo feature-item no mobile */
     .feature-row .order-lg-2 { order: 1 !important; }
     .feature-row .order-lg-1 { order: 2 !important; margin-top: 2rem;}
-    .feature-row img { margin-bottom: 2rem; } /* Adiciona espaço abaixo da imagem */
-    
-    /* Ajusta o demo interativo para empilhar as colunas */
+    .feature-row img { margin-bottom: 2rem; }
+
     .demo-container .row > div {
         margin-bottom: 1.5rem;
     }
 
-    /* Garante que os cards de preço não fiquem espremidos */
     .pricing-card {
         margin-bottom: 2rem;
     }
     .pricing-section .row {
-        gap: 0; /* Remove o gap para usar margin nos cards */
+        gap: 0;
     }
-}
-/* --- Telas pequenas (celulares, abaixo de 768px) --- */
-@media (max-width: 767.98px) {
-    /* ... (código que já estava aqui, como o das features) ... */
 
-    /* NOVO CÓDIGO: Estilos para as tabelas empilháveis */
     .table-responsive-stack thead {
-        display: none; /* 1. Esconde o cabeçalho original */
+        display: none;
     }
     .table-responsive-stack tr {
         display: flex;
-        flex-direction: column; /* 2. Faz cada linha virar uma coluna */
+        flex-direction: column;
         margin-bottom: 1rem;
         border: 1px solid #dee2e6;
         border-radius: var(--border-radius);
@@ -832,21 +714,20 @@ body:has(.auth-container) nav {
     }
     .table-responsive-stack td {
         display: flex;
-        justify-content: space-between; /* 4. Alinha o rótulo e o valor */
+        justify-content: space-between;
         align-items: center;
         border: none;
         padding: 0.5rem 0;
     }
     .table-responsive-stack td::before {
-        content: attr(data-label); /* 3. Usa o 'data-label' do HTML como um rótulo */
+        content: attr(data-label);
         font-weight: bold;
         margin-right: 1rem;
     }
-    /* Alinha os botões de ação à direita */
     .table-responsive-stack td[data-label="Ações"] {
         justify-content: flex-end;
     }
     .table-responsive-stack td[data-label="Ações"]::before {
-        display: none; /* Esconde o rótulo "Ações" que não é necessário */
+        display: none;
     }
 }

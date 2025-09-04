@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, SelectField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Optional
+from wtforms import StringField, PasswordField, SubmitField, SelectField, FloatField, TextAreaField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Optional, NumberRange
 from app.models import User
 from flask_login import current_user
 
@@ -39,7 +39,6 @@ class LoginForm(FlaskForm):
 
 class IngredientForm(FlaskForm):
     name = StringField('Nome do Ingrediente', validators=[DataRequired()])
-    # MUDANÇA: FloatField para StringField com nosso validador
     package_price = StringField('Preço Pago no Pacote (R$)', validators=[DataRequired(), validate_decimal])
     package_quantity = StringField('Quantidade no Pacote', validators=[DataRequired(), validate_decimal])
     package_unit = SelectField('Unidade do Pacote', choices=[
@@ -47,6 +46,20 @@ class IngredientForm(FlaskForm):
         ('ml', 'Mililitro (ml)'), ('un', 'Unidade (un)')
     ], validators=[DataRequired()])
     submit = SubmitField('Salvar Ingrediente')
+    
+class RecipeForm(FlaskForm):
+    name = StringField('Nome da Receita', validators=[DataRequired()])
+    yield_quantity = FloatField('Rendimento', validators=[DataRequired(), NumberRange(min=0.01)])
+    yield_unit = StringField('Unidade do Rendimento (Ex: porções, unidades)', validators=[DataRequired()])
+    loss_percentage = FloatField('Percentual de Perda (%)', validators=[Optional(), NumberRange(min=0, max=100)], default=0)
+    
+    # --- CAMPO DE MODO DE PREPARO ADICIONADO AQUI ---
+    preparation_steps = TextAreaField('Modo de Preparo', 
+                                      validators=[Optional()], 
+                                      render_kw={"rows": 5, "placeholder": "Ex: 1. Misture os ingredientes secos.\n2. Adicione os ovos e o leite...\n3. Leve ao forno por 40 minutos."})
+
+    profit_margin = FloatField('Margem de Lucro Desejada (%)', validators=[DataRequired(), NumberRange(min=0)])
+    submit = SubmitField('Salvar Receita')
     
 class UpdateProfileForm(FlaskForm):
     full_name = StringField('Nome Completo', validators=[DataRequired(), Length(min=2, max=100)])

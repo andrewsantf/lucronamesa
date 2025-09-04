@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: 'Poppins', sans-serif; color: #34495E; }
+        .container { padding: 20px; max-width: 600px; margin: auto; background-color: #f8f9fa; border-radius: 8px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .content { background-color: #ffffff; padding: 25px; border-radius: 8px; }
+        .button { display: inline-block; padding: 10px 20px; background-color: #18BC9C; color: #ffffff; text-decoration: none; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #dee2e6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>LucroNaMesa - Alerta de Custo</h2>
+        </div>
+        <div class="content">
+            <p>Olá, {{ user.full_name.split()[0] }},</p>
+            <p>Nosso sistema detectou um aumento significativo no custo de um de seus ingredientes:</p>
+            
+            <h3 style="color: #E74C60;">{{ ingredient.name }}</h3>
+
+            <table>
+                <tr>
+                    <th>Preço Anterior</th>
+                    <td>R$ {{ "%.2f"|format(old_price) }} / {{ old_unit }}</td>
+                </tr>
+                <tr>
+                    <th>Novo Preço</th>
+                    <td><b>R$ {{ "%.2f"|format(new_price) }} / {{ new_unit }}</b></td>
+                </tr>
+                 <tr>
+                    <th>Aumento</th>
+                    <td><b>{{ "%.0f"|format(increase_percentage) }}%</b></td>
+                </tr>
+            </table>
+
+            <p>Este aumento pode impactar a lucratividade das suas receitas. Recomendamos que você revise os preços de venda dos produtos que utilizam este ingrediente.</p>
+            
+            <p style="text-align: center; margin-top: 30px;">
+                <a href="{{ url_for('main.edit_ingredient', ingredient_id=ingredient.id, _external=True) }}" class="button">Ver Ingrediente no Sistema</a>
+            </p>
+            
+            <p>Atenciosamente,<br>Equipe LucroNaMesa</p>
+        </div>
+    </div>
+</body>
+</html>

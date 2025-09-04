@@ -7,13 +7,41 @@
             <div class="card">
                 <div class="card-body">
                     <h2 class="card-title text-center mb-4">Editar Receita</h2>
+                    
                     <form method="POST" action="{{ url_for('main.edit_recipe', recipe_id=recipe.id) }}">
+                        {{ form.hidden_tag() }}
                         <div class="mb-3">
-                            <label for="name" class="form-label">Nome da Receita</label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{ recipe.name }}" required>
+                            {{ form.name.label(class="form-label") }}
+                            {{ form.name(class="form-control") }}
                         </div>
                         
-                        <h4 class="h5 mt-4">Ingredientes da Receita</h4>
+                        <hr class="my-4">
+
+                        <h4 class="h5">Ficha Técnica</h4>
+                        <p class="text-muted">Ajuste os detalhes de produção da sua receita.</p>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.yield_quantity.label(class="form-label") }}
+                                {{ form.yield_quantity(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.yield_unit.label(class="form-label") }}
+                                {{ form.yield_unit(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                                 {{ form.loss_percentage.label(class="form-label") }}
+                                 {{ form.loss_percentage(class="form-control") }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.preparation_steps.label(class="form-label") }}
+                            {{ form.preparation_steps(class="form-control") }}
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <h4 class="h5">Ingredientes da Receita</h4>
                         
                         <div class="mb-3">
                             <input type="text" id="ingredientSearch" class="form-control" placeholder="🔍 Buscar ingrediente...">
@@ -21,38 +49,42 @@
                         
                         <p class="text-muted">Ajuste os ingredientes e quantidades.</p>
                         
-                        <div id="ingredientsList">
-                            {% for ingredient in all_ingredients %}
-                            <div class="input-group mb-3 ingredient-item">
-                                <div class="input-group-text">
-                                    <input class="form-check-input mt-0 ingredient-checkbox" type="checkbox" name="ingredient_ids" value="{{ ingredient.id }}" {% if ingredient.id in recipe_ingredients %}checked{% endif %}>
+                        <div class="table-responsive">
+                            <div id="ingredientsList">
+                                {% for ingredient in all_ingredients %}
+                                <div class="input-group mb-3 ingredient-item">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0 ingredient-checkbox" type="checkbox" name="ingredient_ids" value="{{ ingredient.id }}" {% if ingredient.id in recipe_ingredients %}checked{% endif %}>
+                                    </div>
+                                    <span class="input-group-text ingredient-name" style="width: 40%;">{{ ingredient.name }} ({{ ingredient.base_price|round(4) }}/{{ ingredient.base_unit }})</span>
+                                    
+                                    <input type="text" class="form-control quantity-input" name="quantity_{{ ingredient.id }}" placeholder="Quantidade" 
+                                    value="{{ recipe_ingredients[ingredient.id].quantity if ingredient.id in recipe_ingredients else '' }}" 
+                                    {% if ingredient.id in recipe_ingredients %}required{% endif %}>
+                                    
+                                    <select class="form-select" name="unit_{{ ingredient.id }}">
+                                        {% set current_unit = recipe_ingredients[ingredient.id].unit if ingredient.id in recipe_ingredients else 'g' %}
+                                        <option value="g" {% if current_unit == 'g' %}selected{% endif %}>Grama (g)</option>
+                                        <option value="kg" {% if current_unit == 'kg' %}selected{% endif %}>Quilograma (kg)</option>
+                                        <option value="ml" {% if current_unit == 'ml' %}selected{% endif %}>Mililitro (ml)</option>
+                                        <option value="l" {% if current_unit == 'l' %}selected{% endif %}>Litro (l)</option>
+                                        <option value="un" {% if current_unit == 'un' %}selected{% endif %}>Unidade (un)</option>
+                                    </select>
                                 </div>
-                                <span class="input-group-text ingredient-name" style="width: 40%;">{{ ingredient.name }} (comprado por {{ ingredient.unit }})</span>
-                                
-                                <input type="number" step="any" class="form-control quantity-input" name="quantity_{{ ingredient.id }}" placeholder="Quantidade" 
-                                value="{{ recipe_ingredients[ingredient.id].quantity if ingredient.id in recipe_ingredients else '' }}" 
-                                {% if ingredient.id in recipe_ingredients %}required{% endif %}>
-                                
-                                <select class="form-select" name="unit_{{ ingredient.id }}">
-                                    {% set current_unit = recipe_ingredients[ingredient.id].unit if ingredient.id in recipe_ingredients else 'g' %}
-                                    <option value="g" {% if current_unit == 'g' %}selected{% endif %}>Grama (g)</option>
-                                    <option value="kg" {% if current_unit == 'kg' %}selected{% endif %}>Quilograma (kg)</option>
-                                    <option value="ml" {% if current_unit == 'ml' %}selected{% endif %}>Mililitro (ml)</option>
-                                    <option value="l" {% if current_unit == 'l' %}selected{% endif %}>Litro (l)</option>
-                                    <option value="un" {% if current_unit == 'un' %}selected{% endif %}>Unidade (un)</option>
-                                </select>
+                                {% endfor %}
                             </div>
-                            {% endfor %}
                         </div>
 
-                        <div class="mt-4 mb-3">
-                            <label for="profit_margin" class="form-label">Margem de Lucro Desejada (%)</label>
-                            <input type="number" step="any" class="form-control" id="profit_margin" name="profit_margin" value="{{ recipe.profit_margin or '' }}" placeholder="Ex: 150 (para 150%)" required>
+                        <hr class="my-4">
+
+                        <div class="mb-3">
+                            {{ form.profit_margin.label(class="form-label") }}
+                            {{ form.profit_margin(class="form-control") }}
                         </div>
                         
                         <div class="d-flex justify-content-end gap-2 mt-4">
                             <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">Cancelar</a>
-                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                            {{ form.submit(class="btn btn-primary", value="Salvar Alterações") }}
                         </div>
                     </form>
                 </div>
@@ -63,7 +95,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Lógica da Busca de Ingredientes
+    // ... (O mesmo script da página de criação) ...
     const searchInput = document.getElementById('ingredientSearch');
     const ingredientsList = document.getElementById('ingredientsList');
     const ingredientItems = ingredientsList.getElementsByClassName('ingredient-item');
@@ -83,7 +115,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Lógica da Validação Condicional do Campo 'required'
     const checkboxes = document.querySelectorAll('.ingredient-checkbox');
     checkboxes.forEach(function(checkbox) {
         checkbox.addEventListener('change', function() {

@@ -4,6 +4,7 @@
 <div class="container mt-4">
     <div class="mb-4 pb-2 border-bottom">
         <h1 class="h2">Relatórios e Análises</h1>
+        <p class="text-muted">Visualize o desempenho geral e mergulhe nos detalhes de suas receitas.</p>
     </div>
 
     <div class="row">
@@ -11,81 +12,120 @@
             <div class="card h-100">
                 <div class="card-header bg-white">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h3 class="h5 mb-0">Análise de Receitas</h3>
+                        <h3 class="h5 mb-0">Análise de Receitas (Gráfico)</h3>
                         <div class="dropdown">
                             <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                Exibindo {% if recipe_limit == 'all' %}Todas{% else %}Top {{ recipe_limit }}{% endif %}
+                                Exibindo Top {{ recipe_limit }}
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit='5', ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit) }}">Top 5</a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit='10', ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit) }}">Top 10</a></li>
-                                <li><a class="dropdown-item" href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit='all', ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit) }}">Ver Todas</a></li>
                             </ul>
                         </div>
                     </div>
-                    <ul class="nav report-filters mt-3">
-                        <li class="nav-item">
-                            <a href="{{ url_for('main.reports', recipe_sort='profit_desc', recipe_limit=recipe_limit, ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit) }}" 
-                               class="nav-link {% if recipe_sort == 'profit_desc' %}active{% endif %}">Mais Lucrativas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url_for('main.reports', recipe_sort='margin_desc', recipe_limit=recipe_limit, ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit) }}" 
-                               class="nav-link {% if recipe_sort == 'margin_desc' %}active{% endif %}">Maior Margem</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url_for('main.reports', recipe_sort='cost_desc', recipe_limit=recipe_limit, ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit) }}" 
-                               class="nav-link {% if recipe_sort == 'cost_desc' %}active{% endif %}">Mais Caras</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url_for('main.reports', recipe_sort='cost_asc', recipe_limit=recipe_limit, ingredient_sort=ingredient_sort, ingredient_limit=ingredient_limit) }}" 
-                               class="nav-link {% if recipe_sort == 'cost_asc' %}active{% endif %}">Mais Baratas</a>
-                        </li>
-                    </ul>
                 </div>
                 <div class="card-body">
                     {% if recipe_chart_labels %}
-                        <canvas id="topRecipesChart"></canvas>
+                        <div style="height: 300px;">
+                            <canvas id="topRecipesChart"></canvas>
+                        </div>
                     {% else %}
-                        <div class="empty-state"><i class="bi bi-journal-text fs-1 text-muted"></i><h5 class="mt-3">Nenhuma receita cadastrada</h5><p>Crie receitas para ver a análise de custos.</p></div>
+                        <div class="empty-state"><i class="bi bi-journal-text fs-1 text-muted"></i><h5 class="mt-3">Nenhuma receita cadastrada</h5></div>
                     {% endif %}
                 </div>
             </div>
         </div>
-
         <div class="col-lg-6 mb-4">
             <div class="card h-100">
                 <div class="card-header bg-white">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h3 class="h5 mb-0">Análise de Ingredientes</h3>
+                        <h3 class="h5 mb-0">Análise de Ingredientes (Gráfico)</h3>
                         <div class="dropdown">
                             <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                Exibindo {% if ingredient_limit == 'all' %}Todos{% else %}Top {{ ingredient_limit }}{% endif %}
+                                Exibindo Top {{ ingredient_limit }}
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit=recipe_limit, ingredient_sort=ingredient_sort, ingredient_limit='5') }}">Top 5</a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit=recipe_limit, ingredient_sort=ingredient_sort, ingredient_limit='10') }}">Top 10</a></li>
-                                <li><a class="dropdown-item" href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit=recipe_limit, ingredient_sort=ingredient_sort, ingredient_limit='all') }}">Ver Todos</a></li>
                             </ul>
                         </div>
                     </div>
-                    <ul class="nav report-filters mt-3">
-                        <li class="nav-item">
-                            <a href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit=recipe_limit, ingredient_sort='desc', ingredient_limit=ingredient_limit) }}" class="nav-link {% if ingredient_sort == 'desc' %}active{% endif %}">Mais Caros</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ url_for('main.reports', recipe_sort=recipe_sort, recipe_limit=recipe_limit, ingredient_sort='asc', ingredient_limit=ingredient_limit) }}" class="nav-link {% if ingredient_sort == 'asc' %}active{% endif %}">Mais Baratos</a>
-                        </li>
-                    </ul>
                 </div>
                 <div class="card-body">
                     {% if ingredient_chart_labels %}
-                        <canvas id="topIngredientsChart"></canvas>
+                        <div style="height: 300px;">
+                            <canvas id="topIngredientsChart"></canvas>
+                        </div>
                     {% else %}
-                        <div class="empty-state"><i class="bi bi-egg-fried fs-1 text-muted"></i><h5 class="mt-3">Nenhum ingrediente cadastrado</h5><p>Cadastre ingredientes para analisar seus custos.</p></div>
+                        <div class="empty-state"><i class="bi bi-egg-fried fs-1 text-muted"></i><h5 class="mt-3">Nenhum ingrediente cadastrado</h5></div>
                     {% endif %}
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap">
+            <div class="me-3">
+                <h3 class="h5 mb-0">Análise de Rentabilidade Detalhada</h3>
+                <p class="text-muted small mb-0">Clique nos filtros para reordenar a tabela.</p>
+            </div>
+            <div>
+                 <a href="{{ url_for('main.export_recipes_csv', recipe_sort=recipe_sort) }}" class="btn btn-outline-primary">
+                    <i class="bi bi-download me-1"></i> Exportar para CSV
+                </a>
+            </div>
+        </div>
+        <div class="card-body border-bottom">
+            <div class="filter-pill-group">
+                <a href="{{ url_for('main.reports', recipe_sort='profit_desc') }}" class="nav-link {% if recipe_sort == 'profit_desc' %}active{% endif %}">Mais Lucrativas</a>
+                <a href="{{ url_for('main.reports', recipe_sort='margin_desc') }}" class="nav-link {% if recipe_sort == 'margin_desc' %}active{% endif %}">Maior Margem</a>
+                <a href="{{ url_for('main.reports', recipe_sort='cost_desc') }}" class="nav-link {% if recipe_sort == 'cost_desc' %}active{% endif %}">Maiores Custos</a>
+                <a href="{{ url_for('main.reports', recipe_sort='cost_asc') }}" class="nav-link {% if recipe_sort == 'cost_asc' %}active{% endif %}">Menores Custos</a>
+            </div>
+        </div>
+
+        <div class="card-body" style="max-height: 500px; overflow-y: auto;">
+            <table class="table table-hover table-responsive-stack mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th>Nome da Receita</th>
+                        <th class="text-center">Custo Total</th>
+                        <th class="text-center">Preço de Venda</th>
+                        <th class="text-center">Lucro (R$)</th>
+                        <th class="text-center">Margem (%)</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recipe in recipes %}
+                    <tr>
+                        <td data-label="Receita"><strong>{{ recipe.name }}</strong></td>
+                        <td data-label="Custo" class="text-center"><span class="badge bg-warning text-dark">R$ {{ "%.2f"|format(recipe.total_cost) }}</span></td>
+                        <td data-label="Venda" class="text-center"><span class="badge bg-info text-dark">R$ {{ "%.2f"|format(recipe.sale_price) }}</span></td>
+                        <td data-label="Lucro (R$)" class="text-center"><span class="badge bg-primary">R$ {{ "%.2f"|format(recipe.profit) }}</span></td>
+                        <td data-label="Margem (%)" class="text-center">
+                            {% if recipe.margin >= 70 %}{% set margin_class = 'bg-success' %}
+                            {% elif recipe.margin >= 40 %}{% set margin_class = 'bg-warning text-dark' %}
+                            {% else %}{% set margin_class = 'bg-danger' %}
+                            {% endif %}
+                            <span class="badge {{ margin_class }}">{{ "%.1f"|format(recipe.margin) }}%</span>
+                        </td>
+                        <td data-label="Ações" class="text-end">
+                            <a href="{{ url_for('main.recipe_detail', recipe_id=recipe.id) }}" class="btn btn-sm btn-outline-secondary" title="Ver Ficha Técnica"><i class="bi bi-search"></i></a>
+                            <a href="{{ url_for('main.edit_recipe', recipe_id=recipe.id) }}" class="btn btn-sm btn-outline-primary" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <form action="{{ url_for('main.delete_recipe', recipe_id=recipe.id) }}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Tem certeza?');" title="Excluir"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="6"><div class="empty-state py-5"><i class="bi bi-journal-text fs-1 text-muted"></i><h5 class="mt-3">Nenhuma receita encontrada</h5><p>Crie sua primeira receita para ver a análise de rentabilidade.</p></div></td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
     </div>
 </div>
 
@@ -99,26 +139,11 @@ document.addEventListener('DOMContentLoaded', function () {
             data: {
                 labels: {{ recipe_chart_labels|default([])|tojson }},
                 datasets: [
-                    {
-                        label: 'Custo (R$)',
-                        data: {{ recipe_chart_cost_data|default([])|tojson }},
-                        backgroundColor: 'rgba(243, 156, 18, 0.6)',
-                        borderColor: 'rgba(243, 156, 18, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Preço de Venda (R$)',
-                        data: {{ recipe_chart_sale_data|default([])|tojson }},
-                        backgroundColor: 'rgba(24, 188, 156, 0.6)',
-                        borderColor: 'rgba(24, 188, 156, 1)',
-                        borderWidth: 1
-                    }
+                    { label: 'Custo (R$)', data: {{ recipe_chart_cost_data|default([])|tojson }}, backgroundColor: 'rgba(255, 193, 7, 0.7)' },
+                    { label: 'Preço de Venda (R$)', data: {{ recipe_chart_sale_data|default([])|tojson }}, backgroundColor: 'rgba(24, 188, 156, 0.7)' }
                 ]
             },
-            options: { 
-                scales: { y: { beginAtZero: true, ticks: { callback: function(value) { return 'R$ ' + value.toFixed(2); } } } },
-                plugins: { legend: { display: true, position: 'top' } }
-            }
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: true, position: 'top' } } }
         });
     }
 
@@ -129,20 +154,9 @@ document.addEventListener('DOMContentLoaded', function () {
             type: 'bar',
             data: {
                 labels: {{ ingredient_chart_labels|default([])|tojson }},
-                datasets: [
-                    {
-                        label: 'Preço (R$/kg ou R$/L)',
-                        data: {{ ingredient_chart_data|default([])|tojson }},
-                        backgroundColor: 'rgba(243, 156, 18, 0.6)',
-                        borderColor: 'rgba(243, 156, 18, 1)',
-                        borderWidth: 1
-                    }
-                ]
+                datasets: [{ label: 'Preço Base (R$)', data: {{ ingredient_chart_data|default([])|tojson }}, backgroundColor: 'rgba(52, 152, 219, 0.7)' }]
             },
-            options: { 
-                scales: { y: { beginAtZero: true, ticks: { callback: function(value) { return 'R$ ' + value.toFixed(2); } } } },
-                plugins: { legend: { display: false } }
-            }
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
         });
     }
 });

@@ -1,0 +1,60 @@
+{
+  "numero": "12345",
+  "serie": "1",
+  "dataEmissao": "2025-09-03T14:30:00-03:00",
+  "emitente": {
+    "nome": "Atacadão dos Ingredientes LTDA",
+    "cnpj": "12.345.678/0001-99"
+  },
+  "destinatario": {
+    "nome": "Sua Confeitaria de Exemplo",
+    "cnpj": "98.765.432/0001-11"
+  },
+  "produtos": [
+    {
+      "numeroItem": "1",
+      "descricao": "FARINHA DE TRIGO TIPO 1 SOL",
+      "codigo": "FT001",
+      "ncm": "1101.00.10",
+      "cfop": "5102",
+      "unidade": "KG",
+      "quantidade": 10.0,
+      "valorUnitario": 4.50,
+      "valorTotal": 45.00
+    },
+    {
+      "numeroItem": "2",
+      "descricao": "CHOCOLATE EM PO 50% CACAU",
+      "codigo": "CHOC50",
+      "ncm": "1805.00.00",
+      "cfop": "5102",
+      "unidade": "KG",
+      "quantidade": 5.0,
+      "valorUnitario": 25.80,
+      "valorTotal": 129.00
+    },
+    {
+      "numeroItem": "3",
+      "descricao": "OVOS BRANCOS TIPO GRANDE DZ",
+      "codigo": "OVOB-DZ",
+      "ncm": "0407.21.00",
+      "cfop": "5102",
+      "unidade": "DZ",
+      "quantidade": 2.0,
+      "valorUnitario": 15.00,
+      "valorTotal": 30.00
+    },
+    {
+      "numeroItem": "4",
+      "descricao": "LEITE INTEGRAL UHT 1L",
+      "codigo": "LEITE01",
+      "ncm": "0401.20.10",
+      "cfop": "5102",
+      "unidade": "L",
+      "quantidade": 12.0,
+      "valorUnitario": 4.25,
+      "valorTotal": 51.00
+    }
+  ],
+  "valorTotal": 255.00
+}

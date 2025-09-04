@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 text-center">
+
+            <h1 class="h2">Bem-vindo(a), {{ current_user.full_name.split()[0] }}!</h1>
+            <p class="lead text-muted">Vamos configurar sua conta para que você veja o poder do LucroNaMesa em ação. Siga os passos abaixo.</p>
+
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h3 class="h5 card-title mb-4">Seu Checklist de Início Rápido</h3>
+
+                    <ul class="list-group list-group-flush text-start">
+                        <li class="list-group-item d-flex justify-content-between align-items-center {% if current_user.has_created_ingredient %}list-group-item-light text-muted{% endif %}">
+                            <div>
+                                <h6 class="mb-0">
+                                    {% if current_user.has_created_ingredient %}
+                                        <i class="bi bi-check-circle-fill text-success"></i>
+                                    {% else %}
+                                        <i class="bi bi-1-circle-fill text-primary"></i>
+                                    {% endif %}
+                                    Passo 1: Cadastre seu primeiro ingrediente
+                                </h6>
+                                <small>Informe o preço do pacote e o sistema faz o resto.</small>
+                            </div>
+                            {% if not current_user.has_created_ingredient %}
+                            <a href="{{ url_for('main.ingredients') }}" class="btn btn-primary">Começar</a>
+                            {% endif %}
+                        </li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center {% if not current_user.has_created_ingredient %}disabled{% endif %} {% if current_user.has_created_recipe %}list-group-item-light text-muted{% endif %}">
+                            <div>
+                                <h6 class="mb-0">
+                                    {% if current_user.has_created_recipe %}
+                                        <i class="bi bi-check-circle-fill text-success"></i>
+                                    {% else %}
+                                        <i class="bi bi-2-circle-fill {% if current_user.has_created_ingredient %}text-primary{% else %}text-muted{% endif %}"></i>
+                                    {% endif %}
+                                    Passo 2: Crie sua primeira receita
+                                </h6>
+                                <small>Selecione os ingredientes e veja o custo na hora.</small>
+                            </div>
+                            {% if current_user.has_created_ingredient and not current_user.has_created_recipe %}
+                            <a href="{{ url_for('main.recipes') }}" class="btn btn-primary">Criar</a>
+                            {% endif %}
+                        </li>
+                        
+                        <li class="list-group-item d-flex justify-content-between align-items-center {% if not current_user.has_created_recipe %}disabled{% endif %}">
+                            <div>
+                                <h6 class="mb-0">
+                                    <i class="bi bi-3-circle-fill {% if current_user.has_created_recipe %}text-primary{% else %}text-muted{% endif %}"></i>
+                                    Passo 3: Explore seu Dashboard
+                                </h6>
+                                <small>Veja seus lucros, custos e relatórios inteligentes.</small>
+                            </div>
+                            {% if current_user.has_created_recipe %}
+                                <a href="{{ url_for('main.dashboard') }}" class="btn btn-success">Ver Dashboard</a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="my-4">
+                <span class="text-muted">OU</span>
+            </div>
+
+            <div class="card card-body">
+                <p class="mb-2">Sem tempo agora? Sem problemas!</p>
+                <p class="text-muted small">Clique abaixo e vamos adicionar um bolo de exemplo com ingredientes para você explorar a plataforma imediatamente.</p>
+                <form action="{{ url_for('main.onboarding_example') }}" method="POST">
+                    <button type="submit" class="btn btn-outline-secondary">
+                        <i class="bi bi-magic"></i> Preencher com um exemplo
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

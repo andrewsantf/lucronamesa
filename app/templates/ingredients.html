@@ -6,7 +6,16 @@
             <div class="card">
                 <div class="card-body">
                     <h2 class="card-title text-center mb-4">{{ title }}</h2>
-                    <p class="text-center text-muted">Preencha os dados exatamente como na embalagem ou nota fiscal.</p>
+
+                    <div class="text-center mb-4">
+                        <a href="{{ url_for('main.importar_nfe') }}" class="btn btn-outline-primary">
+                            <i class="bi bi-file-earmark-arrow-down me-2"></i>
+                            Ou importe uma compra por NF-e
+                        </a>
+                    </div>
+                    
+                    <p class="text-center text-muted">Preencha os dados abaixo exatamente como na embalagem ou nota fiscal.</p>
+                    
                     <form method="POST" action="">
                         {{ form.hidden_tag() }}
                         <div class="mb-3">

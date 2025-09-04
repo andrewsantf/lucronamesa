@@ -7,13 +7,41 @@
             <div class="card">
                 <div class="card-body">
                     <h2 class="card-title text-center mb-4">Adicionar Nova Receita</h2>
+                    
                     <form method="POST" action="{{ url_for('main.recipes') }}">
+                        {{ form.hidden_tag() }}
                         <div class="mb-3">
-                            <label for="name" class="form-label">Nome da Receita</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Ex: Bolo de Chocolate" required>
+                            {{ form.name.label(class="form-label") }}
+                            {{ form.name(class="form-control", placeholder="Ex: Bolo de Chocolate com Cobertura") }}
+                        </div>
+
+                        <hr class="my-4">
+
+                        <h4 class="h5">Ficha Técnica</h4>
+                        <p class="text-muted">Informe os detalhes de produção da sua receita.</p>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.yield_quantity.label(class="form-label") }}
+                                {{ form.yield_quantity(class="form-control", placeholder="Ex: 10") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.yield_unit.label(class="form-label") }}
+                                {{ form.yield_unit(class="form-control", placeholder="Ex: Fatias ou Unidades") }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                                 {{ form.loss_percentage.label(class="form-label") }}
+                                 {{ form.loss_percentage(class="form-control", placeholder="Ex: 5 (para 5% de perda no cozimento)") }}
                         </div>
                         
-                        <h4 class="h5 mt-4">Ingredientes da Receita</h4>
+                        <div class="mb-3">
+                            {{ form.preparation_steps.label(class="form-label") }}
+                            {{ form.preparation_steps(class="form-control") }}
+                        </div>
+
+                        <hr class="my-4">
+                        
+                        <h4 class="h5">Ingredientes da Receita</h4>
                         
                         <div class="mb-3">
                             <input type="text" id="ingredientSearch" class="form-control" placeholder="🔍 Buscar ingrediente...">
@@ -21,31 +49,35 @@
                         
                         <p class="text-muted">Selecione os ingredientes e informe a quantidade usada.</p>
                         
-                        <div id="ingredientsList">
-                            {% for ingredient in ingredients %}
-                            <div class="input-group mb-3 ingredient-item">
-                                <div class="input-group-text"><input class="form-check-input mt-0 ingredient-checkbox" type="checkbox" name="ingredient_ids" value="{{ ingredient.id }}"></div>
-                                <span class="input-group-text ingredient-name" style="width: 40%;">{{ ingredient.name }} (comprado por {{ ingredient.unit }})</span>
-                                
-                                <input type="number" step="any" class="form-control quantity-input" name="quantity_{{ ingredient.id }}" placeholder="Quantidade">
-                                
-                                <select class="form-select" name="unit_{{ ingredient.id }}">
-                                    <option value="g">Grama (g)</option><option value="kg">Quilograma (kg)</option><option value="ml">Mililitro (ml)</option><option value="l">Litro (l)</option><option value="un">Unidade (un)</option>
-                                </select>
+                        <div class="table-responsive">
+                            <div id="ingredientsList" style="min-width: 500px;">
+                                {% for ingredient in ingredients %}
+                                <div class="input-group mb-3 ingredient-item flex-nowrap">
+                                    <div class="input-group-text"><input class="form-check-input mt-0 ingredient-checkbox" type="checkbox" name="ingredient_ids" value="{{ ingredient.id }}"></div>
+                                    <span class="input-group-text ingredient-name" style="width: 40%;">{{ ingredient.name }} ({{ ingredient.base_price|round(4) }}/{{ ingredient.base_unit }})</span>
+                                    
+                                    <input type="text" class="form-control quantity-input" name="quantity_{{ ingredient.id }}" placeholder="Quantidade">
+                                    
+                                    <select class="form-select" name="unit_{{ ingredient.id }}">
+                                        <option value="g">Grama (g)</option><option value="kg">Quilograma (kg)</option><option value="ml">Mililitro (ml)</option><option value="l">Litro (l)</option><option value="un">Unidade (un)</option>
+                                    </select>
+                                </div>
+                                {% else %}
+                                    <div class="alert alert-warning">Você precisa <a href="{{ url_for('main.ingredients') }}">cadastrar ingredientes</a> antes.</div>
+                                {% endfor %}
                             </div>
-                            {% else %}
-                                <div class="alert alert-warning">Você precisa <a href="{{ url_for('main.ingredients') }}">cadastrar ingredientes</a> antes.</div>
-                            {% endfor %}
                         </div>
 
-                        <div class="mt-4 mb-3">
-                            <label for="profit_margin" class="form-label">Margem de Lucro Desejada (%)</label>
-                            <input type="number" step="any" class="form-control" id="profit_margin" name="profit_margin" placeholder="Ex: 150 (para 150%)" required>
+                        <hr class="my-4">
+
+                        <div class="mb-3">
+                            {{ form.profit_margin.label(class="form-label") }}
+                            {{ form.profit_margin(class="form-control", placeholder="Ex: 150 (para 150%)") }}
                         </div>
                         
                         <div class="d-flex justify-content-end gap-2 mt-4">
                             <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">Cancelar</a>
-                            <button type="submit" class="btn btn-primary">Salvar Receita</button>
+                            {{ form.submit(class="btn btn-primary") }}
                         </div>
                     </form>
                 </div>

@@ -79,6 +79,17 @@ a:hover {
     box-shadow: 0 0 0 0.25rem rgba(24, 188, 156, 0.25);
 }
 
+/* --- E. Estilos para Botões de Ação Apenas com Ícone --- */
+.action-btn-icon {
+    width: 40px;      /* Largura fixa */
+    height: 40px;     /* Altura fixa */
+    padding: 0;       /* Remove o padding interno */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem; /* Ajusta o tamanho do ícone */
+}
+
 /* ==========================================================================
    4. Navegação (Header Principal e Sub-menu)
    ========================================================================== */
@@ -193,7 +204,8 @@ body:has(.landing-container-v2) main {
     border-radius: 12px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.08);
 }
-.features-section-v2 { background-color: var(--light-gray); }
+.features-section-v2 { background-color: var(--light-gray); 
+}
 .feature-row { margin-bottom: 60px; }
 .feature-row:last-child { margin-bottom: 0; }
 .feature-text { padding: 0 1rem; text-align: center; }
@@ -203,6 +215,53 @@ body:has(.landing-container-v2) main {
     color: var(--secondary-color);
     margin-bottom: 1rem;
 }
+
+.features-section-v3 .feature-row {
+    margin-top: 4rem; /* Espaçamento acima de cada linha de feature */
+    margin-bottom: 4rem; /* Espaçamento abaixo de cada linha de feature */
+    padding-top: 2rem; /* Preenchimento interno para os elementos */
+    padding-bottom: 2rem; /* Preenchimento interno para os elementos */
+}
+
+/* Centraliza os badges e adiciona margem no texto da feature */
+.features-section-v3 .feature-text {
+    text-align: center; /* Centraliza o texto em dispositivos móveis */
+    margin-top: 1.5rem; /* Margem para separar do topo em móveis */
+}
+.features-section-v3 .feature-text .badge {
+    margin-bottom: 1rem; /* Separa o badge do título */
+    display: inline-block; /* Para centralizar o badge */
+}
+
+/* Container para as imagens das funcionalidades (GIFs/prints de dashboard) */
+.feature-image-container {
+    overflow: hidden; /* Garante que as bordas arredondadas funcionem */
+    border-radius: 15px; /* Bordas arredondadas */
+    width: 100%; /* Ocupa a largura total da coluna */
+    height: auto; /* Altura automática */
+    display: flex; /* Para centralizar a imagem dentro */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    margin: 0 auto; /* Centraliza o container */
+}
+
+.feature-image-container img {
+    width: 100%; /* Faz a imagem ocupar 100% do container */
+    height: auto;
+    display: block; /* Remove espaços extras abaixo da imagem */
+    object-fit: cover; /* Ajusta a imagem sem distorcer, cortando se necessário */
+}
+
+/* Estilo específico para a imagem do telemóvel (chatbot) */
+.phone-mockup {
+    max-width: 250px; /* Reduz o tamanho máximo para parecer mais realista */
+    border-radius: 21px; /* Bordas mais arredondadas para simular um telemóvel */
+    border: 8px solid #333; /* Uma borda para simular a moldura do telemóvel */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2); /* Sombra mais acentuada */
+    background-color: #333; /* Cor da moldura */
+    padding: 5px; /* Espaçamento interno para a tela */
+}
+
 .whatsapp-float-button {
     position: fixed;
     width: 60px;
@@ -325,6 +384,10 @@ body:has(.landing-container-v2) main {
     color: #6c757d;
 }
 
+.chatbot-image-wrapper {
+    max-width: 350px;
+}
+
 /* --- B. Páginas de Login/Registro --- */
 body:has(.auth-container) nav {
     display: none !important;
@@ -386,6 +449,16 @@ body:has(.auth-container) nav {
     }
     .auth-right {
         width: 100%;
+    }
+}
+
+@media (min-width: 992px) { /* Para desktops e tablets maiores */
+    .features-section-v3 .feature-text {
+        text-align: left; /* Alinha o texto à esquerda em ecrãs maiores */
+        margin-top: 0; /* Remove a margem extra em desktops */
+    }
+    .features-section-v3 .feature-text .badge {
+        margin-left: 0; /* Alinha o badge à esquerda */
     }
 }
 
@@ -658,49 +731,120 @@ body:has(.auth-container) nav {
 .kpi-card-demo.sale-price .kpi-value { color: #198754; }
 .kpi-card-demo.profit .kpi-value { color: #0d6efd; }
 
+/* --- A. Estilos Gerais da Aplicação --- */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius);
+    height: 100%;
+    min-height: 150px;
+}
+
+.dashboard-chart-container { 
+    position: relative; 
+    height: 300px; 
+}
+
+/* --- B. Dashboard e Componentes de UI --- */
+
+/* Estilos para as abas principais do Dashboard */
+#dashboardTabs {
+    border-bottom: 2px solid #dee2e6;
+}
+#dashboardTabs .nav-link {
+    color: var(--text-color);
+    font-weight: 500;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease-in-out;
+}
+#dashboardTabs .nav-link:hover {
+    background-color: var(--light-gray);
+    border-color: #eee;
+}
+#dashboardTabs .nav-link.active {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-weight: 600;
+    background-color: #fff;
+}
+
+/* Estilos para os KPIs do dashboard */
+.kpi-title { 
+    font-size: 0.9rem; 
+    color: #6c757d; 
+    margin-bottom: 0.25rem; 
+}
+.kpi-value { 
+    font-size: 1.75rem; 
+    font-weight: 700; 
+    color: var(--secondary-color); 
+    margin-bottom: 0; 
+}
+
+/* Estilos para os badges de KPI comparativo */
+.bg-success-soft { background-color: rgba(25, 135, 84, 0.1); color: #157347; }
+.bg-danger-soft { background-color: rgba(220, 53, 69, 0.1); color: #b02a37; }
+.bg-secondary-soft { background-color: rgba(108, 117, 125, 0.1); color: #6c757d; }
+
+/* NOVO ESTILO UNIFICADO para Filtros em Pílula */
+.filter-pill-group {
+    background-color: var(--light-gray);
+    border-radius: 10px;
+    padding: 0.3rem;
+    display: inline-flex;
+    border: 1px solid #dee2e6;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.filter-pill-group .btn,
+.filter-pill-group .nav-link {
+    color: var(--text-color);
+    font-weight: 500;
+    padding: 0.5rem 1.25rem;
+    border-radius: 10px;
+    border: none;
+    transition: all 0.2s ease-in-out;
+    background-color: transparent;
+    line-height: 1.5; /* Garante alinhamento vertical */
+}
+.filter-pill-group .btn:hover,
+.filter-pill-group .nav-link:hover {
+    color: var(--secondary-color);
+}
+.filter-pill-group .btn.active,
+.filter-pill-group .nav-link.active,
+.filter-pill-group .btn.btn-primary { /* Cobre todos os casos de botão ativo */
+    background-color: #fff !important;
+    color: var(--secondary-color) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+    font-weight: 600;
+}
+
+/* --- C. Padronização de Alinhamento (Responsividade) --- */
+.card-header,
+.card-body {
+    text-align: left;
+}
+.card-body.text-center {
+    text-align: left !important;
+}
+.empty-state {
+    text-align: center;
+}
+
 /* ==========================================================================
    8. AJUSTES RESPONSIVOS (Media Queries)
    ========================================================================== */
-
-/* --- Telas médias (tablets, 768px ou mais) --- */
-@media (min-width: 768px) {
-    .section-title { font-size: 2.5rem; }
-    .section-subtitle { font-size: 1.15rem; }
-    .hero-title { font-size: 3.2rem; }
-    .hero-subtitle { font-size: 1.25rem; }
-    .hero-section { padding: 100px 0; }
-    .before-after-section, .features-section-v2, .interactive-demo-section, .pricing-section, .faq-section, .product-carousel-section {
-        padding: 100px 0;
-    }
-    .feature-text { text-align: left; }
-}
-
-/* --- Telas grandes (desktops, 992px ou mais) --- */
-@media (min-width: 992px) {
-    .feature-text { padding: 0 2rem; }
-    .pricing-card.highlighted { transform: scale(1.05); }
-}
-
-/* --- Telas pequenas (celulares, abaixo de 768px) --- */
 @media (max-width: 767.98px) {
-    .feature-row {
-        flex-direction: column;
-    }
-    .feature-row .order-lg-2 { order: 1 !important; }
-    .feature-row .order-lg-1 { order: 2 !important; margin-top: 2rem;}
-    .feature-row img { margin-bottom: 2rem; }
-
-    .demo-container .row > div {
-        margin-bottom: 1.5rem;
-    }
-
-    .pricing-card {
-        margin-bottom: 2rem;
-    }
-    .pricing-section .row {
-        gap: 0;
-    }
-
+    /* Estilo para empilhamento das tabelas no Dashboard e Relatórios */
     .table-responsive-stack thead {
         display: none;
     }
@@ -723,6 +867,7 @@ body:has(.auth-container) nav {
         content: attr(data-label);
         font-weight: bold;
         margin-right: 1rem;
+        flex-shrink: 0;
     }
     .table-responsive-stack td[data-label="Ações"] {
         justify-content: flex-end;
@@ -730,4 +875,57 @@ body:has(.auth-container) nav {
     .table-responsive-stack td[data-label="Ações"]::before {
         display: none;
     }
+}
+
+@media print {
+    body, .container {
+        background-color: #fff !important;
+    }
+    
+    .no-print, .sub-nav, .navbar {
+        display: none !important;
+    }
+
+    .card {
+        border: 1px solid #dee2e6 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+    }
+
+    #fiche-tecnica {
+        margin-top: 0 !important;
+    }
+}
+
+
+/* --- Estilos para o Cabeçalho da Ficha Técnica --- */
+.fiche-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; 
+    flex-wrap: wrap; 
+    gap: 0.5rem; 
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.fiche-header-title {
+    flex-grow: 1; 
+    flex-basis: 0; 
+    min-width: 150px;
+}
+
+.recipe-subtitle {
+    display: block;
+    max-width: 100%; 
+    word-break: break-word; 
+    margin-top: 0.25rem;
+    line-height: 1.3;
+}
+
+.fiche-header-actions {
+    flex-shrink: 0; 
+    display: flex;
+    gap: 0.5rem; 
 }

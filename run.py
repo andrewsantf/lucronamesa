@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv() # Carrega as variáveis do .env APENAS para o ambiente local
 from app import create_app
 import logging
 

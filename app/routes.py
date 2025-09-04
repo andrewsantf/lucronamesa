@@ -791,7 +791,7 @@ def terms():
 def privacy():
     return render_template('privacy.html', title="Política de Privacidade")
 
-# --- FUNÇÕES AUXILIARES ---
+# --- FUNÇÕES AUXILIARES ------ #
 def calculate_base_price(package_price, package_quantity, package_unit):
     if package_quantity == 0: return 0, package_unit[0] if package_unit in ['kg', 'l'] else package_unit
     if package_unit == 'kg':

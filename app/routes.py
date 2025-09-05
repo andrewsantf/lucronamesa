@@ -410,7 +410,7 @@ def dashboard():
                         percentage_increase = (latest_price_per_unit / previous_price_per_unit - 1) * 100
                         alerts.append({
                             "type": "cost",
-                            "message": f"O custo de '{ingredient.name}' subiu {percentage_increase:.0f}%. Considere revisar suas receitas.",
+                            "message": f"O custo de '{ingredient.name}' subiu {percentage_increase:.0f}%. Um alerta foi enviado para o seu e-mail.",
                             "link": url_for('main.edit_ingredient', ingredient_id=ingredient.id)
                         })
     
@@ -504,7 +504,7 @@ def edit_ingredient(ingredient_id):
                         new_unit=new_package_unit,
                         increase_percentage=increase_percentage
                     )
-                    # flash(f'Detectamos um aumento de {increase_percentage:.0f}% no custo de "{ingredient.name}". Um alerta foi enviado para o seu e-mail.', 'warning')
+                    #flash(f'Detectamos um aumento de {increase_percentage:.0f}% no custo de "{ingredient.name}". Um alerta foi enviado para o seu e-mail.', 'warning')
                     ingredient.last_alerted_at = datetime.utcnow()
 
             price_record = PriceHistory(

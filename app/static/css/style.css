@@ -583,6 +583,12 @@ body:has(.auth-container) nav {
     }
 }
 
+.section-dark {
+  background-color: #f8f9fa; /* Um cinza bem claro, padrão do Bootstrap */
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
 
 /* --- B. Seção de Prova Social com Avatares --- */
 .social-proof-avatars {
